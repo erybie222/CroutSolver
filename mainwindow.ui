@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect><x>0</x><y>0</y><width>800</width><height>600</height></rect>
+  </property>
+  <property name="windowTitle">
+   <string>Crout Solver</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <layout class="QHBoxLayout" name="topLayout">
+      <item>
+       <widget class="QSpinBox" name="matrixSizeSpinBox"/>
+      </item>
+      <item>
+       <widget class="QPushButton" name="generateButton">
+        <property name="text">
+         <string>Generuj macierz</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="solveButton">
+        <property name="text">
+         <string>Rozwiąż</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QGridLayout" name="matrixLayout"/>
+    </item>
+    <item>
+     <layout class="QGridLayout" name="vectorLayout"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar"/>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
