@@ -1,35 +1,36 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.16)
+project(CroutSolver)
 
-# Nazwa projektu
-project(CroutSolver LANGUAGES CXX)
-
-# Ustaw standard C++
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-# Znajdź Qt5 z komponentem Widgets
-find_package(Qt5 REQUIRED COMPONENTS Widgets)
-
-# Włącz automatyczne przetwarzanie MOC, UIC i RCC
 set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
 
-# Dodaj pliki źródłowe
-set(SOURCES
+# Qt6
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets Gui)
+
+# Główne źródła
+add_executable(CroutSolver
     main.cpp
     mainwindow.cpp
-)
-
-set(HEADERS
     mainwindow.h
+    mainwindow.ui
+    crout_solver.hpp
+    interval.hpp
+    mpreal.h
 )
 
-# Utwórz plik wykonywalny
-add_executable(${PROJECT_NAME}
-    ${SOURCES}
-    ${HEADERS}
+# Ścieżki do własnych plików nagłówkowych
+target_include_directories(CroutSolver PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-# Powiąż Qt5::Widgets z naszym programem
-target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
+# Linkowanie bibliotek
+target_link_libraries(CroutSolver
+    Qt6::Core
+    Qt6::Gui
+    Qt6::Widgets
+    mpfr
+    gmp
+)
+add_definitions(-DMPFR_USE_NO_MACRO -DMPFR_USE_INTMAX_T)

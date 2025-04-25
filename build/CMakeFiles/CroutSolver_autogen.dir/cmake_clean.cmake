@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/CroutSolver_autogen"
+  "CroutSolver_autogen/include/ui_mainwindow.h"
   "CroutSolver_autogen/mocs_compilation.cpp"
   "CroutSolver_autogen/timestamp"
 )

@@ -69,8 +69,8 @@ include CMakeFiles/CroutSolver.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/CroutSolver.dir/flags.make
 
-CroutSolver_autogen/timestamp: /usr/lib/qt5/bin/moc
-CroutSolver_autogen/timestamp: /usr/lib/qt5/bin/uic
+CroutSolver_autogen/timestamp: /usr/lib/qt6/libexec/moc
+CroutSolver_autogen/timestamp: /usr/lib/qt6/libexec/uic
 CroutSolver_autogen/timestamp: CMakeFiles/CroutSolver.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/home/eryk/CroutSolver/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Automatic MOC and UIC for target CroutSolver"
 	/usr/bin/cmake -E cmake_autogen /home/eryk/CroutSolver/build/CMakeFiles/CroutSolver_autogen.dir/AutogenInfo.json ""
@@ -131,9 +131,11 @@ CroutSolver: CMakeFiles/CroutSolver.dir/CroutSolver_autogen/mocs_compilation.cpp
 CroutSolver: CMakeFiles/CroutSolver.dir/main.cpp.o
 CroutSolver: CMakeFiles/CroutSolver.dir/mainwindow.cpp.o
 CroutSolver: CMakeFiles/CroutSolver.dir/build.make
-CroutSolver: /usr/lib/aarch64-linux-gnu/libQt5Widgets.so.5.15.13
-CroutSolver: /usr/lib/aarch64-linux-gnu/libQt5Gui.so.5.15.13
-CroutSolver: /usr/lib/aarch64-linux-gnu/libQt5Core.so.5.15.13
+CroutSolver: /usr/lib/aarch64-linux-gnu/libQt6Widgets.so.6.4.2
+CroutSolver: /usr/lib/aarch64-linux-gnu/libQt6Gui.so.6.4.2
+CroutSolver: /usr/lib/aarch64-linux-gnu/libQt6Core.so.6.4.2
+CroutSolver: /usr/lib/aarch64-linux-gnu/libGLX.so
+CroutSolver: /usr/lib/aarch64-linux-gnu/libOpenGL.so
 CroutSolver: CMakeFiles/CroutSolver.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/eryk/CroutSolver/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable CroutSolver"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/CroutSolver.dir/link.txt --verbose=$(VERBOSE)

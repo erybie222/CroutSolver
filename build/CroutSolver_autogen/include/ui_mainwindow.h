@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.15.13
+** Created by: Qt User Interface Compiler version 6.4.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -13,6 +13,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
@@ -27,61 +28,82 @@ class Ui_MainWindow
 {
 public:
     QWidget *centralwidget;
-    QVBoxLayout *verticalLayout;
-    QHBoxLayout *topLayout;
-    QSpinBox *matrixSizeSpinBox;
+    QVBoxLayout *topLayout;
+    QHBoxLayout *hboxLayout;
+    QLabel *sizeLabel;
+    QSpinBox *sizeSpinBox;
     QPushButton *generateButton;
-    QPushButton *solveButton;
+    QHBoxLayout *hboxLayout1;
     QGridLayout *matrixLayout;
-    QGridLayout *vectorLayout;
+    QVBoxLayout *vectorLayout;
+    QPushButton *solveButton;
+    QLabel *resultLabel;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
     void setupUi(QMainWindow *MainWindow)
     {
         if (MainWindow->objectName().isEmpty())
-            MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(800, 600);
+            MainWindow->setObjectName("MainWindow");
+        MainWindow->resize(640, 480);
         centralwidget = new QWidget(MainWindow);
-        centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
-        verticalLayout = new QVBoxLayout(centralwidget);
-        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
-        topLayout = new QHBoxLayout();
-        topLayout->setObjectName(QString::fromUtf8("topLayout"));
-        matrixSizeSpinBox = new QSpinBox(centralwidget);
-        matrixSizeSpinBox->setObjectName(QString::fromUtf8("matrixSizeSpinBox"));
+        centralwidget->setObjectName("centralwidget");
+        topLayout = new QVBoxLayout(centralwidget);
+        topLayout->setObjectName("topLayout");
+        hboxLayout = new QHBoxLayout();
+        hboxLayout->setObjectName("hboxLayout");
+        sizeLabel = new QLabel(centralwidget);
+        sizeLabel->setObjectName("sizeLabel");
 
-        topLayout->addWidget(matrixSizeSpinBox);
+        hboxLayout->addWidget(sizeLabel);
+
+        sizeSpinBox = new QSpinBox(centralwidget);
+        sizeSpinBox->setObjectName("sizeSpinBox");
+        sizeSpinBox->setMinimum(2);
+        sizeSpinBox->setMaximum(10);
+        sizeSpinBox->setValue(3);
+
+        hboxLayout->addWidget(sizeSpinBox);
+
+
+        topLayout->addLayout(hboxLayout);
 
         generateButton = new QPushButton(centralwidget);
-        generateButton->setObjectName(QString::fromUtf8("generateButton"));
+        generateButton->setObjectName("generateButton");
 
         topLayout->addWidget(generateButton);
 
+        hboxLayout1 = new QHBoxLayout();
+        hboxLayout1->setObjectName("hboxLayout1");
+        matrixLayout = new QGridLayout();
+        matrixLayout->setObjectName("matrixLayout");
+
+        hboxLayout1->addLayout(matrixLayout);
+
+        vectorLayout = new QVBoxLayout();
+        vectorLayout->setObjectName("vectorLayout");
+
+        hboxLayout1->addLayout(vectorLayout);
+
+
+        topLayout->addLayout(hboxLayout1);
+
         solveButton = new QPushButton(centralwidget);
-        solveButton->setObjectName(QString::fromUtf8("solveButton"));
+        solveButton->setObjectName("solveButton");
 
         topLayout->addWidget(solveButton);
 
+        resultLabel = new QLabel(centralwidget);
+        resultLabel->setObjectName("resultLabel");
 
-        verticalLayout->addLayout(topLayout);
-
-        matrixLayout = new QGridLayout();
-        matrixLayout->setObjectName(QString::fromUtf8("matrixLayout"));
-
-        verticalLayout->addLayout(matrixLayout);
-
-        vectorLayout = new QGridLayout();
-        vectorLayout->setObjectName(QString::fromUtf8("vectorLayout"));
-
-        verticalLayout->addLayout(vectorLayout);
+        topLayout->addWidget(resultLabel);
 
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
-        menubar->setObjectName(QString::fromUtf8("menubar"));
+        menubar->setObjectName("menubar");
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
-        statusbar->setObjectName(QString::fromUtf8("statusbar"));
+        statusbar->setObjectName("statusbar");
         MainWindow->setStatusBar(statusbar);
 
         retranslateUi(MainWindow);
@@ -92,8 +114,10 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "Crout Solver", nullptr));
+        sizeLabel->setText(QCoreApplication::translate("MainWindow", "Rozmiar macierzy:", nullptr));
         generateButton->setText(QCoreApplication::translate("MainWindow", "Generuj macierz", nullptr));
         solveButton->setText(QCoreApplication::translate("MainWindow", "Rozwi\304\205\305\274", nullptr));
+        resultLabel->setText(QCoreApplication::translate("MainWindow", "Wynik:", nullptr));
     } // retranslateUi
 
 };

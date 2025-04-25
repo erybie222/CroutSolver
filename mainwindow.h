@@ -3,13 +3,17 @@
 
 #include <QMainWindow>
 #include <QVector>
-#include <QLineEdit> // <-- to dodaj koniecznie
+#include <QLineEdit>
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
+namespace Ui
+{
+    class MainWindow;
+}
 QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow {
+class MainWindow : public QMainWindow
+{
     Q_OBJECT
 
 public:
@@ -21,11 +25,16 @@ private slots:
     void solveSystem();
 
 private:
-    void clearLayout(QLayout* layout);
-
+    QVector<QVector<QLineEdit *>> matrixEdits;
+    QVector<QLineEdit *> vectorEdits;
     Ui::MainWindow *ui;
-    QVector<QVector<QLineEdit*>> matrixEdits;
-    QVector<QLineEdit*> vectorEdits;
+    QVector<QVector<double>> A;
+    QVector<double> b;
+    void clearLayout(QLayout *layout);
+    void readMatrixAndVector();
+
+    // 👇 TO JEST DEKLARACJA FUNKCJI CZŁONKOWEJ KLASY!
+    QVector<double> solveCrout(const QVector<QVector<double>> &A, const QVector<double> &b);
 };
 
 #endif // MAINWINDOW_H

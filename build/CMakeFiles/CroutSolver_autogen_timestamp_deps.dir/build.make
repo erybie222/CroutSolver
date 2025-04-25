@@ -66,9 +66,11 @@ include CMakeFiles/CroutSolver_autogen_timestamp_deps.dir/compiler_depend.make
 # Include the progress variables for this target.
 include CMakeFiles/CroutSolver_autogen_timestamp_deps.dir/progress.make
 
-CMakeFiles/CroutSolver_autogen_timestamp_deps: /usr/lib/aarch64-linux-gnu/libQt5Widgets.so.5.15.13
-CMakeFiles/CroutSolver_autogen_timestamp_deps: /usr/lib/qt5/bin/uic
-CMakeFiles/CroutSolver_autogen_timestamp_deps: /usr/lib/qt5/bin/moc
+CMakeFiles/CroutSolver_autogen_timestamp_deps: /usr/lib/aarch64-linux-gnu/libQt6Core.so.6.4.2
+CMakeFiles/CroutSolver_autogen_timestamp_deps: /usr/lib/qt6/libexec/moc
+CMakeFiles/CroutSolver_autogen_timestamp_deps: /usr/lib/aarch64-linux-gnu/libQt6Gui.so.6.4.2
+CMakeFiles/CroutSolver_autogen_timestamp_deps: /usr/lib/aarch64-linux-gnu/libQt6Widgets.so.6.4.2
+CMakeFiles/CroutSolver_autogen_timestamp_deps: /usr/lib/qt6/libexec/uic
 
 CroutSolver_autogen_timestamp_deps: CMakeFiles/CroutSolver_autogen_timestamp_deps
 CroutSolver_autogen_timestamp_deps: CMakeFiles/CroutSolver_autogen_timestamp_deps.dir/build.make
