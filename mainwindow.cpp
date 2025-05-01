@@ -10,24 +10,35 @@ MainWindow::MainWindow(QWidget *parent)
     QWidget *central = new QWidget(this);
     QVBoxLayout *mainLayout = new QVBoxLayout(central);
 
+    // Górny pasek: rozmiar + typ danych
     QHBoxLayout *topLayout = new QHBoxLayout;
     QLabel *sizeLabel = new QLabel("Rozmiar macierzy:", this);
     matrixSizeSpinBox = new QSpinBox(this);
     matrixSizeSpinBox->setRange(2, 10);
     matrixSizeSpinBox->setValue(3);
+    QLabel *typeLabel = new QLabel("Typ danych:", this);
     dataTypeComboBox = new QComboBox(this);
-    dataTypeComboBox->addItems({"double", "mpreal", "interval"});
+    dataTypeComboBox->addItem("double");
+    dataTypeComboBox->addItem("mpreal");
+    dataTypeComboBox->addItem("interval");
     dataTypeComboBox->setCurrentText("interval");
 
     topLayout->addWidget(sizeLabel);
     topLayout->addWidget(matrixSizeSpinBox);
+    topLayout->addSpacing(20);
+    topLayout->addWidget(typeLabel);
     topLayout->addWidget(dataTypeComboBox);
     topLayout->addStretch();
 
+    // Layouty macierzy i wektora
     matrixLayout = new QGridLayout;
+    matrixLayout->setSpacing(5);
     vectorLayout = new QVBoxLayout;
+    vectorLayout->setSpacing(5);
+
     QFrame *separator = new QFrame(this);
     separator->setFrameShape(QFrame::VLine);
+    separator->setFrameShadow(QFrame::Sunken);
     separator->setLineWidth(1);
 
     QHBoxLayout *matrixGroupLayout = new QHBoxLayout;
@@ -35,24 +46,33 @@ MainWindow::MainWindow(QWidget *parent)
     matrixGroupLayout->addWidget(separator);
     matrixGroupLayout->addLayout(vectorLayout);
 
+    // Przycisk rozwiązania
     solveButton = new QPushButton("Rozwiąż", this);
+    solveButton->setFixedWidth(120);
+
+    // Pole wynikowe
     solutionTextEdit = new QTextEdit(this);
     solutionTextEdit->setReadOnly(true);
+    solutionTextEdit->setMinimumHeight(100);
 
+    // Składanie wszystkiego
     mainLayout->addLayout(topLayout);
+    mainLayout->addSpacing(10);
     mainLayout->addLayout(matrixGroupLayout);
-    mainLayout->addWidget(solveButton);
+    mainLayout->addSpacing(10);
+    mainLayout->addWidget(solveButton, 0, Qt::AlignCenter);
     mainLayout->addWidget(solutionTextEdit);
     setCentralWidget(central);
 
-    connect(matrixSizeSpinBox, QOverload<int>::of(&QSpinBox::valueChanged),
-            this, &MainWindow::createMatrixInputs);
-
+    // Sygnaly
+    selectedType = dataTypeComboBox->currentText();
     connect(dataTypeComboBox, &QComboBox::currentTextChanged, this, [=](const QString &text)
             {
         selectedType = text;
         createMatrixInputs(matrixSizeSpinBox->value()); });
 
+    connect(matrixSizeSpinBox, QOverload<int>::of(&QSpinBox::valueChanged),
+            this, &MainWindow::createMatrixInputs);
     connect(solveButton, &QPushButton::clicked, this, &MainWindow::solveSystem);
 
     createMatrixInputs(matrixSizeSpinBox->value());
