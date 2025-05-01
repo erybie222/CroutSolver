@@ -27,24 +27,27 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 namespace {
 struct qt_meta_stringdata_MainWindow_t {
-    uint offsetsAndSizes[8];
+    uint offsetsAndSizes[10];
     char stringdata0[11];
-    char stringdata1[21];
+    char stringdata1[19];
     char stringdata2[1];
-    char stringdata3[12];
+    char stringdata3[5];
+    char stringdata4[12];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_MainWindow_t::offsetsAndSizes) + ofs), len 
 Q_CONSTINIT static const qt_meta_stringdata_MainWindow_t qt_meta_stringdata_MainWindow = {
     {
         QT_MOC_LITERAL(0, 10),  // "MainWindow"
-        QT_MOC_LITERAL(11, 20),  // "generateMatrixInputs"
-        QT_MOC_LITERAL(32, 0),  // ""
-        QT_MOC_LITERAL(33, 11)   // "solveSystem"
+        QT_MOC_LITERAL(11, 18),  // "createMatrixInputs"
+        QT_MOC_LITERAL(30, 0),  // ""
+        QT_MOC_LITERAL(31, 4),  // "size"
+        QT_MOC_LITERAL(36, 11)   // "solveSystem"
     },
     "MainWindow",
-    "generateMatrixInputs",
+    "createMatrixInputs",
     "",
+    "size",
     "solveSystem"
 };
 #undef QT_MOC_LITERAL
@@ -64,11 +67,11 @@ Q_CONSTINIT static const uint qt_meta_data_MainWindow[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    0,   26,    2, 0x08,    1 /* Private */,
-       3,    0,   27,    2, 0x08,    2 /* Private */,
+       1,    1,   26,    2, 0x08,    1 /* Private */,
+       4,    0,   29,    2, 0x08,    3 /* Private */,
 
  // slots: parameters
-    QMetaType::Void,
+    QMetaType::Void, QMetaType::Int,    3,
     QMetaType::Void,
 
        0        // eod
@@ -83,8 +86,9 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
     qt_incomplete_metaTypeArray<qt_meta_stringdata_MainWindow_t,
         // Q_OBJECT / Q_GADGET
         QtPrivate::TypeAndForceComplete<MainWindow, std::true_type>,
-        // method 'generateMatrixInputs'
+        // method 'createMatrixInputs'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<int, std::false_type>,
         // method 'solveSystem'
         QtPrivate::TypeAndForceComplete<void, std::false_type>
     >,
@@ -97,12 +101,11 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         auto *_t = static_cast<MainWindow *>(_o);
         (void)_t;
         switch (_id) {
-        case 0: _t->generateMatrixInputs(); break;
+        case 0: _t->createMatrixInputs((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
         case 1: _t->solveSystem(); break;
         default: ;
         }
     }
-    (void)_a;
 }
 
 const QMetaObject *MainWindow::metaObject() const

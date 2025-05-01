@@ -348,52 +348,67 @@ CMakeFiles/CroutSolver.dir/mainwindow.cpp.o: \
  /usr/include/aarch64-linux-gnu/qt6/QtGui/qtextformat.h \
  /usr/include/aarch64-linux-gnu/qt6/QtGui/qpen.h \
  /usr/include/aarch64-linux-gnu/qt6/QtGui/qtextoption.h \
- /home/eryk/CroutSolver/build/CroutSolver_autogen/include/ui_mainwindow.h \
- /usr/include/aarch64-linux-gnu/qt6/QtCore/QVariant \
- /usr/include/aarch64-linux-gnu/qt6/QtCore/qvariant.h \
- /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QApplication \
- /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qapplication.h \
- /usr/include/aarch64-linux-gnu/qt6/QtCore/qcoreapplication.h \
- /usr/include/aarch64-linux-gnu/qt6/QtCore/qcoreevent.h \
- /usr/include/aarch64-linux-gnu/qt6/QtCore/qeventloop.h \
- /usr/include/aarch64-linux-gnu/qt6/QtCore/qnativeinterface.h \
- /usr/include/aarch64-linux-gnu/qt6/QtCore/qcoreapplication_platform.h \
- /usr/include/aarch64-linux-gnu/qt6/QtGui/qguiapplication.h \
- /usr/include/aarch64-linux-gnu/qt6/QtGui/qinputmethod.h \
- /usr/include/aarch64-linux-gnu/qt6/QtCore/qlocale.h \
- /usr/include/aarch64-linux-gnu/qt6/QtGui/qguiapplication_platform.h \
  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QGridLayout \
  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qgridlayout.h \
  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qlayout.h \
  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qlayoutitem.h \
  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qboxlayout.h \
  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qgridlayout.h \
- /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QHBoxLayout \
+ /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QVBoxLayout \
  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qboxlayout.h \
- /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QLabel \
- /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qlabel.h \
- /usr/include/aarch64-linux-gnu/qt6/QtGui/qpicture.h \
- /usr/include/aarch64-linux-gnu/qt6/QtCore/qiodevice.h \
- /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QMainWindow \
- /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QMenuBar \
- /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qmenubar.h \
- /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qmenu.h \
- /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QPushButton \
- /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qpushbutton.h \
- /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qabstractbutton.h \
- /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QSpinBox \
- /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qspinbox.h \
+ /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QComboBox \
+ /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qcombobox.h \
+ /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qabstractitemdelegate.h \
+ /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qstyleoption.h \
+ /usr/include/aarch64-linux-gnu/qt6/QtCore/qlocale.h \
  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qabstractspinbox.h \
  /usr/include/aarch64-linux-gnu/qt6/QtGui/qvalidator.h \
  /usr/include/aarch64-linux-gnu/qt6/QtCore/qregularexpression.h \
- /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QStatusBar \
- /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qstatusbar.h \
- /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QVBoxLayout \
- /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QWidget \
- /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qwidget.h \
- /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QVBoxLayout \
+ /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qslider.h \
+ /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qabstractslider.h \
+ /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qstyle.h \
+ /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qtabbar.h \
+ /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qrubberband.h \
+ /usr/include/aarch64-linux-gnu/qt6/QtCore/qabstractitemmodel.h \
+ /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QSpinBox \
+ /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qspinbox.h \
+ /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QPushButton \
+ /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qpushbutton.h \
+ /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qabstractbutton.h \
+ /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QTextEdit \
+ /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qtextedit.h \
+ /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qabstractscrollarea.h \
+ /usr/include/aarch64-linux-gnu/qt6/QtCore/QString \
+ /usr/include/aarch64-linux-gnu/qt6/QtCore/qstring.h \
+ /home/eryk/CroutSolver/mpreal.h /usr/include/c++/13/iostream \
+ /usr/include/c++/13/ostream /usr/include/c++/13/ios \
+ /usr/include/c++/13/bits/basic_ios.h \
+ /usr/include/c++/13/bits/locale_facets.h /usr/include/c++/13/cwctype \
+ /usr/include/wctype.h /usr/include/aarch64-linux-gnu/bits/wctype-wchar.h \
+ /usr/include/aarch64-linux-gnu/c++/13/bits/ctype_base.h \
+ /usr/include/aarch64-linux-gnu/c++/13/bits/ctype_inline.h \
+ /usr/include/c++/13/bits/locale_facets.tcc \
+ /usr/include/c++/13/bits/basic_ios.tcc \
+ /usr/include/c++/13/bits/ostream.tcc /usr/include/c++/13/istream \
+ /usr/include/c++/13/bits/istream.tcc /usr/include/c++/13/sstream \
+ /usr/include/c++/13/bits/sstream.tcc /usr/include/c++/13/cfloat \
+ /usr/lib/gcc/aarch64-linux-gnu/13/include/float.h \
+ /usr/include/c++/13/complex /usr/include/mpfr.h \
+ /usr/include/aarch64-linux-gnu/gmp.h /home/eryk/CroutSolver/interval.hpp \
+ /usr/include/c++/13/iomanip /usr/include/c++/13/locale \
+ /usr/include/c++/13/bits/locale_facets_nonio.h \
+ /usr/include/aarch64-linux-gnu/c++/13/bits/time_members.h \
+ /usr/include/aarch64-linux-gnu/c++/13/bits/messages_members.h \
+ /usr/include/libintl.h /usr/include/c++/13/bits/codecvt.h \
+ /usr/include/c++/13/bits/locale_facets_nonio.tcc \
+ /usr/include/c++/13/bits/locale_conv.h \
+ /usr/include/c++/13/bits/quoted_string.h /usr/include/c++/13/cfenv \
+ /usr/include/c++/13/fenv.h /usr/include/fenv.h \
+ /usr/include/aarch64-linux-gnu/bits/fenv.h \
  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QHBoxLayout \
+ /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QFrame \
+ /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qframe.h \
  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QLabel \
- /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QMessageBox \
- /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qmessagebox.h \
- /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qdialog.h
+ /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qlabel.h \
+ /usr/include/aarch64-linux-gnu/qt6/QtGui/qpicture.h \
+ /usr/include/aarch64-linux-gnu/qt6/QtCore/qiodevice.h

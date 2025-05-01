@@ -1,5 +1,7 @@
 /home/eryk/CroutSolver/build/CroutSolver_autogen/EWIEGA46WW/moc_mainwindow.cpp: /home/eryk/CroutSolver/mainwindow.h \
   /home/eryk/CroutSolver/build/CroutSolver_autogen/moc_predefs.h \
+  /home/eryk/CroutSolver/interval.hpp \
+  /home/eryk/CroutSolver/mpreal.h \
   /usr/include/aarch64-linux-gnu/asm/bitsperlong.h \
   /usr/include/aarch64-linux-gnu/asm/errno.h \
   /usr/include/aarch64-linux-gnu/asm/unistd.h \
@@ -85,10 +87,15 @@
   /usr/include/aarch64-linux-gnu/c++/13/bits/ctype_inline.h \
   /usr/include/aarch64-linux-gnu/c++/13/bits/gthr-default.h \
   /usr/include/aarch64-linux-gnu/c++/13/bits/gthr.h \
+  /usr/include/aarch64-linux-gnu/c++/13/bits/messages_members.h \
   /usr/include/aarch64-linux-gnu/c++/13/bits/os_defines.h \
+  /usr/include/aarch64-linux-gnu/c++/13/bits/time_members.h \
+  /usr/include/aarch64-linux-gnu/gmp.h \
   /usr/include/aarch64-linux-gnu/gnu/stubs-lp64.h \
   /usr/include/aarch64-linux-gnu/gnu/stubs.h \
+  /usr/include/aarch64-linux-gnu/qt6/QtCore/QString \
   /usr/include/aarch64-linux-gnu/qt6/QtCore/QVector \
+  /usr/include/aarch64-linux-gnu/qt6/QtCore/qabstractitemmodel.h \
   /usr/include/aarch64-linux-gnu/qt6/QtCore/qalgorithms.h \
   /usr/include/aarch64-linux-gnu/qt6/QtCore/qanystringview.h \
   /usr/include/aarch64-linux-gnu/qt6/QtCore/qarraydata.h \
@@ -125,6 +132,7 @@
   /usr/include/aarch64-linux-gnu/qt6/QtCore/qiterator.h \
   /usr/include/aarch64-linux-gnu/qt6/QtCore/qline.h \
   /usr/include/aarch64-linux-gnu/qt6/QtCore/qlist.h \
+  /usr/include/aarch64-linux-gnu/qt6/QtCore/qlocale.h \
   /usr/include/aarch64-linux-gnu/qt6/QtCore/qlogging.h \
   /usr/include/aarch64-linux-gnu/qt6/QtCore/qmap.h \
   /usr/include/aarch64-linux-gnu/qt6/QtCore/qmargins.h \
@@ -142,6 +150,7 @@
   /usr/include/aarch64-linux-gnu/qt6/QtCore/qprocessordetection.h \
   /usr/include/aarch64-linux-gnu/qt6/QtCore/qrect.h \
   /usr/include/aarch64-linux-gnu/qt6/QtCore/qrefcount.h \
+  /usr/include/aarch64-linux-gnu/qt6/QtCore/qregularexpression.h \
   /usr/include/aarch64-linux-gnu/qt6/QtCore/qscopedpointer.h \
   /usr/include/aarch64-linux-gnu/qt6/QtCore/qscopeguard.h \
   /usr/include/aarch64-linux-gnu/qt6/QtCore/qset.h \
@@ -202,14 +211,39 @@
   /usr/include/aarch64-linux-gnu/qt6/QtGui/qtguiexports.h \
   /usr/include/aarch64-linux-gnu/qt6/QtGui/qtguiglobal.h \
   /usr/include/aarch64-linux-gnu/qt6/QtGui/qtransform.h \
+  /usr/include/aarch64-linux-gnu/qt6/QtGui/qvalidator.h \
   /usr/include/aarch64-linux-gnu/qt6/QtGui/qwindowdefs.h \
+  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QComboBox \
+  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QGridLayout \
   /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QLineEdit \
   /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QMainWindow \
+  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QPushButton \
+  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QSpinBox \
+  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QTextEdit \
+  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QVBoxLayout \
+  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qabstractbutton.h \
+  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qabstractitemdelegate.h \
+  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qabstractscrollarea.h \
+  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qabstractslider.h \
+  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qabstractspinbox.h \
+  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qboxlayout.h \
+  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qcombobox.h \
   /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qframe.h \
+  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qgridlayout.h \
+  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qlayout.h \
+  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qlayoutitem.h \
   /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qlineedit.h \
   /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qmainwindow.h \
+  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qpushbutton.h \
+  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qrubberband.h \
   /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qsizepolicy.h \
+  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qslider.h \
+  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qspinbox.h \
+  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qstyle.h \
+  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qstyleoption.h \
+  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qtabbar.h \
   /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qtabwidget.h \
+  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qtextedit.h \
   /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qtwidgets-config.h \
   /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qtwidgetsexports.h \
   /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qtwidgetsglobal.h \
@@ -245,6 +279,7 @@
   /usr/include/c++/13/bits/c++0x_warning.h \
   /usr/include/c++/13/bits/char_traits.h \
   /usr/include/c++/13/bits/charconv.h \
+  /usr/include/c++/13/bits/codecvt.h \
   /usr/include/c++/13/bits/concept_check.h \
   /usr/include/c++/13/bits/cpp_type_traits.h \
   /usr/include/c++/13/bits/cxxabi_forced.h \
@@ -259,12 +294,16 @@
   /usr/include/c++/13/bits/hash_bytes.h \
   /usr/include/c++/13/bits/invoke.h \
   /usr/include/c++/13/bits/ios_base.h \
+  /usr/include/c++/13/bits/istream.tcc \
   /usr/include/c++/13/bits/iterator_concepts.h \
   /usr/include/c++/13/bits/list.tcc \
   /usr/include/c++/13/bits/locale_classes.h \
   /usr/include/c++/13/bits/locale_classes.tcc \
+  /usr/include/c++/13/bits/locale_conv.h \
   /usr/include/c++/13/bits/locale_facets.h \
   /usr/include/c++/13/bits/locale_facets.tcc \
+  /usr/include/c++/13/bits/locale_facets_nonio.h \
+  /usr/include/c++/13/bits/locale_facets_nonio.tcc \
   /usr/include/c++/13/bits/localefwd.h \
   /usr/include/c++/13/bits/max_size_type.h \
   /usr/include/c++/13/bits/memory_resource.h \
@@ -281,6 +320,7 @@
   /usr/include/c++/13/bits/postypes.h \
   /usr/include/c++/13/bits/predefined_ops.h \
   /usr/include/c++/13/bits/ptr_traits.h \
+  /usr/include/c++/13/bits/quoted_string.h \
   /usr/include/c++/13/bits/range_access.h \
   /usr/include/c++/13/bits/ranges_algo.h \
   /usr/include/c++/13/bits/ranges_algobase.h \
@@ -294,6 +334,7 @@
   /usr/include/c++/13/bits/shared_ptr_atomic.h \
   /usr/include/c++/13/bits/shared_ptr_base.h \
   /usr/include/c++/13/bits/specfun.h \
+  /usr/include/c++/13/bits/sstream.tcc \
   /usr/include/c++/13/bits/std_abs.h \
   /usr/include/c++/13/bits/std_function.h \
   /usr/include/c++/13/bits/std_mutex.h \
@@ -330,16 +371,21 @@
   /usr/include/c++/13/bits/vector.tcc \
   /usr/include/c++/13/cctype \
   /usr/include/c++/13/cerrno \
+  /usr/include/c++/13/cfenv \
+  /usr/include/c++/13/cfloat \
   /usr/include/c++/13/chrono \
   /usr/include/c++/13/climits \
   /usr/include/c++/13/clocale \
   /usr/include/c++/13/cmath \
   /usr/include/c++/13/compare \
+  /usr/include/c++/13/complex \
   /usr/include/c++/13/concepts \
   /usr/include/c++/13/cstddef \
   /usr/include/c++/13/cstdint \
+  /usr/include/c++/13/cstdio \
   /usr/include/c++/13/cstdlib \
   /usr/include/c++/13/cstring \
+  /usr/include/c++/13/ctime \
   /usr/include/c++/13/cwchar \
   /usr/include/c++/13/cwctype \
   /usr/include/c++/13/debug/assertions.h \
@@ -354,11 +400,15 @@
   /usr/include/c++/13/ext/type_traits.h \
   /usr/include/c++/13/functional \
   /usr/include/c++/13/initializer_list \
+  /usr/include/c++/13/iomanip \
   /usr/include/c++/13/ios \
   /usr/include/c++/13/iosfwd \
+  /usr/include/c++/13/iostream \
+  /usr/include/c++/13/istream \
   /usr/include/c++/13/iterator \
   /usr/include/c++/13/limits \
   /usr/include/c++/13/list \
+  /usr/include/c++/13/locale \
   /usr/include/c++/13/map \
   /usr/include/c++/13/memory \
   /usr/include/c++/13/new \
@@ -370,6 +420,7 @@
   /usr/include/c++/13/pstl/glue_algorithm_defs.h \
   /usr/include/c++/13/pstl/glue_memory_defs.h \
   /usr/include/c++/13/pstl/glue_numeric_defs.h \
+  /usr/include/c++/13/sstream \
   /usr/include/c++/13/stdexcept \
   /usr/include/c++/13/streambuf \
   /usr/include/c++/13/string \
@@ -398,10 +449,12 @@
   /usr/include/errno.h \
   /usr/include/features-time64.h \
   /usr/include/features.h \
+  /usr/include/libintl.h \
   /usr/include/limits.h \
   /usr/include/linux/errno.h \
   /usr/include/linux/limits.h \
   /usr/include/locale.h \
+  /usr/include/mpfr.h \
   /usr/include/pthread.h \
   /usr/include/sched.h \
   /usr/include/stdc-predef.h \
@@ -415,6 +468,7 @@
   /usr/include/unistd.h \
   /usr/include/wchar.h \
   /usr/include/wctype.h \
+  /usr/lib/gcc/aarch64-linux-gnu/13/include/float.h \
   /usr/lib/gcc/aarch64-linux-gnu/13/include/stdarg.h \
   /usr/lib/gcc/aarch64-linux-gnu/13/include/stdbool.h \
   /usr/lib/gcc/aarch64-linux-gnu/13/include/stddef.h

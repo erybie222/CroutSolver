@@ -4,37 +4,47 @@
 #include <QMainWindow>
 #include <QVector>
 #include <QLineEdit>
+#include <QGridLayout>
+#include <QVBoxLayout>
+#include <QComboBox>
+#include <QSpinBox>
+#include <QPushButton>
+#include <QTextEdit>
+#include <QString>
+#include <mpreal.h>
+#include "interval.hpp"
 
-QT_BEGIN_NAMESPACE
-namespace Ui
-{
-    class MainWindow;
-}
-QT_END_NAMESPACE
+using interval_arithmetic::Interval;
+using mpfr::mpreal;
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
+    MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
 private slots:
-    void generateMatrixInputs();
+    void createMatrixInputs(int size);
     void solveSystem();
 
 private:
-    QVector<QVector<QLineEdit *>> matrixEdits;
-    QVector<QLineEdit *> vectorEdits;
-    Ui::MainWindow *ui;
-    QVector<QVector<double>> A;
-    QVector<double> b;
-    void clearLayout(QLayout *layout);
-    void readMatrixAndVector();
+    QGridLayout *matrixLayout;
+    QVBoxLayout *vectorLayout;
+    QComboBox *dataTypeComboBox;
+    QSpinBox *matrixSizeSpinBox;
+    QPushButton *solveButton;
+    QTextEdit *solutionTextEdit;
 
-    // 👇 TO JEST DEKLARACJA FUNKCJI CZŁONKOWEJ KLASY!
+    QVector<QVector<QLineEdit *>> matrixInputs;
+    QVector<QLineEdit *> vectorInputs;
+
+    QString selectedType = "interval";
+
     QVector<double> solveCrout(const QVector<QVector<double>> &A, const QVector<double> &b);
+    QVector<mpreal> solveCrout(const QVector<QVector<mpreal>> &A, const QVector<mpreal> &b);
+    QVector<Interval<mpreal>> solveCrout(const QVector<QVector<Interval<mpreal>>> &A, const QVector<Interval<mpreal>> &b);
 };
 
 #endif // MAINWINDOW_H
