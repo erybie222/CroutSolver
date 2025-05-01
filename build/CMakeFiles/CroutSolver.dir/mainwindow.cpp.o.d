@@ -406,8 +406,6 @@ CMakeFiles/CroutSolver.dir/mainwindow.cpp.o: \
  /usr/include/c++/13/fenv.h /usr/include/fenv.h \
  /usr/include/aarch64-linux-gnu/bits/fenv.h \
  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QHBoxLayout \
- /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QFrame \
- /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qframe.h \
  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QLabel \
  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qlabel.h \
  /usr/include/aarch64-linux-gnu/qt6/QtGui/qpicture.h \

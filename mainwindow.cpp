@@ -1,8 +1,18 @@
 #include "mainwindow.h"
-#include <QVBoxLayout>
+#include "interval.hpp"
 #include <QHBoxLayout>
-#include <QFrame>
+#include <QVBoxLayout>
+#include <QGridLayout>
 #include <QLabel>
+#include <QPushButton>
+#include <QSpinBox>
+#include <QTextEdit>
+#include <QComboBox>
+
+using namespace mpfr;
+using namespace interval_arithmetic;
+
+MainWindow::~MainWindow() = default;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -10,78 +20,68 @@ MainWindow::MainWindow(QWidget *parent)
     QWidget *central = new QWidget(this);
     QVBoxLayout *mainLayout = new QVBoxLayout(central);
 
-    // Górny pasek: rozmiar + typ danych
-    QHBoxLayout *topLayout = new QHBoxLayout;
-    QLabel *sizeLabel = new QLabel("Rozmiar macierzy:", this);
+    // Kontrolki górne
+    QHBoxLayout *controlsLayout = new QHBoxLayout;
+    controlsLayout->addWidget(new QLabel("Rozmiar macierzy:"));
     matrixSizeSpinBox = new QSpinBox(this);
     matrixSizeSpinBox->setRange(2, 10);
     matrixSizeSpinBox->setValue(3);
-    QLabel *typeLabel = new QLabel("Typ danych:", this);
+    controlsLayout->addWidget(matrixSizeSpinBox);
+
+    controlsLayout->addWidget(new QLabel("Typ danych:"));
     dataTypeComboBox = new QComboBox(this);
     dataTypeComboBox->addItem("double");
     dataTypeComboBox->addItem("mpreal");
     dataTypeComboBox->addItem("interval");
-    dataTypeComboBox->setCurrentText("interval");
+    controlsLayout->addWidget(dataTypeComboBox);
+    controlsLayout->addStretch();
 
-    topLayout->addWidget(sizeLabel);
-    topLayout->addWidget(matrixSizeSpinBox);
-    topLayout->addSpacing(20);
-    topLayout->addWidget(typeLabel);
-    topLayout->addWidget(dataTypeComboBox);
-    topLayout->addStretch();
+    mainLayout->addLayout(controlsLayout);
 
-    // Layouty macierzy i wektora
+    // Layouty dla macierzy i wektora
     matrixLayout = new QGridLayout;
-    matrixLayout->setSpacing(5);
     vectorLayout = new QVBoxLayout;
-    vectorLayout->setSpacing(5);
+    matrixLayout->setSpacing(2);
+    vectorLayout->setSpacing(2);
 
     QFrame *separator = new QFrame(this);
     separator->setFrameShape(QFrame::VLine);
-    separator->setFrameShadow(QFrame::Sunken);
     separator->setLineWidth(1);
 
-    QHBoxLayout *matrixGroupLayout = new QHBoxLayout;
-    matrixGroupLayout->addLayout(matrixLayout);
-    matrixGroupLayout->addWidget(separator);
-    matrixGroupLayout->addLayout(vectorLayout);
+    QHBoxLayout *matrixGroup = new QHBoxLayout;
+    matrixGroup->addLayout(matrixLayout);
+    matrixGroup->addWidget(separator);
+    matrixGroup->addLayout(vectorLayout);
 
-    // Przycisk rozwiązania
+    mainLayout->addLayout(matrixGroup);
+
+    // Przycisk i pole tekstowe
     solveButton = new QPushButton("Rozwiąż", this);
-    solveButton->setFixedWidth(120);
+    mainLayout->addWidget(solveButton);
 
-    // Pole wynikowe
     solutionTextEdit = new QTextEdit(this);
     solutionTextEdit->setReadOnly(true);
-    solutionTextEdit->setMinimumHeight(100);
-
-    // Składanie wszystkiego
-    mainLayout->addLayout(topLayout);
-    mainLayout->addSpacing(10);
-    mainLayout->addLayout(matrixGroupLayout);
-    mainLayout->addSpacing(10);
-    mainLayout->addWidget(solveButton, 0, Qt::AlignCenter);
     mainLayout->addWidget(solutionTextEdit);
+
     setCentralWidget(central);
 
-    // Sygnaly
-    selectedType = dataTypeComboBox->currentText();
-    connect(dataTypeComboBox, &QComboBox::currentTextChanged, this, [=](const QString &text)
+    // Połączenia
+    connect(matrixSizeSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &MainWindow::createMatrixInputs);
+    connect(dataTypeComboBox, &QComboBox::currentTextChanged, this, [this](const QString &text)
             {
         selectedType = text;
         createMatrixInputs(matrixSizeSpinBox->value()); });
-
-    connect(matrixSizeSpinBox, QOverload<int>::of(&QSpinBox::valueChanged),
-            this, &MainWindow::createMatrixInputs);
     connect(solveButton, &QPushButton::clicked, this, &MainWindow::solveSystem);
 
+    selectedType = dataTypeComboBox->currentText();
     createMatrixInputs(matrixSizeSpinBox->value());
 }
 
-MainWindow::~MainWindow() {}
-
 void MainWindow::createMatrixInputs(int size)
 {
+    QString type = selectedType.toLower();
+
+    // Czyścimy stare pola
     QLayoutItem *child;
     while ((child = matrixLayout->takeAt(0)))
     {
@@ -97,8 +97,6 @@ void MainWindow::createMatrixInputs(int size)
     matrixInputs.clear();
     vectorInputs.clear();
 
-    QString type = selectedType.toLower();
-
     for (int i = 0; i < size; ++i)
     {
         QVector<QLineEdit *> row;
@@ -106,21 +104,22 @@ void MainWindow::createMatrixInputs(int size)
         {
             if (type == "interval")
             {
-                QHBoxLayout *pairLayout = new QHBoxLayout;
-                QLineEdit *a = new QLineEdit(this);
-                QLineEdit *b = new QLineEdit(this);
-                a->setFixedWidth(40);
-                b->setFixedWidth(40);
-                a->setAlignment(Qt::AlignCenter);
-                b->setAlignment(Qt::AlignCenter);
-                pairLayout->addWidget(a);
-                pairLayout->addWidget(b);
+                QHBoxLayout *cellLayout = new QHBoxLayout;
+                QLineEdit *left = new QLineEdit(this);
+                QLineEdit *right = new QLineEdit(this);
+                left->setFixedWidth(40);
+                right->setFixedWidth(40);
+                left->setAlignment(Qt::AlignCenter);
+                right->setAlignment(Qt::AlignCenter);
+                cellLayout->addWidget(left);
+                cellLayout->addWidget(right);
 
                 QWidget *container = new QWidget(this);
-                container->setLayout(pairLayout);
+                container->setLayout(cellLayout);
                 matrixLayout->addWidget(container, i, j);
-                row.append(a);
-                row.append(b);
+
+                row.append(left);
+                row.append(right);
             }
             else
             {
@@ -135,21 +134,20 @@ void MainWindow::createMatrixInputs(int size)
 
         if (type == "interval")
         {
-            QHBoxLayout *vPair = new QHBoxLayout;
-            QLineEdit *a = new QLineEdit(this);
-            QLineEdit *b = new QLineEdit(this);
-            a->setFixedWidth(40);
-            b->setFixedWidth(40);
-            a->setAlignment(Qt::AlignCenter);
-            b->setAlignment(Qt::AlignCenter);
-            vPair->addWidget(a);
-            vPair->addWidget(b);
-
-            QWidget *vContainer = new QWidget(this);
-            vContainer->setLayout(vPair);
-            vectorLayout->addWidget(vContainer);
-            vectorInputs.append(a);
-            vectorInputs.append(b);
+            QHBoxLayout *vecLayout = new QHBoxLayout;
+            QLineEdit *left = new QLineEdit(this);
+            QLineEdit *right = new QLineEdit(this);
+            left->setFixedWidth(40);
+            right->setFixedWidth(40);
+            left->setAlignment(Qt::AlignCenter);
+            right->setAlignment(Qt::AlignCenter);
+            vecLayout->addWidget(left);
+            vecLayout->addWidget(right);
+            QWidget *container = new QWidget(this);
+            container->setLayout(vecLayout);
+            vectorLayout->addWidget(container);
+            vectorInputs.append(left);
+            vectorInputs.append(right);
         }
         else
         {
@@ -164,45 +162,67 @@ void MainWindow::createMatrixInputs(int size)
 
 void MainWindow::solveSystem()
 {
-    QString type = selectedType.toLower();
     int size = matrixSizeSpinBox->value();
+    QString type = selectedType.toLower();
 
-    if (type == "interval")
+    if (type == "double")
+    {
+        QVector<QVector<double>> A(size, QVector<double>(size));
+        QVector<double> b(size);
+        for (int i = 0; i < size; ++i)
+        {
+            for (int j = 0; j < size; ++j)
+                A[i][j] = matrixInputs[i][j]->text().toDouble();
+            b[i] = vectorInputs[i]->text().toDouble();
+        }
+        QVector<double> x = solveCrout(A, b);
+        QString res;
+        for (int i = 0; i < size; ++i)
+            res += QString("x[%1] = %2\n").arg(i).arg(x[i]);
+        solutionTextEdit->setText(res);
+    }
+    else if (type == "mpreal")
+    {
+        QVector<QVector<mpreal>> A(size, QVector<mpreal>(size));
+        QVector<mpreal> b(size);
+        for (int i = 0; i < size; ++i)
+        {
+            for (int j = 0; j < size; ++j)
+                A[i][j] = mpreal(matrixInputs[i][j]->text().toStdString());
+            b[i] = mpreal(vectorInputs[i]->text().toStdString());
+        }
+        QVector<mpreal> x = solveCrout(A, b);
+        QString res;
+        for (int i = 0; i < size; ++i)
+            res += QString("x[%1] = %2\n").arg(i).arg(QString::fromStdString(x[i].toString()));
+        solutionTextEdit->setText(res);
+    }
+    else if (type == "interval")
     {
         QVector<QVector<Interval<mpreal>>> A(size, QVector<Interval<mpreal>>(size));
         QVector<Interval<mpreal>> b(size);
-
-        for (int i = 0, k = 0; i < size; ++i)
-        {
-            for (int j = 0; j < size; ++j, k += 2)
-            {
-                mpreal a = QString(matrixInputs[i][2 * j]->text()).toDouble();
-                mpreal b_val = QString(matrixInputs[i][2 * j + 1]->text()).toDouble();
-                A[i][j] = Interval<mpreal>(a, b_val);
-            }
-        }
-
         for (int i = 0; i < size; ++i)
         {
-            mpreal a = QString(vectorInputs[2 * i]->text()).toDouble();
-            mpreal b_val = QString(vectorInputs[2 * i + 1]->text()).toDouble();
-            b[i] = Interval<mpreal>(a, b_val);
+            for (int j = 0; j < size; ++j)
+            {
+                mpreal a = mpreal(matrixInputs[i][2 * j]->text().toStdString());
+                mpreal b_ = mpreal(matrixInputs[i][2 * j + 1]->text().toStdString());
+                A[i][j] = Interval<mpreal>(a, b_);
+            }
+            mpreal ba = mpreal(vectorInputs[2 * i]->text().toStdString());
+            mpreal bb = mpreal(vectorInputs[2 * i + 1]->text().toStdString());
+            b[i] = Interval<mpreal>(ba, bb);
         }
 
         QVector<Interval<mpreal>> x = solveCrout(A, b);
-        QString result;
+        QString res;
         for (int i = 0; i < size; ++i)
-            result += QString("x[%1] = [%2, %3]\n")
-                          .arg(i)
-                          .arg(QString::fromStdString(x[i].a.toString()))
-                          .arg(QString::fromStdString(x[i].b.toString()));
-
-        solutionTextEdit->setText(result);
+            res += QString("x[%1] = [%2, %3]\n").arg(i).arg(QString::fromStdString(x[i].a.toString())).arg(QString::fromStdString(x[i].b.toString()));
+        solutionTextEdit->setText(res);
     }
-
-    // inne typy (double, mpreal) możesz dorobić później – teraz skupiłem się na interval
 }
 
+// Brakujące definicje metod solveCrout dla double i mpreal
 QVector<double> MainWindow::solveCrout(const QVector<QVector<double>> &A, const QVector<double> &b)
 {
     int n = A.size();
@@ -257,7 +277,7 @@ QVector<mpreal> MainWindow::solveCrout(const QVector<QVector<mpreal>> &A, const 
 
     for (int i = 0; i < n; ++i)
     {
-        L[i][i] = 1.0;
+        L[i][i] = 1;
         for (int j = i; j < n; ++j)
         {
             mpreal sum = 0;
@@ -293,12 +313,15 @@ QVector<mpreal> MainWindow::solveCrout(const QVector<QVector<mpreal>> &A, const 
     return x;
 }
 
-QVector<Interval<mpreal>> MainWindow::solveCrout(const QVector<QVector<Interval<mpreal>>> &A, const QVector<Interval<mpreal>> &b)
+QVector<Interval<mpreal>> MainWindow::solveCrout(
+    const QVector<QVector<Interval<mpreal>>> &A,
+    const QVector<Interval<mpreal>> &b)
 {
     int n = A.size();
     QVector<QVector<Interval<mpreal>>> L(n, QVector<Interval<mpreal>>(n));
     QVector<QVector<Interval<mpreal>>> U(n, QVector<Interval<mpreal>>(n));
-    QVector<Interval<mpreal>> y(n), x(n);
+    QVector<Interval<mpreal>> y(n);
+    QVector<Interval<mpreal>> x(n);
 
     for (int i = 0; i < n; ++i)
     {
