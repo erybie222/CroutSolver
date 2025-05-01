@@ -105,7 +105,7 @@
  /usr/include/aarch64-linux-gnu/gmp.h
  /usr/include/aarch64-linux-gnu/gnu/stubs-lp64.h
  /usr/include/aarch64-linux-gnu/gnu/stubs.h
- /usr/include/aarch64-linux-gnu/qt6/QtCore/QString
+ /usr/include/aarch64-linux-gnu/qt6/QtCore/QList
  /usr/include/aarch64-linux-gnu/qt6/QtCore/QVector
  /usr/include/aarch64-linux-gnu/qt6/QtCore/qabstractitemmodel.h
  /usr/include/aarch64-linux-gnu/qt6/QtCore/qalgorithms.h
@@ -227,6 +227,7 @@
  /usr/include/aarch64-linux-gnu/qt6/QtGui/qwindowdefs.h
  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QComboBox
  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QGridLayout
+ /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QHBoxLayout
  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QLineEdit
  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QMainWindow
  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QPushButton

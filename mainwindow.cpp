@@ -165,6 +165,8 @@ void MainWindow::solveSystem()
     int size = matrixSizeSpinBox->value();
     QString type = selectedType.toLower();
 
+    QString res;
+
     if (type == "double")
     {
         QVector<QVector<double>> A(size, QVector<double>(size));
@@ -175,11 +177,30 @@ void MainWindow::solveSystem()
                 A[i][j] = matrixInputs[i][j]->text().toDouble();
             b[i] = vectorInputs[i]->text().toDouble();
         }
-        QVector<double> x = solveCrout(A, b);
-        QString res;
+
+        QVector<QVector<double>> L, U;
+        QVector<double> y, x;
+        std::tie(x, L, U, y) = solveCroutFull(A, b);
+        displaySolutionDetails(L, U, y);
+
         for (int i = 0; i < size; ++i)
             res += QString("x[%1] = %2\n").arg(i).arg(x[i]);
-        solutionTextEdit->setText(res);
+
+        res += "\nMacierz L:\n";
+        for (const auto &row : L)
+            for (double val : row)
+                res += QString::number(val) + " ";
+        res += "\n";
+
+        res += "\nMacierz U:\n";
+        for (const auto &row : U)
+            for (double val : row)
+                res += QString::number(val) + " ";
+        res += "\n";
+
+        res += "\nWektor y:\n";
+        for (double val : y)
+            res += QString::number(val) + "\n";
     }
     else if (type == "mpreal")
     {
@@ -191,11 +212,30 @@ void MainWindow::solveSystem()
                 A[i][j] = mpreal(matrixInputs[i][j]->text().toStdString());
             b[i] = mpreal(vectorInputs[i]->text().toStdString());
         }
-        QVector<mpreal> x = solveCrout(A, b);
-        QString res;
+
+        QVector<QVector<mpreal>> L, U;
+        QVector<mpreal> y, x;
+        std::tie(x, L, U, y) = solveCroutFull(A, b);
+        displaySolutionDetails(L, U, y);
+
         for (int i = 0; i < size; ++i)
-            res += QString("x[%1] = %2\n").arg(i).arg(QString::fromStdString(x[i].toString()));
-        solutionTextEdit->setText(res);
+            res += QString("x[%1] = %1\n").arg(i).arg(QString::fromStdString(x[i].toString()));
+
+        res += "\nMacierz L:\n";
+        for (const auto &row : L)
+            for (const auto &val : row)
+                res += QString::fromStdString(val.toString()) + " ";
+        res += "\n";
+
+        res += "\nMacierz U:\n";
+        for (const auto &row : U)
+            for (const auto &val : row)
+                res += QString::fromStdString(val.toString()) + " ";
+        res += "\n";
+
+        res += "\nWektor y:\n";
+        for (const auto &val : y)
+            res += QString::fromStdString(val.toString()) + "\n";
     }
     else if (type == "interval")
     {
@@ -204,22 +244,36 @@ void MainWindow::solveSystem()
         for (int i = 0; i < size; ++i)
         {
             for (int j = 0; j < size; ++j)
-            {
-                mpreal a = mpreal(matrixInputs[i][2 * j]->text().toStdString());
-                mpreal b_ = mpreal(matrixInputs[i][2 * j + 1]->text().toStdString());
-                A[i][j] = Interval<mpreal>(a, b_);
-            }
-            mpreal ba = mpreal(vectorInputs[2 * i]->text().toStdString());
-            mpreal bb = mpreal(vectorInputs[2 * i + 1]->text().toStdString());
-            b[i] = Interval<mpreal>(ba, bb);
+                A[i][j] = Interval<mpreal>::fromString(matrixInputs[i][j]->text().toStdString());
+            b[i] = Interval<mpreal>::fromString(vectorInputs[i]->text().toStdString());
         }
 
-        QVector<Interval<mpreal>> x = solveCrout(A, b);
-        QString res;
+        QVector<QVector<Interval<mpreal>>> L, U;
+        QVector<Interval<mpreal>> y, x;
+        std::tie(x, L, U, y) = solveCroutFull(A, b);
+        displaySolutionDetails(L, U, y);
+
         for (int i = 0; i < size; ++i)
             res += QString("x[%1] = [%2, %3]\n").arg(i).arg(QString::fromStdString(x[i].a.toString())).arg(QString::fromStdString(x[i].b.toString()));
-        solutionTextEdit->setText(res);
+
+        res += "\nMacierz L:\n";
+        for (const auto &row : L)
+            for (const auto &val : row)
+                res += "[" + QString::fromStdString(val.a.toString()) + ", " + QString::fromStdString(val.b.toString()) + "] ";
+        res += "\n";
+
+        res += "\nMacierz U:\n";
+        for (const auto &row : U)
+            for (const auto &val : row)
+                res += "[" + QString::fromStdString(val.a.toString()) + ", " + QString::fromStdString(val.b.toString()) + "] ";
+        res += "\n";
+
+        res += "\nWektor y:\n";
+        for (const auto &val : y)
+            res += "[" + QString::fromStdString(val.a.toString()) + ", " + QString::fromStdString(val.b.toString()) + "]\n";
     }
+
+    solutionTextEdit->setText(res);
 }
 
 // Brakujące definicje metod solveCrout dla double i mpreal
@@ -359,4 +413,239 @@ QVector<Interval<mpreal>> MainWindow::solveCrout(
     }
 
     return x;
+}
+
+std::tuple<QVector<double>, QVector<QVector<double>>, QVector<QVector<double>>, QVector<double>>
+MainWindow::solveCroutFull(const QVector<QVector<double>> &A, const QVector<double> &b)
+{
+    int n = A.size();
+    QVector<QVector<double>> L(n, QVector<double>(n));
+    QVector<QVector<double>> U(n, QVector<double>(n));
+    QVector<double> y(n), x(n);
+
+    for (int i = 0; i < n; ++i)
+    {
+        L[i][i] = 1.0;
+        for (int j = i; j < n; ++j)
+        {
+            double sum = 0;
+            for (int k = 0; k < i; ++k)
+                sum += L[i][k] * U[k][j];
+            U[i][j] = A[i][j] - sum;
+        }
+        for (int j = i + 1; j < n; ++j)
+        {
+            double sum = 0;
+            for (int k = 0; k < i; ++k)
+                sum += L[j][k] * U[k][i];
+            L[j][i] = (A[j][i] - sum) / U[i][i];
+        }
+    }
+
+    for (int i = 0; i < n; ++i)
+    {
+        double sum = 0;
+        for (int k = 0; k < i; ++k)
+            sum += L[i][k] * y[k];
+        y[i] = (b[i] - sum) / L[i][i];
+    }
+
+    for (int i = n - 1; i >= 0; --i)
+    {
+        double sum = 0;
+        for (int k = i + 1; k < n; ++k)
+            sum += U[i][k] * x[k];
+        x[i] = (y[i] - sum) / U[i][i];
+    }
+
+    return {x, L, U, y};
+}
+
+std::tuple<QVector<mpreal>, QVector<QVector<mpreal>>, QVector<QVector<mpreal>>, QVector<mpreal>>
+MainWindow::solveCroutFull(const QVector<QVector<mpreal>> &A, const QVector<mpreal> &b)
+{
+    int n = A.size();
+    QVector<QVector<mpreal>> L(n, QVector<mpreal>(n));
+    QVector<QVector<mpreal>> U(n, QVector<mpreal>(n));
+    QVector<mpreal> y(n), x(n);
+
+    for (int i = 0; i < n; ++i)
+    {
+        L[i][i] = 1;
+        for (int j = i; j < n; ++j)
+        {
+            mpreal sum = 0;
+            for (int k = 0; k < i; ++k)
+                sum += L[i][k] * U[k][j];
+            U[i][j] = A[i][j] - sum;
+        }
+        for (int j = i + 1; j < n; ++j)
+        {
+            mpreal sum = 0;
+            for (int k = 0; k < i; ++k)
+                sum += L[j][k] * U[k][i];
+            L[j][i] = (A[j][i] - sum) / U[i][i];
+        }
+    }
+
+    for (int i = 0; i < n; ++i)
+    {
+        mpreal sum = 0;
+        for (int k = 0; k < i; ++k)
+            sum += L[i][k] * y[k];
+        y[i] = (b[i] - sum) / L[i][i];
+    }
+
+    for (int i = n - 1; i >= 0; --i)
+    {
+        mpreal sum = 0;
+        for (int k = i + 1; k < n; ++k)
+            sum += U[i][k] * x[k];
+        x[i] = (y[i] - sum) / U[i][i];
+    }
+
+    return {x, L, U, y};
+}
+
+std::tuple<QVector<Interval<mpreal>>, QVector<QVector<Interval<mpreal>>>, QVector<QVector<Interval<mpreal>>>, QVector<Interval<mpreal>>>
+MainWindow::solveCroutFull(const QVector<QVector<Interval<mpreal>>> &A, const QVector<Interval<mpreal>> &b)
+{
+    int n = A.size();
+    QVector<QVector<Interval<mpreal>>> L(n, QVector<Interval<mpreal>>(n));
+    QVector<QVector<Interval<mpreal>>> U(n, QVector<Interval<mpreal>>(n));
+    QVector<Interval<mpreal>> y(n), x(n);
+
+    for (int i = 0; i < n; ++i)
+    {
+        L[i][i] = Interval<mpreal>(1, 1);
+        for (int j = i; j < n; ++j)
+        {
+            Interval<mpreal> sum(0, 0);
+            for (int k = 0; k < i; ++k)
+                sum = sum + L[i][k] * U[k][j];
+            U[i][j] = A[i][j] - sum;
+        }
+        for (int j = i + 1; j < n; ++j)
+        {
+            Interval<mpreal> sum(0, 0);
+            for (int k = 0; k < i; ++k)
+                sum = sum + L[j][k] * U[k][i];
+            L[j][i] = (A[j][i] - sum) / U[i][i];
+        }
+    }
+
+    for (int i = 0; i < n; ++i)
+    {
+        Interval<mpreal> sum(0, 0);
+        for (int k = 0; k < i; ++k)
+            sum = sum + L[i][k] * y[k];
+        y[i] = (b[i] - sum) / L[i][i];
+    }
+
+    for (int i = n - 1; i >= 0; --i)
+    {
+        Interval<mpreal> sum(0, 0);
+        for (int k = i + 1; k < n; ++k)
+            sum = sum + U[i][k] * x[k];
+        x[i] = (y[i] - sum) / U[i][i];
+    }
+
+    return {x, L, U, y};
+}
+
+void MainWindow::displaySolutionDetails(const QVector<QVector<double>> &L,
+                                        const QVector<QVector<double>> &U,
+                                        const QVector<double> &y)
+{
+    QString result;
+    int n = L.size();
+
+    result += "Macierz L:\n";
+    for (int i = 0; i < n; ++i)
+    {
+        for (int j = 0; j < n; ++j)
+            result += QString("%1\t").arg(L[i][j]);
+        result += "\n";
+    }
+
+    result += "\nMacierz U:\n";
+    for (int i = 0; i < n; ++i)
+    {
+        for (int j = 0; j < n; ++j)
+            result += QString("%1\t").arg(U[i][j]);
+        result += "\n";
+    }
+
+    result += "\nWektor y:\n";
+    for (int i = 0; i < n; ++i)
+        result += QString("y[%1] = %2\n").arg(i).arg(y[i]);
+
+    solutionTextEdit->append(result);
+}
+
+void MainWindow::displaySolutionDetails(const QVector<QVector<mpreal>> &L,
+                                        const QVector<QVector<mpreal>> &U,
+                                        const QVector<mpreal> &y)
+{
+    QString result;
+    int n = L.size();
+
+    result += "Macierz L:\n";
+    for (int i = 0; i < n; ++i)
+    {
+        for (int j = 0; j < n; ++j)
+            result += QString::fromStdString(L[i][j].toString()) + "\t";
+        result += "\n";
+    }
+
+    result += "\nMacierz U:\n";
+    for (int i = 0; i < n; ++i)
+    {
+        for (int j = 0; j < n; ++j)
+            result += QString::fromStdString(U[i][j].toString()) + "\t";
+        result += "\n";
+    }
+
+    result += "\nWektor y:\n";
+    for (int i = 0; i < n; ++i)
+        result += QString("y[%1] = %2\n").arg(i).arg(QString::fromStdString(y[i].toString()));
+
+    solutionTextEdit->append(result);
+}
+
+void MainWindow::displaySolutionDetails(const QVector<QVector<Interval<mpreal>>> &L,
+                                        const QVector<QVector<Interval<mpreal>>> &U,
+                                        const QVector<Interval<mpreal>> &y)
+{
+    QString result;
+    int n = L.size();
+
+    result += "Macierz L:\n";
+    for (int i = 0; i < n; ++i)
+    {
+        for (int j = 0; j < n; ++j)
+            result += QString("[%1, %2]\t")
+                          .arg(QString::fromStdString(L[i][j].a.toString()))
+                          .arg(QString::fromStdString(L[i][j].b.toString()));
+        result += "\n";
+    }
+
+    result += "\nMacierz U:\n";
+    for (int i = 0; i < n; ++i)
+    {
+        for (int j = 0; j < n; ++j)
+            result += QString("[%1, %2]\t")
+                          .arg(QString::fromStdString(U[i][j].a.toString()))
+                          .arg(QString::fromStdString(U[i][j].b.toString()));
+        result += "\n";
+    }
+
+    result += "\nWektor y:\n";
+    for (int i = 0; i < n; ++i)
+        result += QString("y[%1] = [%2, %3]\n")
+                      .arg(i)
+                      .arg(QString::fromStdString(y[i].a.toString()))
+                      .arg(QString::fromStdString(y[i].b.toString()));
+
+    solutionTextEdit->append(result);
 }

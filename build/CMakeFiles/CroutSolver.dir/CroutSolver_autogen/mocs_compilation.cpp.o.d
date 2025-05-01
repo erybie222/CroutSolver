@@ -346,6 +346,8 @@ CMakeFiles/CroutSolver.dir/CroutSolver_autogen/mocs_compilation.cpp.o: \
  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qtabwidget.h \
  /usr/include/aarch64-linux-gnu/qt6/QtCore/QVector \
  /usr/include/aarch64-linux-gnu/qt6/QtCore/qvector.h \
+ /usr/include/aarch64-linux-gnu/qt6/QtCore/QList \
+ /usr/include/aarch64-linux-gnu/qt6/QtCore/qlist.h \
  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QLineEdit \
  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qlineedit.h \
  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qframe.h \
@@ -355,14 +357,6 @@ CMakeFiles/CroutSolver.dir/CroutSolver_autogen/mocs_compilation.cpp.o: \
  /usr/include/aarch64-linux-gnu/qt6/QtGui/qtextformat.h \
  /usr/include/aarch64-linux-gnu/qt6/QtGui/qpen.h \
  /usr/include/aarch64-linux-gnu/qt6/QtGui/qtextoption.h \
- /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QGridLayout \
- /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qgridlayout.h \
- /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qlayout.h \
- /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qlayoutitem.h \
- /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qboxlayout.h \
- /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qgridlayout.h \
- /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QVBoxLayout \
- /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qboxlayout.h \
  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QComboBox \
  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qcombobox.h \
  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qabstractitemdelegate.h \
@@ -377,16 +371,23 @@ CMakeFiles/CroutSolver.dir/CroutSolver_autogen/mocs_compilation.cpp.o: \
  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qtabbar.h \
  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qrubberband.h \
  /usr/include/aarch64-linux-gnu/qt6/QtCore/qabstractitemmodel.h \
- /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QSpinBox \
- /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qspinbox.h \
  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QPushButton \
  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qpushbutton.h \
  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qabstractbutton.h \
+ /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QSpinBox \
+ /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qspinbox.h \
  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QTextEdit \
  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qtextedit.h \
  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qabstractscrollarea.h \
- /usr/include/aarch64-linux-gnu/qt6/QtCore/QString \
- /usr/include/aarch64-linux-gnu/qt6/QtCore/qstring.h \
+ /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QGridLayout \
+ /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qgridlayout.h \
+ /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qlayout.h \
+ /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qlayoutitem.h \
+ /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qboxlayout.h \
+ /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qgridlayout.h \
+ /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QVBoxLayout \
+ /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qboxlayout.h \
+ /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QHBoxLayout \
  /home/eryk/CroutSolver/mpreal.h /usr/include/c++/13/iostream \
  /usr/include/c++/13/ostream /usr/include/c++/13/ios \
  /usr/include/c++/13/bits/basic_ios.h \

@@ -104,7 +104,7 @@ CroutSolver_autogen/timestamp: /home/eryk/CroutSolver/CMakeLists.txt \
   /usr/include/aarch64-linux-gnu/gmp.h \
   /usr/include/aarch64-linux-gnu/gnu/stubs-lp64.h \
   /usr/include/aarch64-linux-gnu/gnu/stubs.h \
-  /usr/include/aarch64-linux-gnu/qt6/QtCore/QString \
+  /usr/include/aarch64-linux-gnu/qt6/QtCore/QList \
   /usr/include/aarch64-linux-gnu/qt6/QtCore/QVector \
   /usr/include/aarch64-linux-gnu/qt6/QtCore/qabstractitemmodel.h \
   /usr/include/aarch64-linux-gnu/qt6/QtCore/qalgorithms.h \
@@ -226,6 +226,7 @@ CroutSolver_autogen/timestamp: /home/eryk/CroutSolver/CMakeLists.txt \
   /usr/include/aarch64-linux-gnu/qt6/QtGui/qwindowdefs.h \
   /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QComboBox \
   /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QGridLayout \
+  /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QHBoxLayout \
   /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QLineEdit \
   /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QMainWindow \
   /usr/include/aarch64-linux-gnu/qt6/QtWidgets/QPushButton \
@@ -885,13 +886,9 @@ CroutSolver_autogen/timestamp: /home/eryk/CroutSolver/CMakeLists.txt \
 
 /usr/lib/aarch64-linux-gnu/cmake/Qt6Gui/Qt6GuiDependencies.cmake:
 
-/usr/include/aarch64-linux-gnu/qt6/QtWidgets/qtwidgetsglobal.h:
-
-/home/eryk/CroutSolver/interval.hpp:
+/usr/lib/aarch64-linux-gnu/cmake/Qt6Gui/Qt6GuiConfigVersionImpl.cmake:
 
 /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qtwidgetsexports.h:
-
-/usr/include/aarch64-linux-gnu/qt6/QtCore/QString:
 
 /usr/share/cmake-3.28/Modules/CMakeParseImplicitIncludeInfo.cmake:
 
@@ -963,8 +960,6 @@ CroutSolver_autogen/timestamp: /home/eryk/CroutSolver/CMakeLists.txt \
 
 /usr/include/c++/13/bits/locale_classes.h:
 
-/usr/lib/aarch64-linux-gnu/cmake/Qt6Gui/Qt6GuiConfigVersionImpl.cmake:
-
 /usr/include/aarch64-linux-gnu/qt6/QtCore/qvariant.h:
 
 /usr/share/cmake-3.28/Modules/Platform/Linux-Determine-CXX.cmake:
@@ -1023,6 +1018,10 @@ CMakeFiles/3.28.3/CMakeCXXCompiler.cmake:
 
 /usr/include/aarch64-linux-gnu/qt6/QtCore/qstringlist.h:
 
+/usr/include/aarch64-linux-gnu/qt6/QtCore/qbytearraylist.h:
+
+/usr/lib/aarch64-linux-gnu/cmake/Qt6Gui/Qt6GuiConfigVersion.cmake:
+
 /usr/include/aarch64-linux-gnu/qt6/QtCore/qstringtokenizer.h:
 
 /usr/include/c++/13/bits/max_size_type.h:
@@ -1032,6 +1031,12 @@ CMakeFiles/3.28.3/CMakeCXXCompiler.cmake:
 /usr/include/aarch64-linux-gnu/qt6/QtCore/qstringconverter_base.h:
 
 /usr/include/aarch64-linux-gnu/bits/local_lim.h:
+
+/usr/share/cmake-3.28/Modules/FindVulkan.cmake:
+
+/usr/lib/aarch64-linux-gnu/cmake/Qt6/QtPublicPluginHelpers.cmake:
+
+/usr/include/aarch64-linux-gnu/qt6/QtCore/qsize.h:
 
 /usr/include/aarch64-linux-gnu/qt6/QtCore/qsharedpointer_impl.h:
 
@@ -1233,8 +1238,6 @@ CMakeFiles/3.28.3/CMakeSystem.cmake:
 
 /usr/include/aarch64-linux-gnu/qt6/QtGui/qtguiexports.h:
 
-/usr/include/aarch64-linux-gnu/bits/uio_lim.h:
-
 /usr/include/c++/13/bits/localefwd.h:
 
 /usr/include/aarch64-linux-gnu/bits/struct_rwlock.h:
@@ -1256,6 +1259,10 @@ CroutSolver_autogen/moc_predefs.h:
 /usr/include/strings.h:
 
 /usr/include/aarch64-linux-gnu/bits/sched.h:
+
+/home/eryk/CroutSolver/interval.hpp:
+
+/usr/include/aarch64-linux-gnu/qt6/QtWidgets/qtwidgetsglobal.h:
 
 /usr/include/aarch64-linux-gnu/qt6/QtCore/qglobal.h:
 
@@ -1511,6 +1518,10 @@ CMakeFiles/3.28.3/CMakeCCompiler.cmake:
 
 /usr/include/aarch64-linux-gnu/sys/select.h:
 
+/usr/include/aarch64-linux-gnu/bits/uio_lim.h:
+
+/usr/include/aarch64-linux-gnu/qt6/QtCore/QList:
+
 /usr/include/aarch64-linux-gnu/c++/13/bits/os_defines.h:
 
 /usr/include/aarch64-linux-gnu/qt6/QtCore/QVector:
@@ -1557,16 +1568,6 @@ CMakeFiles/3.28.3/CMakeCCompiler.cmake:
 
 /usr/include/c++/13/typeinfo:
 
-/usr/lib/aarch64-linux-gnu/cmake/Qt6Gui/Qt6GuiConfigVersion.cmake:
-
-/usr/include/aarch64-linux-gnu/qt6/QtCore/qbytearraylist.h:
-
-/usr/share/cmake-3.28/Modules/FindVulkan.cmake:
-
-/usr/include/aarch64-linux-gnu/qt6/QtCore/qsize.h:
-
-/usr/lib/aarch64-linux-gnu/cmake/Qt6/QtPublicPluginHelpers.cmake:
-
 /usr/include/aarch64-linux-gnu/bits/stdio_lim.h:
 
 /usr/include/aarch64-linux-gnu/qt6/QtWidgets/qwidget.h:
@@ -1586,6 +1587,8 @@ CMakeFiles/3.28.3/CMakeCCompiler.cmake:
 /usr/include/asm-generic/unistd.h:
 
 /usr/include/assert.h:
+
+/usr/include/aarch64-linux-gnu/qt6/QtWidgets/QHBoxLayout:
 
 /usr/include/aarch64-linux-gnu/qt6/QtGui/qpen.h:
 
