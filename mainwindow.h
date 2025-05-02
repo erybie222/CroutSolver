@@ -70,6 +70,7 @@ private:
     void displaySolutionDetails(const QVector<QVector<mpreal>> &L, const QVector<QVector<mpreal>> &U, const QVector<mpreal> &y, const QVector<mpreal> &x);
     void displaySolutionDetails(const QVector<QVector<Interval<mpreal>>> &L, const QVector<QVector<Interval<mpreal>>> &U, const QVector<Interval<mpreal>> &y, const QVector<Interval<mpreal>> &x);
 
+    QVBoxLayout *mainLayout;
 
 
     template <typename T>

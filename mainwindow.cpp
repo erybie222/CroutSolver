@@ -9,6 +9,8 @@
 #include <QComboBox>
 #include <QGroupBox>
 #include <QFrame>
+#include <QApplication>
+
 
 
 using namespace mpfr;
@@ -19,8 +21,48 @@ MainWindow::~MainWindow() = default;
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
+    qApp->setStyleSheet(R"(
+        QWidget {
+            background-color: #2b2b2b;
+            color: #f0f0f0;
+            font-family: Consolas, monospace;
+            font-size: 14px;
+        }
+        QLineEdit {
+            background-color: #3c3f41;
+            border: 1px solid #555;
+            border-radius: 4px;
+            padding: 4px;
+            color: #f0f0f0;
+        }
+        QLineEdit:focus {
+            border: 1px solid #007acc;
+        }
+        QPushButton {
+            background-color: #007acc;
+            border: none;
+            padding: 6px 12px;
+            color: white;
+            border-radius: 4px;
+        }
+        QPushButton:hover {
+            background-color: #005999;
+        }
+        QGroupBox {
+            border: 1px solid #555;
+            margin-top: 10px;
+        }
+        QGroupBox::title {
+            subcontrol-origin: margin;
+            subcontrol-position: top left;
+            padding: 0 3px;
+        }
+    )");
+    
+
     QWidget *central = new QWidget(this);
-    QVBoxLayout *mainLayout = new QVBoxLayout(central);
+    mainLayout = new QVBoxLayout(central);
+
 
     // Layout górny — kontrolki
     QHBoxLayout *controlsLayout = new QHBoxLayout;
@@ -39,6 +81,10 @@ MainWindow::MainWindow(QWidget *parent)
     controlsLayout->addStretch();
 
     mainLayout->addLayout(controlsLayout);
+
+    QLabel *labelA = new QLabel("Macierz A:", this);
+    labelA->setAlignment(Qt::AlignLeft);
+    
 
     // Layouty dla macierzy i wektora — tworzenie
     matrixLayout = new QGridLayout;
@@ -72,16 +118,19 @@ MainWindow::MainWindow(QWidget *parent)
     inputGroup->setContentsMargins(10, 10, 10, 10);
     inputGroup->setStyleSheet(R"(
         QGroupBox {
-            background-color: #f0f0f0;
-            border: 1px solid #aaa;
+            background-color: transparent;
+            border: 1px solid #555;
             margin-top: 10px;
+            color: #f0f0f0;
         }
         QGroupBox::title {
             subcontrol-origin: margin;
             left: 10px;
             padding: 0 3px;
+            color: #f0f0f0;
         }
     )");
+    
 
     mainLayout->addWidget(inputGroup);
 
@@ -90,6 +139,17 @@ MainWindow::MainWindow(QWidget *parent)
     mainLayout->addWidget(solveButton);
 
     solutionTextEdit = new QTextEdit(this);
+    solutionTextEdit->setStyleSheet(R"(
+        QTextEdit {
+            font-family: Consolas, monospace;
+            font-size: 13px;
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            border: 1px solid #555;
+            padding: 6px;
+        }
+    )");
+    
     solutionTextEdit->setReadOnly(true);
     QFont font("Courier");
     font.setStyleHint(QFont::Monospace);
@@ -97,6 +157,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     QGroupBox *resultGroup = new QGroupBox("Wynik rozwiązania", this);
     QVBoxLayout *resultLayout = new QVBoxLayout(resultGroup);
+    mainLayout->setContentsMargins(10, 10, 10, 10);
+    mainLayout->setSpacing(10);
+
     resultLayout->addWidget(solutionTextEdit);
     resultGroup->setContentsMargins(10, 10, 10, 10);
     mainLayout->addWidget(resultGroup);
@@ -145,6 +208,9 @@ void MainWindow::createMatrixInputs(int size)
             if (type == "interval")
             {
                 QHBoxLayout *cellLayout = new QHBoxLayout;
+                mainLayout->setContentsMargins(10, 10, 10, 10);
+                mainLayout->setSpacing(10);
+
                 QLineEdit *left = new QLineEdit(this);
                 QLineEdit *right = new QLineEdit(this);
                 left->setFixedWidth(40);
@@ -153,6 +219,10 @@ void MainWindow::createMatrixInputs(int size)
                 right->setAlignment(Qt::AlignCenter);
                 cellLayout->addWidget(left);
                 cellLayout->addWidget(right);
+
+                left->setStyleSheet("background-color: #404040; color: #ffaaaa;");
+                right->setStyleSheet("background-color: #404040; color: #aaffaa;");
+
 
                 QWidget *container = new QWidget(this);
                 container->setLayout(cellLayout);
