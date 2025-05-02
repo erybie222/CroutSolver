@@ -22,7 +22,7 @@ CMAKE_AR:FILEPATH=/usr/bin/ar
 
 //Choose the type of build, options are: None Debug Release RelWithDebInfo
 // MinSizeRel ...
-CMAKE_BUILD_TYPE:STRING=
+CMAKE_BUILD_TYPE:STRING=Debug
 
 //Enable/Disable color output during build.
 CMAKE_COLOR_MAKEFILE:BOOL=ON
@@ -273,7 +273,7 @@ CroutSolver_IS_TOP_LEVEL:STATIC=ON
 CroutSolver_SOURCE_DIR:STATIC=/home/eryk/CroutSolver
 
 //Path to a file.
-OPENGL_EGL_INCLUDE_DIR:PATH=/usr/include
+OPENGL_EGL_INCLUDE_DIR:PATH=OPENGL_EGL_INCLUDE_DIR-NOTFOUND
 
 //Path to a file.
 OPENGL_GLES2_INCLUDE_DIR:PATH=OPENGL_GLES2_INCLUDE_DIR-NOTFOUND
@@ -288,7 +288,7 @@ OPENGL_GLX_INCLUDE_DIR:PATH=/usr/include
 OPENGL_INCLUDE_DIR:PATH=/usr/include
 
 //Path to a library.
-OPENGL_egl_LIBRARY:FILEPATH=/usr/lib/aarch64-linux-gnu/libEGL.so
+OPENGL_egl_LIBRARY:FILEPATH=OPENGL_egl_LIBRARY-NOTFOUND
 
 //Path to a library.
 OPENGL_gles2_LIBRARY:FILEPATH=OPENGL_gles2_LIBRARY-NOTFOUND
@@ -297,13 +297,13 @@ OPENGL_gles2_LIBRARY:FILEPATH=OPENGL_gles2_LIBRARY-NOTFOUND
 OPENGL_gles3_LIBRARY:FILEPATH=OPENGL_gles3_LIBRARY-NOTFOUND
 
 //Path to a library.
-OPENGL_glu_LIBRARY:FILEPATH=/usr/lib/aarch64-linux-gnu/libGLU.so
+OPENGL_glu_LIBRARY:FILEPATH=OPENGL_glu_LIBRARY-NOTFOUND
 
 //Path to a library.
-OPENGL_glx_LIBRARY:FILEPATH=/usr/lib/aarch64-linux-gnu/libGLX.so
+OPENGL_glx_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libGLX.so
 
 //Path to a library.
-OPENGL_opengl_LIBRARY:FILEPATH=/usr/lib/aarch64-linux-gnu/libOpenGL.so
+OPENGL_opengl_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libOpenGL.so
 
 //Path to a file.
 OPENGL_xmesa_INCLUDE_DIR:PATH=OPENGL_xmesa_INCLUDE_DIR-NOTFOUND
@@ -322,31 +322,31 @@ QT_ADDITIONAL_HOST_PACKAGES_PREFIX_PATH:STRING=
 QT_ADDITIONAL_PACKAGES_PREFIX_PATH:STRING=
 
 //The directory containing a CMake configuration file for Qt6CoreTools.
-Qt6CoreTools_DIR:PATH=/usr/lib/aarch64-linux-gnu/cmake/Qt6CoreTools
+Qt6CoreTools_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/Qt6CoreTools
 
 //The directory containing a CMake configuration file for Qt6Core.
-Qt6Core_DIR:PATH=/usr/lib/aarch64-linux-gnu/cmake/Qt6Core
+Qt6Core_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/Qt6Core
 
 //The directory containing a CMake configuration file for Qt6DBusTools.
-Qt6DBusTools_DIR:PATH=/usr/lib/aarch64-linux-gnu/cmake/Qt6DBusTools
+Qt6DBusTools_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/Qt6DBusTools
 
 //The directory containing a CMake configuration file for Qt6DBus.
-Qt6DBus_DIR:PATH=/usr/lib/aarch64-linux-gnu/cmake/Qt6DBus
+Qt6DBus_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/Qt6DBus
 
 //The directory containing a CMake configuration file for Qt6GuiTools.
-Qt6GuiTools_DIR:PATH=/usr/lib/aarch64-linux-gnu/cmake/Qt6GuiTools
+Qt6GuiTools_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/Qt6GuiTools
 
 //The directory containing a CMake configuration file for Qt6Gui.
-Qt6Gui_DIR:PATH=/usr/lib/aarch64-linux-gnu/cmake/Qt6Gui
+Qt6Gui_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/Qt6Gui
 
 //The directory containing a CMake configuration file for Qt6WidgetsTools.
-Qt6WidgetsTools_DIR:PATH=/usr/lib/aarch64-linux-gnu/cmake/Qt6WidgetsTools
+Qt6WidgetsTools_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/Qt6WidgetsTools
 
 //The directory containing a CMake configuration file for Qt6Widgets.
-Qt6Widgets_DIR:PATH=/usr/lib/aarch64-linux-gnu/cmake/Qt6Widgets
+Qt6Widgets_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/Qt6Widgets
 
 //The directory containing a CMake configuration file for Qt6.
-Qt6_DIR:PATH=/usr/lib/aarch64-linux-gnu/cmake/Qt6
+Qt6_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/Qt6
 
 //Path to a program.
 Vulkan_GLSLANG_VALIDATOR_EXECUTABLE:FILEPATH=Vulkan_GLSLANG_VALIDATOR_EXECUTABLE-NOTFOUND
@@ -358,7 +358,7 @@ Vulkan_GLSLC_EXECUTABLE:FILEPATH=Vulkan_GLSLC_EXECUTABLE-NOTFOUND
 Vulkan_INCLUDE_DIR:PATH=/usr/include
 
 //Path to a library.
-Vulkan_LIBRARY:FILEPATH=/usr/lib/aarch64-linux-gnu/libvulkan.so
+Vulkan_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libvulkan.so
 
 //Path to a file.
 XKB_INCLUDE_DIR:PATH=XKB_INCLUDE_DIR-NOTFOUND
@@ -551,7 +551,7 @@ CMAKE_UNAME:INTERNAL=/usr/bin/uname
 //ADVANCED property for variable: CMAKE_VERBOSE_MAKEFILE
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 //Details about finding OpenGL
-FIND_PACKAGE_MESSAGE_DETAILS_OpenGL:INTERNAL=[/usr/lib/aarch64-linux-gnu/libOpenGL.so][/usr/lib/aarch64-linux-gnu/libGLX.so][/usr/include][c ][v()]
+FIND_PACKAGE_MESSAGE_DETAILS_OpenGL:INTERNAL=[/usr/lib/x86_64-linux-gnu/libOpenGL.so][/usr/lib/x86_64-linux-gnu/libGLX.so][/usr/include][c ][v()]
 //Details about finding Threads
 FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
 //Details about finding WrapAtomic
@@ -622,7 +622,7 @@ QT_FEATURE_accessibility_atspi_bridge:INTERNAL=ON
 //Qt feature: action (from target Qt6::Gui)
 QT_FEATURE_action:INTERNAL=ON
 //Qt feature: aesni (from target Qt6::Core)
-QT_FEATURE_aesni:INTERNAL=OFF
+QT_FEATURE_aesni:INTERNAL=ON
 //Qt feature: alloca (from target Qt6::Core)
 QT_FEATURE_alloca:INTERNAL=ON
 //Qt feature: alloca_h (from target Qt6::Core)
@@ -640,29 +640,29 @@ QT_FEATURE_arm_crc32:INTERNAL=OFF
 //Qt feature: arm_crypto (from target Qt6::Core)
 QT_FEATURE_arm_crypto:INTERNAL=OFF
 //Qt feature: avx (from target Qt6::Core)
-QT_FEATURE_avx:INTERNAL=OFF
+QT_FEATURE_avx:INTERNAL=ON
 //Qt feature: avx2 (from target Qt6::Core)
-QT_FEATURE_avx2:INTERNAL=OFF
+QT_FEATURE_avx2:INTERNAL=ON
 //Qt feature: avx512bw (from target Qt6::Core)
-QT_FEATURE_avx512bw:INTERNAL=OFF
+QT_FEATURE_avx512bw:INTERNAL=ON
 //Qt feature: avx512cd (from target Qt6::Core)
-QT_FEATURE_avx512cd:INTERNAL=OFF
+QT_FEATURE_avx512cd:INTERNAL=ON
 //Qt feature: avx512dq (from target Qt6::Core)
-QT_FEATURE_avx512dq:INTERNAL=OFF
+QT_FEATURE_avx512dq:INTERNAL=ON
 //Qt feature: avx512er (from target Qt6::Core)
-QT_FEATURE_avx512er:INTERNAL=OFF
+QT_FEATURE_avx512er:INTERNAL=ON
 //Qt feature: avx512f (from target Qt6::Core)
-QT_FEATURE_avx512f:INTERNAL=OFF
+QT_FEATURE_avx512f:INTERNAL=ON
 //Qt feature: avx512ifma (from target Qt6::Core)
-QT_FEATURE_avx512ifma:INTERNAL=OFF
+QT_FEATURE_avx512ifma:INTERNAL=ON
 //Qt feature: avx512pf (from target Qt6::Core)
-QT_FEATURE_avx512pf:INTERNAL=OFF
+QT_FEATURE_avx512pf:INTERNAL=ON
 //Qt feature: avx512vbmi (from target Qt6::Core)
-QT_FEATURE_avx512vbmi:INTERNAL=OFF
+QT_FEATURE_avx512vbmi:INTERNAL=ON
 //Qt feature: avx512vbmi2 (from target Qt6::Core)
-QT_FEATURE_avx512vbmi2:INTERNAL=OFF
+QT_FEATURE_avx512vbmi2:INTERNAL=ON
 //Qt feature: avx512vl (from target Qt6::Core)
-QT_FEATURE_avx512vl:INTERNAL=OFF
+QT_FEATURE_avx512vl:INTERNAL=ON
 //Qt feature: backtrace (from target Qt6::Core)
 QT_FEATURE_backtrace:INTERNAL=ON
 //Qt feature: buttongroup (from target Qt6::Widgets)
@@ -822,7 +822,7 @@ QT_FEATURE_evdev:INTERNAL=ON
 //Qt feature: eventfd (from target Qt6::Core)
 QT_FEATURE_eventfd:INTERNAL=ON
 //Qt feature: f16c (from target Qt6::Core)
-QT_FEATURE_f16c:INTERNAL=OFF
+QT_FEATURE_f16c:INTERNAL=ON
 //Qt feature: filedialog (from target Qt6::Widgets)
 QT_FEATURE_filedialog:INTERNAL=ON
 //Qt feature: filesystemiterator (from target Qt6::Core)
@@ -924,7 +924,7 @@ QT_FEATURE_integrityfb:INTERNAL=OFF
 //Qt feature: integrityhid (from target Qt6::Gui)
 QT_FEATURE_integrityhid:INTERNAL=OFF
 //Qt feature: intelcet (from target Qt6::Core)
-QT_FEATURE_intelcet:INTERNAL=OFF
+QT_FEATURE_intelcet:INTERNAL=ON
 //Qt feature: islamiccivilcalendar (from target Qt6::Core)
 QT_FEATURE_islamiccivilcalendar:INTERNAL=ON
 //Qt feature: itemmodel (from target Qt6::Core)
@@ -994,7 +994,7 @@ QT_FEATURE_mtdev:INTERNAL=ON
 //Qt feature: multiprocess (from target Qt6::Gui)
 QT_FEATURE_multiprocess:INTERNAL=ON
 //Qt feature: neon (from target Qt6::Core)
-QT_FEATURE_neon:INTERNAL=ON
+QT_FEATURE_neon:INTERNAL=OFF
 //Qt feature: network (from target Qt6::Core)
 QT_FEATURE_network:INTERNAL=ON
 //Qt feature: no_direct_extern_access (from target Qt6::Core)
@@ -1064,13 +1064,13 @@ QT_FEATURE_raster_64bit:INTERNAL=ON
 //Qt feature: raster_fp (from target Qt6::Gui)
 QT_FEATURE_raster_fp:INTERNAL=ON
 //Qt feature: rdrnd (from target Qt6::Core)
-QT_FEATURE_rdrnd:INTERNAL=OFF
+QT_FEATURE_rdrnd:INTERNAL=ON
 //Qt feature: rdseed (from target Qt6::Core)
-QT_FEATURE_rdseed:INTERNAL=OFF
+QT_FEATURE_rdseed:INTERNAL=ON
 //Qt feature: reduce_exports (from target Qt6::Core)
 QT_FEATURE_reduce_exports:INTERNAL=ON
 //Qt feature: reduce_relocations (from target Qt6::Core)
-QT_FEATURE_reduce_relocations:INTERNAL=OFF
+QT_FEATURE_reduce_relocations:INTERNAL=ON
 //Qt feature: regularexpression (from target Qt6::Core)
 QT_FEATURE_regularexpression:INTERNAL=ON
 //Qt feature: relocatable (from target Qt6::Core)
@@ -1098,7 +1098,7 @@ QT_FEATURE_settings:INTERNAL=ON
 //Qt feature: sha3_fast (from target Qt6::Core)
 QT_FEATURE_sha3_fast:INTERNAL=ON
 //Qt feature: shani (from target Qt6::Core)
-QT_FEATURE_shani:INTERNAL=OFF
+QT_FEATURE_shani:INTERNAL=ON
 //Qt feature: shared (from target Qt6::Core)
 QT_FEATURE_shared:INTERNAL=ON
 //Qt feature: sharedmemory (from target Qt6::Core)
@@ -1126,15 +1126,15 @@ QT_FEATURE_splitter:INTERNAL=ON
 //Qt feature: sql (from target Qt6::Core)
 QT_FEATURE_sql:INTERNAL=ON
 //Qt feature: sse2 (from target Qt6::Core)
-QT_FEATURE_sse2:INTERNAL=OFF
+QT_FEATURE_sse2:INTERNAL=ON
 //Qt feature: sse3 (from target Qt6::Core)
-QT_FEATURE_sse3:INTERNAL=OFF
+QT_FEATURE_sse3:INTERNAL=ON
 //Qt feature: sse4_1 (from target Qt6::Core)
-QT_FEATURE_sse4_1:INTERNAL=OFF
+QT_FEATURE_sse4_1:INTERNAL=ON
 //Qt feature: sse4_2 (from target Qt6::Core)
-QT_FEATURE_sse4_2:INTERNAL=OFF
+QT_FEATURE_sse4_2:INTERNAL=ON
 //Qt feature: ssse3 (from target Qt6::Core)
-QT_FEATURE_ssse3:INTERNAL=OFF
+QT_FEATURE_ssse3:INTERNAL=ON
 //Qt feature: stack_protector_strong (from target Qt6::Core)
 QT_FEATURE_stack_protector_strong:INTERNAL=OFF
 //Qt feature: stackedwidget (from target Qt6::Widgets)
@@ -1266,7 +1266,7 @@ QT_FEATURE_use_lld_linker:INTERNAL=OFF
 //Qt feature: use_mold_linker (from target Qt6::Core)
 QT_FEATURE_use_mold_linker:INTERNAL=OFF
 //Qt feature: vaes (from target Qt6::Core)
-QT_FEATURE_vaes:INTERNAL=OFF
+QT_FEATURE_vaes:INTERNAL=ON
 //Qt feature: validator (from target Qt6::Gui)
 QT_FEATURE_validator:INTERNAL=ON
 //Qt feature: vkgen (from target Qt6::Gui)

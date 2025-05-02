@@ -30,9 +30,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     controlsLayout->addWidget(new QLabel("Typ danych:"));
     dataTypeComboBox = new QComboBox(this);
-    dataTypeComboBox->addItem("double");
-    dataTypeComboBox->addItem("mpreal");
-    dataTypeComboBox->addItem("interval");
+    dataTypeComboBox->addItem("Liczby zmiennoprzecinkowe (double)", "double");
+    dataTypeComboBox->addItem("Liczby wysokiej precyzji (mpreal)", "mpreal");
+    dataTypeComboBox->addItem("Przedziały liczbowe (interval)", "interval");
+
     controlsLayout->addWidget(dataTypeComboBox);
     controlsLayout->addStretch();
 
@@ -53,7 +54,12 @@ MainWindow::MainWindow(QWidget *parent)
     matrixGroup->addWidget(separator);
     matrixGroup->addLayout(vectorLayout);
 
-    mainLayout->addLayout(matrixGroup);
+    QWidget *matrixContainer = new QWidget(this);
+matrixContainer->setLayout(matrixGroup);
+matrixContainer->setStyleSheet("QWidget { background-color: #f0f0f0; border: 1px solid #aaa; padding: 10px; }");
+
+mainLayout->addWidget(matrixContainer);
+
 
     // Przycisk i pole tekstowe
     solveButton = new QPushButton("Rozwiąż", this);
@@ -67,13 +73,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Połączenia
     connect(matrixSizeSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &MainWindow::createMatrixInputs);
-    connect(dataTypeComboBox, &QComboBox::currentTextChanged, this, [this](const QString &text)
-            {
-        selectedType = text;
-        createMatrixInputs(matrixSizeSpinBox->value()); });
+    connect(dataTypeComboBox, &QComboBox::currentIndexChanged, this, [this](int) {
+        selectedType = dataTypeComboBox->currentData().toString();
+        createMatrixInputs(matrixSizeSpinBox->value());
+    });
+    
     connect(solveButton, &QPushButton::clicked, this, &MainWindow::solveSystem);
 
-    selectedType = dataTypeComboBox->currentText();
+    selectedType = dataTypeComboBox->currentData().toString();
     createMatrixInputs(matrixSizeSpinBox->value());
 }
 
@@ -163,14 +170,13 @@ void MainWindow::createMatrixInputs(int size)
 void MainWindow::solveSystem()
 {
     int size = matrixSizeSpinBox->value();
-    QString type = selectedType.toLower();
-
-    QString res;
+    QString type = dataTypeComboBox->currentData().toString();
 
     if (type == "double")
     {
         QVector<QVector<double>> A(size, QVector<double>(size));
         QVector<double> b(size);
+
         for (int i = 0; i < size; ++i)
         {
             for (int j = 0; j < size; ++j)
@@ -178,34 +184,14 @@ void MainWindow::solveSystem()
             b[i] = vectorInputs[i]->text().toDouble();
         }
 
-        QVector<QVector<double>> L, U;
-        QVector<double> y, x;
-        std::tie(x, L, U, y) = solveCroutFull(A, b);
-        displaySolutionDetails(L, U, y);
-
-        for (int i = 0; i < size; ++i)
-            res += QString("x[%1] = %2\n").arg(i).arg(x[i]);
-
-        res += "\nMacierz L:\n";
-        for (const auto &row : L)
-            for (double val : row)
-                res += QString::number(val) + " ";
-        res += "\n";
-
-        res += "\nMacierz U:\n";
-        for (const auto &row : U)
-            for (double val : row)
-                res += QString::number(val) + " ";
-        res += "\n";
-
-        res += "\nWektor y:\n";
-        for (double val : y)
-            res += QString::number(val) + "\n";
+        auto [L, U, y, x] = solveCroutFull(A, b);
+        displaySolutionDetails(L, U, y, x);
     }
     else if (type == "mpreal")
     {
         QVector<QVector<mpreal>> A(size, QVector<mpreal>(size));
         QVector<mpreal> b(size);
+
         for (int i = 0; i < size; ++i)
         {
             for (int j = 0; j < size; ++j)
@@ -213,68 +199,36 @@ void MainWindow::solveSystem()
             b[i] = mpreal(vectorInputs[i]->text().toStdString());
         }
 
-        QVector<QVector<mpreal>> L, U;
-        QVector<mpreal> y, x;
-        std::tie(x, L, U, y) = solveCroutFull(A, b);
-        displaySolutionDetails(L, U, y);
-
-        for (int i = 0; i < size; ++i)
-            res += QString("x[%1] = %1\n").arg(i).arg(QString::fromStdString(x[i].toString()));
-
-        res += "\nMacierz L:\n";
-        for (const auto &row : L)
-            for (const auto &val : row)
-                res += QString::fromStdString(val.toString()) + " ";
-        res += "\n";
-
-        res += "\nMacierz U:\n";
-        for (const auto &row : U)
-            for (const auto &val : row)
-                res += QString::fromStdString(val.toString()) + " ";
-        res += "\n";
-
-        res += "\nWektor y:\n";
-        for (const auto &val : y)
-            res += QString::fromStdString(val.toString()) + "\n";
+        auto [L, U, y, x] = solveCroutFull(A, b);
+        displaySolutionDetails(L, U, y, x);
     }
     else if (type == "interval")
     {
         QVector<QVector<Interval<mpreal>>> A(size, QVector<Interval<mpreal>>(size));
         QVector<Interval<mpreal>> b(size);
+
         for (int i = 0; i < size; ++i)
         {
             for (int j = 0; j < size; ++j)
-                A[i][j] = Interval<mpreal>::fromString(matrixInputs[i][j]->text().toStdString());
-            b[i] = Interval<mpreal>::fromString(vectorInputs[i]->text().toStdString());
+            {
+                int idx = j * 2;
+                mpreal left = mpreal(matrixInputs[i][idx]->text().toStdString());
+                mpreal right = mpreal(matrixInputs[i][idx + 1]->text().toStdString());
+                A[i][j] = Interval<mpreal>(left, right);
+            }
+
+            int vIdx = i * 2;
+            mpreal left = mpreal(vectorInputs[vIdx]->text().toStdString());
+            mpreal right = mpreal(vectorInputs[vIdx + 1]->text().toStdString());
+            b[i] = Interval<mpreal>(left, right);
         }
 
-        QVector<QVector<Interval<mpreal>>> L, U;
-        QVector<Interval<mpreal>> y, x;
-        std::tie(x, L, U, y) = solveCroutFull(A, b);
-        displaySolutionDetails(L, U, y);
-
-        for (int i = 0; i < size; ++i)
-            res += QString("x[%1] = [%2, %3]\n").arg(i).arg(QString::fromStdString(x[i].a.toString())).arg(QString::fromStdString(x[i].b.toString()));
-
-        res += "\nMacierz L:\n";
-        for (const auto &row : L)
-            for (const auto &val : row)
-                res += "[" + QString::fromStdString(val.a.toString()) + ", " + QString::fromStdString(val.b.toString()) + "] ";
-        res += "\n";
-
-        res += "\nMacierz U:\n";
-        for (const auto &row : U)
-            for (const auto &val : row)
-                res += "[" + QString::fromStdString(val.a.toString()) + ", " + QString::fromStdString(val.b.toString()) + "] ";
-        res += "\n";
-
-        res += "\nWektor y:\n";
-        for (const auto &val : y)
-            res += "[" + QString::fromStdString(val.a.toString()) + ", " + QString::fromStdString(val.b.toString()) + "]\n";
+        auto [L, U, y, x] = solveCroutFull(A, b);
+        displaySolutionDetails(L, U, y, x);
     }
-
-    solutionTextEdit->setText(res);
 }
+
+
 
 // Brakujące definicje metod solveCrout dla double i mpreal
 QVector<double> MainWindow::solveCrout(const QVector<QVector<double>> &A, const QVector<double> &b)
@@ -415,12 +369,12 @@ QVector<Interval<mpreal>> MainWindow::solveCrout(
     return x;
 }
 
-std::tuple<QVector<double>, QVector<QVector<double>>, QVector<QVector<double>>, QVector<double>>
+std::tuple<QVector<QVector<double>>, QVector<QVector<double>>, QVector<double>, QVector<double>>
 MainWindow::solveCroutFull(const QVector<QVector<double>> &A, const QVector<double> &b)
 {
     int n = A.size();
-    QVector<QVector<double>> L(n, QVector<double>(n));
-    QVector<QVector<double>> U(n, QVector<double>(n));
+    QVector<QVector<double>> L(n, QVector<double>(n, 0));
+    QVector<QVector<double>> U(n, QVector<double>(n, 0));
     QVector<double> y(n), x(n);
 
     for (int i = 0; i < n; ++i)
@@ -458,10 +412,10 @@ MainWindow::solveCroutFull(const QVector<QVector<double>> &A, const QVector<doub
         x[i] = (y[i] - sum) / U[i][i];
     }
 
-    return {x, L, U, y};
+    return {L, U, y, x};
 }
 
-std::tuple<QVector<mpreal>, QVector<QVector<mpreal>>, QVector<QVector<mpreal>>, QVector<mpreal>>
+std::tuple<QVector<QVector<mpreal>>, QVector<QVector<mpreal>>, QVector<mpreal>, QVector<mpreal>>
 MainWindow::solveCroutFull(const QVector<QVector<mpreal>> &A, const QVector<mpreal> &b)
 {
     int n = A.size();
@@ -504,10 +458,10 @@ MainWindow::solveCroutFull(const QVector<QVector<mpreal>> &A, const QVector<mpre
         x[i] = (y[i] - sum) / U[i][i];
     }
 
-    return {x, L, U, y};
+    return {L, U, y, x};
 }
 
-std::tuple<QVector<Interval<mpreal>>, QVector<QVector<Interval<mpreal>>>, QVector<QVector<Interval<mpreal>>>, QVector<Interval<mpreal>>>
+std::tuple<QVector<QVector<Interval<mpreal>>>, QVector<QVector<Interval<mpreal>>>, QVector<Interval<mpreal>>, QVector<Interval<mpreal>>>
 MainWindow::solveCroutFull(const QVector<QVector<Interval<mpreal>>> &A, const QVector<Interval<mpreal>> &b)
 {
     int n = A.size();
@@ -550,102 +504,118 @@ MainWindow::solveCroutFull(const QVector<QVector<Interval<mpreal>>> &A, const QV
         x[i] = (y[i] - sum) / U[i][i];
     }
 
-    return {x, L, U, y};
+    return {L, U, y, x};
 }
 
-void MainWindow::displaySolutionDetails(const QVector<QVector<double>> &L,
-                                        const QVector<QVector<double>> &U,
-                                        const QVector<double> &y)
+
+
+template <typename T>
+QString MainWindow::toQString(const T &val)
+{
+    if constexpr (std::is_same_v<T, mpreal>)
+        return QString::fromStdString(val.toString());
+    else if constexpr (std::is_same_v<T, Interval<mpreal>>)
+        return QString("[%1, %2]").arg(QString::fromStdString(val.a.toString())).arg(QString::fromStdString(val.b.toString()));
+    else
+        return QString::number(val);
+}
+
+void MainWindow::displaySolutionDetails(const QVector<QVector<double>> &L, const QVector<QVector<double>> &U, const QVector<double> &y, const QVector<double> &x)
 {
     QString result;
-    int n = L.size();
+    int n = x.size();
 
     result += "Macierz L:\n";
-    for (int i = 0; i < n; ++i)
+    for (const auto &row : L)
     {
-        for (int j = 0; j < n; ++j)
-            result += QString("%1\t").arg(L[i][j]);
-        result += "\n";
+        for (const auto &val : row)
+            result += toQString(val).leftJustified(15);
+        result += '\n';
     }
 
     result += "\nMacierz U:\n";
-    for (int i = 0; i < n; ++i)
+    for (const auto &row : U)
     {
-        for (int j = 0; j < n; ++j)
-            result += QString("%1\t").arg(U[i][j]);
-        result += "\n";
+        for (const auto &val : row)
+            result += toQString(val).leftJustified(15);
+        result += '\n';
     }
 
-    result += "\nWektor y:\n";
+    result += "\nWektor y (z równania Ly = b):\n";
     for (int i = 0; i < n; ++i)
-        result += QString("y[%1] = %2\n").arg(i).arg(y[i]);
+        result += QString("y[%1] = %2\n").arg(i).arg(toQString(y[i]));
 
-    solutionTextEdit->append(result);
+    result += "\nWektor x (rozwiązanie):\n";
+    for (int i = 0; i < n; ++i)
+        result += QString("x[%1] = %2\n").arg(i).arg(toQString(x[i]));
+
+    solutionTextEdit->setText(result);
 }
 
-void MainWindow::displaySolutionDetails(const QVector<QVector<mpreal>> &L,
-                                        const QVector<QVector<mpreal>> &U,
-                                        const QVector<mpreal> &y)
+
+
+void MainWindow::displaySolutionDetails(const QVector<QVector<mpreal>> &L, const QVector<QVector<mpreal>> &U, const QVector<mpreal> &y, const QVector<mpreal> &x)
 {
     QString result;
-    int n = L.size();
+    int n = x.size();
 
     result += "Macierz L:\n";
-    for (int i = 0; i < n; ++i)
+    for (const auto &row : L)
     {
-        for (int j = 0; j < n; ++j)
-            result += QString::fromStdString(L[i][j].toString()) + "\t";
-        result += "\n";
+        for (const auto &val : row)
+            result += toQString(val).leftJustified(15);
+        result += '\n';
     }
 
     result += "\nMacierz U:\n";
-    for (int i = 0; i < n; ++i)
+    for (const auto &row : U)
     {
-        for (int j = 0; j < n; ++j)
-            result += QString::fromStdString(U[i][j].toString()) + "\t";
-        result += "\n";
+        for (const auto &val : row)
+            result += toQString(val).leftJustified(15);
+        result += '\n';
     }
 
-    result += "\nWektor y:\n";
+    result += "\nWektor y (z równania Ly = b):\n";
     for (int i = 0; i < n; ++i)
-        result += QString("y[%1] = %2\n").arg(i).arg(QString::fromStdString(y[i].toString()));
+        result += QString("y[%1] = %2\n").arg(i).arg(toQString(y[i]));
 
-    solutionTextEdit->append(result);
+    result += "\nWektor x (rozwiązanie):\n";
+    for (int i = 0; i < n; ++i)
+        result += QString("x[%1] = %2\n").arg(i).arg(toQString(x[i]));
+
+    solutionTextEdit->setText(result);
 }
 
-void MainWindow::displaySolutionDetails(const QVector<QVector<Interval<mpreal>>> &L,
-                                        const QVector<QVector<Interval<mpreal>>> &U,
-                                        const QVector<Interval<mpreal>> &y)
+
+void MainWindow::displaySolutionDetails(const QVector<QVector<Interval<mpreal>>> &L, const QVector<QVector<Interval<mpreal>>> &U, const QVector<Interval<mpreal>> &y, const QVector<Interval<mpreal>> &x)
 {
     QString result;
-    int n = L.size();
+    int n = x.size();
 
     result += "Macierz L:\n";
-    for (int i = 0; i < n; ++i)
+    for (const auto &row : L)
     {
-        for (int j = 0; j < n; ++j)
-            result += QString("[%1, %2]\t")
-                          .arg(QString::fromStdString(L[i][j].a.toString()))
-                          .arg(QString::fromStdString(L[i][j].b.toString()));
-        result += "\n";
+        for (const auto &val : row)
+            result += toQString(val).leftJustified(15);
+        result += '\n';
     }
 
     result += "\nMacierz U:\n";
-    for (int i = 0; i < n; ++i)
+    for (const auto &row : U)
     {
-        for (int j = 0; j < n; ++j)
-            result += QString("[%1, %2]\t")
-                          .arg(QString::fromStdString(U[i][j].a.toString()))
-                          .arg(QString::fromStdString(U[i][j].b.toString()));
-        result += "\n";
+        for (const auto &val : row)
+            result += toQString(val).leftJustified(15);
+        result += '\n';
     }
 
-    result += "\nWektor y:\n";
+    result += "\nWektor y (z równania Ly = b):\n";
     for (int i = 0; i < n; ++i)
-        result += QString("y[%1] = [%2, %3]\n")
-                      .arg(i)
-                      .arg(QString::fromStdString(y[i].a.toString()))
-                      .arg(QString::fromStdString(y[i].b.toString()));
+        result += QString("y[%1] = %2\n").arg(i).arg(toQString(y[i]));
 
-    solutionTextEdit->append(result);
+    result += "\nWektor x (rozwiązanie):\n";
+    for (int i = 0; i < n; ++i)
+        result += QString("x[%1] = %2\n").arg(i).arg(toQString(x[i]));
+
+    solutionTextEdit->setText(result);
 }
+

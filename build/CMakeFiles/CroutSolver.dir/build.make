@@ -73,7 +73,7 @@ CroutSolver_autogen/timestamp: /usr/lib/qt6/libexec/moc
 CroutSolver_autogen/timestamp: /usr/lib/qt6/libexec/uic
 CroutSolver_autogen/timestamp: CMakeFiles/CroutSolver.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/home/eryk/CroutSolver/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Automatic MOC and UIC for target CroutSolver"
-	/usr/bin/cmake -E cmake_autogen /home/eryk/CroutSolver/build/CMakeFiles/CroutSolver_autogen.dir/AutogenInfo.json ""
+	/usr/bin/cmake -E cmake_autogen /home/eryk/CroutSolver/build/CMakeFiles/CroutSolver_autogen.dir/AutogenInfo.json Debug
 	/usr/bin/cmake -E touch /home/eryk/CroutSolver/build/CroutSolver_autogen/timestamp
 
 CMakeFiles/CroutSolver.dir/CroutSolver_autogen/mocs_compilation.cpp.o: CMakeFiles/CroutSolver.dir/flags.make
@@ -131,11 +131,11 @@ CroutSolver: CMakeFiles/CroutSolver.dir/CroutSolver_autogen/mocs_compilation.cpp
 CroutSolver: CMakeFiles/CroutSolver.dir/main.cpp.o
 CroutSolver: CMakeFiles/CroutSolver.dir/mainwindow.cpp.o
 CroutSolver: CMakeFiles/CroutSolver.dir/build.make
-CroutSolver: /usr/lib/aarch64-linux-gnu/libQt6Widgets.so.6.4.2
-CroutSolver: /usr/lib/aarch64-linux-gnu/libQt6Gui.so.6.4.2
-CroutSolver: /usr/lib/aarch64-linux-gnu/libQt6Core.so.6.4.2
-CroutSolver: /usr/lib/aarch64-linux-gnu/libGLX.so
-CroutSolver: /usr/lib/aarch64-linux-gnu/libOpenGL.so
+CroutSolver: /usr/lib/x86_64-linux-gnu/libQt6Widgets.so.6.4.2
+CroutSolver: /usr/lib/x86_64-linux-gnu/libQt6Gui.so.6.4.2
+CroutSolver: /usr/lib/x86_64-linux-gnu/libQt6Core.so.6.4.2
+CroutSolver: /usr/lib/x86_64-linux-gnu/libGLX.so
+CroutSolver: /usr/lib/x86_64-linux-gnu/libOpenGL.so
 CroutSolver: CMakeFiles/CroutSolver.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/eryk/CroutSolver/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable CroutSolver"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/CroutSolver.dir/link.txt --verbose=$(VERBOSE)
