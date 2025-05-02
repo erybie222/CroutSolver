@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "interval.hpp"
-#include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <QLabel>
@@ -8,6 +7,9 @@
 #include <QSpinBox>
 #include <QTextEdit>
 #include <QComboBox>
+#include <QGroupBox>
+#include <QFrame>
+
 
 using namespace mpfr;
 using namespace interval_arithmetic;
@@ -20,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
     QWidget *central = new QWidget(this);
     QVBoxLayout *mainLayout = new QVBoxLayout(central);
 
-    // Kontrolki górne
+    // Layout górny — kontrolki
     QHBoxLayout *controlsLayout = new QHBoxLayout;
     controlsLayout->addWidget(new QLabel("Rozmiar macierzy:"));
     matrixSizeSpinBox = new QSpinBox(this);
@@ -33,56 +35,87 @@ MainWindow::MainWindow(QWidget *parent)
     dataTypeComboBox->addItem("Liczby zmiennoprzecinkowe (double)", "double");
     dataTypeComboBox->addItem("Liczby wysokiej precyzji (mpreal)", "mpreal");
     dataTypeComboBox->addItem("Przedziały liczbowe (interval)", "interval");
-
     controlsLayout->addWidget(dataTypeComboBox);
     controlsLayout->addStretch();
 
     mainLayout->addLayout(controlsLayout);
 
-    // Layouty dla macierzy i wektora
+    // Layouty dla macierzy i wektora — tworzenie
     matrixLayout = new QGridLayout;
     vectorLayout = new QVBoxLayout;
     matrixLayout->setSpacing(2);
     vectorLayout->setSpacing(2);
 
+    // Kolumna dla macierzy A z etykietą
+    QVBoxLayout *matrixColumn = new QVBoxLayout;
+    matrixColumn->addWidget(new QLabel("Macierz A:", this));
+    matrixColumn->addLayout(matrixLayout);
+
+    // Separator
     QFrame *separator = new QFrame(this);
     separator->setFrameShape(QFrame::VLine);
     separator->setLineWidth(1);
 
+    // Kolumna dla wektora b z etykietą
+    QVBoxLayout *vectorColumn = new QVBoxLayout;
+    vectorColumn->addWidget(new QLabel("Wektor b:", this));
+    vectorColumn->addLayout(vectorLayout);
+
+    // Layout grupujący macierz i wektor
     QHBoxLayout *matrixGroup = new QHBoxLayout;
-    matrixGroup->addLayout(matrixLayout);
+    matrixGroup->addLayout(matrixColumn);
     matrixGroup->addWidget(separator);
-    matrixGroup->addLayout(vectorLayout);
+    matrixGroup->addLayout(vectorColumn);
 
-    QWidget *matrixContainer = new QWidget(this);
-matrixContainer->setLayout(matrixGroup);
-matrixContainer->setStyleSheet("QWidget { background-color: #f0f0f0; border: 1px solid #aaa; padding: 10px; }");
+    QGroupBox *inputGroup = new QGroupBox("Dane wejściowe", this);
+    inputGroup->setLayout(matrixGroup);
+    inputGroup->setContentsMargins(10, 10, 10, 10);
+    inputGroup->setStyleSheet(R"(
+        QGroupBox {
+            background-color: #f0f0f0;
+            border: 1px solid #aaa;
+            margin-top: 10px;
+        }
+        QGroupBox::title {
+            subcontrol-origin: margin;
+            left: 10px;
+            padding: 0 3px;
+        }
+    )");
 
-mainLayout->addWidget(matrixContainer);
+    mainLayout->addWidget(inputGroup);
 
-
-    // Przycisk i pole tekstowe
+    // Przycisk i pole wynikowe
     solveButton = new QPushButton("Rozwiąż", this);
     mainLayout->addWidget(solveButton);
 
     solutionTextEdit = new QTextEdit(this);
     solutionTextEdit->setReadOnly(true);
-    mainLayout->addWidget(solutionTextEdit);
+    QFont font("Courier");
+    font.setStyleHint(QFont::Monospace);
+    solutionTextEdit->setFont(font);
+
+    QGroupBox *resultGroup = new QGroupBox("Wynik rozwiązania", this);
+    QVBoxLayout *resultLayout = new QVBoxLayout(resultGroup);
+    resultLayout->addWidget(solutionTextEdit);
+    resultGroup->setContentsMargins(10, 10, 10, 10);
+    mainLayout->addWidget(resultGroup);
 
     setCentralWidget(central);
 
-    // Połączenia
+    // Połączenia sygnałów
     connect(matrixSizeSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &MainWindow::createMatrixInputs);
     connect(dataTypeComboBox, &QComboBox::currentIndexChanged, this, [this](int) {
         selectedType = dataTypeComboBox->currentData().toString();
         createMatrixInputs(matrixSizeSpinBox->value());
     });
-    
     connect(solveButton, &QPushButton::clicked, this, &MainWindow::solveSystem);
 
+    // Inicjalizacja
     selectedType = dataTypeComboBox->currentData().toString();
     createMatrixInputs(matrixSizeSpinBox->value());
 }
+
 
 void MainWindow::createMatrixInputs(int size)
 {
@@ -133,6 +166,19 @@ void MainWindow::createMatrixInputs(int size)
                 QLineEdit *edit = new QLineEdit(this);
                 edit->setFixedWidth(60);
                 edit->setAlignment(Qt::AlignCenter);
+                vectorLayout->setContentsMargins(10, 0, 0, 0);
+                edit->setStyleSheet(R"(
+                    QLineEdit {
+                        background-color: #fdfdfd;
+                        border: 1px solid #ccc;
+                        border-radius: 4px;
+                        padding: 4px;
+                    }
+                    QLineEdit:focus {
+                        border: 1px solid #66afe9;
+                    }
+                )");
+                
                 matrixLayout->addWidget(edit, i, j);
                 row.append(edit);
             }
@@ -155,6 +201,30 @@ void MainWindow::createMatrixInputs(int size)
             vectorLayout->addWidget(container);
             vectorInputs.append(left);
             vectorInputs.append(right);
+            left->setStyleSheet(R"(
+                QLineEdit {
+                    background-color: #fdfdfd;
+                    border: 1px solid #ccc;
+                    border-radius: 4px;
+                    padding: 4px;
+                }
+                QLineEdit:focus {
+                    border: 1px solid #66afe9;
+                }
+            )");
+            
+            right->setStyleSheet(R"(
+                QLineEdit {
+                    background-color: #fdfdfd;
+                    border: 1px solid #ccc;
+                    border-radius: 4px;
+                    padding: 4px;
+                }
+                QLineEdit:focus {
+                    border: 1px solid #66afe9;
+                }
+            )");
+            
         }
         else
         {
