@@ -75,6 +75,10 @@ private:
 
     template <typename T>
     QString toQString(const T &val);
+
+    QComboBox *matrixTypeComboBox;
+    QHBoxLayout *controlsLayout;
+
 };
 
 #endif // MAINWINDOW_H

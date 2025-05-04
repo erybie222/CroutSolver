@@ -61,11 +61,18 @@ MainWindow::MainWindow(QWidget *parent)
     
 
     QWidget *central = new QWidget(this);
-    mainLayout = new QVBoxLayout(central);
+    controlsLayout = new QHBoxLayout;
+
+    // Pole wyboru typu macierzy
+    controlsLayout->addWidget(new QLabel("Typ macierzy:"));
+    matrixTypeComboBox = new QComboBox(this);
+    matrixTypeComboBox->addItem("Dowolna", "general");
+    matrixTypeComboBox->addItem("Symetryczna", "symmetric");
+    matrixTypeComboBox->addItem("Trójdiagonalna", "tridiagonal");
+    controlsLayout->addWidget(matrixTypeComboBox);
 
 
     // Layout górny — kontrolki
-    QHBoxLayout *controlsLayout = new QHBoxLayout;
     controlsLayout->addWidget(new QLabel("Rozmiar macierzy:"));
     matrixSizeSpinBox = new QSpinBox(this);
     matrixSizeSpinBox->setRange(2, 10);
@@ -80,6 +87,8 @@ MainWindow::MainWindow(QWidget *parent)
     controlsLayout->addWidget(dataTypeComboBox);
     controlsLayout->addStretch();
 
+
+    mainLayout = new QVBoxLayout(central);  // <-- TO JEST KLUCZOWE!
     mainLayout->addLayout(controlsLayout);
 
     QLabel *labelA = new QLabel("Macierz A:", this);
@@ -173,7 +182,10 @@ MainWindow::MainWindow(QWidget *parent)
         createMatrixInputs(matrixSizeSpinBox->value());
     });
     connect(solveButton, &QPushButton::clicked, this, &MainWindow::solveSystem);
-
+    connect(matrixTypeComboBox, &QComboBox::currentIndexChanged, this, [this](int) {
+        createMatrixInputs(matrixSizeSpinBox->value());
+    });
+    
     // Inicjalizacja
     selectedType = dataTypeComboBox->currentData().toString();
     createMatrixInputs(matrixSizeSpinBox->value());
