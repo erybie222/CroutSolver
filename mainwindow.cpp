@@ -10,6 +10,7 @@
 #include <QGroupBox>
 #include <QFrame>
 #include <QApplication>
+#include "CroutSolver.h"
 
 
 
@@ -323,8 +324,29 @@ void MainWindow::solveSystem()
 {
     int size = matrixSizeSpinBox->value();
     QString type = dataTypeComboBox->currentData().toString();
+    QString matrixKind = matrixTypeComboBox->currentData().toString();  // general / symmetric / tridiagonal
 
     if (type == "double")
+{
+    QString matrixKind = matrixTypeComboBox->currentData().toString();
+
+    if (matrixKind == "tridiagonal")
+    {
+        QVector<double> a(size, 0), b_diag(size), c(size, 0), d(size);
+        for (int i = 0; i < size; ++i)
+        {
+            if (i > 0)
+                a[i] = matrixInputs[i][i - 1]->text().toDouble();
+            b_diag[i] = matrixInputs[i][i]->text().toDouble();
+            if (i < size - 1)
+                c[i] = matrixInputs[i][i + 1]->text().toDouble();
+            d[i] = vectorInputs[i]->text().toDouble();
+        }
+
+        auto [L, U, y, x] = solveCroutTridiagonal(a, b_diag, c, d);
+        displaySolutionDetails(L, U, y, x);
+    }
+    else // symmetric lub general
     {
         QVector<QVector<double>> A(size, QVector<double>(size));
         QVector<double> b(size);
@@ -339,6 +361,8 @@ void MainWindow::solveSystem()
         auto [L, U, y, x] = solveCroutFull(A, b);
         displaySolutionDetails(L, U, y, x);
     }
+}
+
     else if (type == "mpreal")
     {
         QVector<QVector<mpreal>> A(size, QVector<mpreal>(size));
@@ -351,7 +375,7 @@ void MainWindow::solveSystem()
             b[i] = mpreal(vectorInputs[i]->text().toStdString());
         }
 
-        auto [L, U, y, x] = solveCroutFull(A, b);
+        auto [L, U, y, x] = CroutSolverMP::solve(A, b, matrixKind);
         displaySolutionDetails(L, U, y, x);
     }
     else if (type == "interval")
@@ -375,290 +399,10 @@ void MainWindow::solveSystem()
             b[i] = Interval<mpreal>(left, right);
         }
 
-        auto [L, U, y, x] = solveCroutFull(A, b);
+        auto [L, U, y, x] = CroutSolverInterval::solve(A, b, matrixKind);
         displaySolutionDetails(L, U, y, x);
     }
 }
-
-
-
-// Brakujące definicje metod solveCrout dla double i mpreal
-QVector<double> MainWindow::solveCrout(const QVector<QVector<double>> &A, const QVector<double> &b)
-{
-    int n = A.size();
-    QVector<QVector<double>> L(n, QVector<double>(n));
-    QVector<QVector<double>> U(n, QVector<double>(n));
-    QVector<double> y(n), x(n);
-
-    for (int i = 0; i < n; ++i)
-    {
-        L[i][i] = 1.0;
-        for (int j = i; j < n; ++j)
-        {
-            double sum = 0;
-            for (int k = 0; k < i; ++k)
-                sum += L[i][k] * U[k][j];
-            U[i][j] = A[i][j] - sum;
-        }
-        for (int j = i + 1; j < n; ++j)
-        {
-            double sum = 0;
-            for (int k = 0; k < i; ++k)
-                sum += L[j][k] * U[k][i];
-            L[j][i] = (A[j][i] - sum) / U[i][i];
-        }
-    }
-
-    for (int i = 0; i < n; ++i)
-    {
-        double sum = 0;
-        for (int k = 0; k < i; ++k)
-            sum += L[i][k] * y[k];
-        y[i] = (b[i] - sum) / L[i][i];
-    }
-
-    for (int i = n - 1; i >= 0; --i)
-    {
-        double sum = 0;
-        for (int k = i + 1; k < n; ++k)
-            sum += U[i][k] * x[k];
-        x[i] = (y[i] - sum) / U[i][i];
-    }
-
-    return x;
-}
-
-QVector<mpreal> MainWindow::solveCrout(const QVector<QVector<mpreal>> &A, const QVector<mpreal> &b)
-{
-    int n = A.size();
-    QVector<QVector<mpreal>> L(n, QVector<mpreal>(n));
-    QVector<QVector<mpreal>> U(n, QVector<mpreal>(n));
-    QVector<mpreal> y(n), x(n);
-
-    for (int i = 0; i < n; ++i)
-    {
-        L[i][i] = 1;
-        for (int j = i; j < n; ++j)
-        {
-            mpreal sum = 0;
-            for (int k = 0; k < i; ++k)
-                sum += L[i][k] * U[k][j];
-            U[i][j] = A[i][j] - sum;
-        }
-        for (int j = i + 1; j < n; ++j)
-        {
-            mpreal sum = 0;
-            for (int k = 0; k < i; ++k)
-                sum += L[j][k] * U[k][i];
-            L[j][i] = (A[j][i] - sum) / U[i][i];
-        }
-    }
-
-    for (int i = 0; i < n; ++i)
-    {
-        mpreal sum = 0;
-        for (int k = 0; k < i; ++k)
-            sum += L[i][k] * y[k];
-        y[i] = (b[i] - sum) / L[i][i];
-    }
-
-    for (int i = n - 1; i >= 0; --i)
-    {
-        mpreal sum = 0;
-        for (int k = i + 1; k < n; ++k)
-            sum += U[i][k] * x[k];
-        x[i] = (y[i] - sum) / U[i][i];
-    }
-
-    return x;
-}
-
-QVector<Interval<mpreal>> MainWindow::solveCrout(
-    const QVector<QVector<Interval<mpreal>>> &A,
-    const QVector<Interval<mpreal>> &b)
-{
-    int n = A.size();
-    QVector<QVector<Interval<mpreal>>> L(n, QVector<Interval<mpreal>>(n));
-    QVector<QVector<Interval<mpreal>>> U(n, QVector<Interval<mpreal>>(n));
-    QVector<Interval<mpreal>> y(n);
-    QVector<Interval<mpreal>> x(n);
-
-    for (int i = 0; i < n; ++i)
-    {
-        L[i][i] = Interval<mpreal>(1, 1);
-        for (int j = i; j < n; ++j)
-        {
-            Interval<mpreal> sum(0, 0);
-            for (int k = 0; k < i; ++k)
-                sum = sum + L[i][k] * U[k][j];
-            U[i][j] = A[i][j] - sum;
-        }
-        for (int j = i + 1; j < n; ++j)
-        {
-            Interval<mpreal> sum(0, 0);
-            for (int k = 0; k < i; ++k)
-                sum = sum + L[j][k] * U[k][i];
-            L[j][i] = (A[j][i] - sum) / U[i][i];
-        }
-    }
-
-    for (int i = 0; i < n; ++i)
-    {
-        Interval<mpreal> sum(0, 0);
-        for (int k = 0; k < i; ++k)
-            sum = sum + L[i][k] * y[k];
-        y[i] = (b[i] - sum) / L[i][i];
-    }
-
-    for (int i = n - 1; i >= 0; --i)
-    {
-        Interval<mpreal> sum(0, 0);
-        for (int k = i + 1; k < n; ++k)
-            sum = sum + U[i][k] * x[k];
-        x[i] = (y[i] - sum) / U[i][i];
-    }
-
-    return x;
-}
-
-std::tuple<QVector<QVector<double>>, QVector<QVector<double>>, QVector<double>, QVector<double>>
-MainWindow::solveCroutFull(const QVector<QVector<double>> &A, const QVector<double> &b)
-{
-    int n = A.size();
-    QVector<QVector<double>> L(n, QVector<double>(n, 0));
-    QVector<QVector<double>> U(n, QVector<double>(n, 0));
-    QVector<double> y(n), x(n);
-
-    for (int i = 0; i < n; ++i)
-    {
-        L[i][i] = 1.0;
-        for (int j = i; j < n; ++j)
-        {
-            double sum = 0;
-            for (int k = 0; k < i; ++k)
-                sum += L[i][k] * U[k][j];
-            U[i][j] = A[i][j] - sum;
-        }
-        for (int j = i + 1; j < n; ++j)
-        {
-            double sum = 0;
-            for (int k = 0; k < i; ++k)
-                sum += L[j][k] * U[k][i];
-            L[j][i] = (A[j][i] - sum) / U[i][i];
-        }
-    }
-
-    for (int i = 0; i < n; ++i)
-    {
-        double sum = 0;
-        for (int k = 0; k < i; ++k)
-            sum += L[i][k] * y[k];
-        y[i] = (b[i] - sum) / L[i][i];
-    }
-
-    for (int i = n - 1; i >= 0; --i)
-    {
-        double sum = 0;
-        for (int k = i + 1; k < n; ++k)
-            sum += U[i][k] * x[k];
-        x[i] = (y[i] - sum) / U[i][i];
-    }
-
-    return {L, U, y, x};
-}
-
-std::tuple<QVector<QVector<mpreal>>, QVector<QVector<mpreal>>, QVector<mpreal>, QVector<mpreal>>
-MainWindow::solveCroutFull(const QVector<QVector<mpreal>> &A, const QVector<mpreal> &b)
-{
-    int n = A.size();
-    QVector<QVector<mpreal>> L(n, QVector<mpreal>(n));
-    QVector<QVector<mpreal>> U(n, QVector<mpreal>(n));
-    QVector<mpreal> y(n), x(n);
-
-    for (int i = 0; i < n; ++i)
-    {
-        L[i][i] = 1;
-        for (int j = i; j < n; ++j)
-        {
-            mpreal sum = 0;
-            for (int k = 0; k < i; ++k)
-                sum += L[i][k] * U[k][j];
-            U[i][j] = A[i][j] - sum;
-        }
-        for (int j = i + 1; j < n; ++j)
-        {
-            mpreal sum = 0;
-            for (int k = 0; k < i; ++k)
-                sum += L[j][k] * U[k][i];
-            L[j][i] = (A[j][i] - sum) / U[i][i];
-        }
-    }
-
-    for (int i = 0; i < n; ++i)
-    {
-        mpreal sum = 0;
-        for (int k = 0; k < i; ++k)
-            sum += L[i][k] * y[k];
-        y[i] = (b[i] - sum) / L[i][i];
-    }
-
-    for (int i = n - 1; i >= 0; --i)
-    {
-        mpreal sum = 0;
-        for (int k = i + 1; k < n; ++k)
-            sum += U[i][k] * x[k];
-        x[i] = (y[i] - sum) / U[i][i];
-    }
-
-    return {L, U, y, x};
-}
-
-std::tuple<QVector<QVector<Interval<mpreal>>>, QVector<QVector<Interval<mpreal>>>, QVector<Interval<mpreal>>, QVector<Interval<mpreal>>>
-MainWindow::solveCroutFull(const QVector<QVector<Interval<mpreal>>> &A, const QVector<Interval<mpreal>> &b)
-{
-    int n = A.size();
-    QVector<QVector<Interval<mpreal>>> L(n, QVector<Interval<mpreal>>(n));
-    QVector<QVector<Interval<mpreal>>> U(n, QVector<Interval<mpreal>>(n));
-    QVector<Interval<mpreal>> y(n), x(n);
-
-    for (int i = 0; i < n; ++i)
-    {
-        L[i][i] = Interval<mpreal>(1, 1);
-        for (int j = i; j < n; ++j)
-        {
-            Interval<mpreal> sum(0, 0);
-            for (int k = 0; k < i; ++k)
-                sum = sum + L[i][k] * U[k][j];
-            U[i][j] = A[i][j] - sum;
-        }
-        for (int j = i + 1; j < n; ++j)
-        {
-            Interval<mpreal> sum(0, 0);
-            for (int k = 0; k < i; ++k)
-                sum = sum + L[j][k] * U[k][i];
-            L[j][i] = (A[j][i] - sum) / U[i][i];
-        }
-    }
-
-    for (int i = 0; i < n; ++i)
-    {
-        Interval<mpreal> sum(0, 0);
-        for (int k = 0; k < i; ++k)
-            sum = sum + L[i][k] * y[k];
-        y[i] = (b[i] - sum) / L[i][i];
-    }
-
-    for (int i = n - 1; i >= 0; --i)
-    {
-        Interval<mpreal> sum(0, 0);
-        for (int k = i + 1; k < n; ++k)
-            sum = sum + U[i][k] * x[k];
-        x[i] = (y[i] - sum) / U[i][i];
-    }
-
-    return {L, U, y, x};
-}
-
 
 
 template <typename T>
@@ -771,3 +515,46 @@ void MainWindow::displaySolutionDetails(const QVector<QVector<Interval<mpreal>>>
     solutionTextEdit->setText(result);
 }
 
+std::tuple<QVector<QVector<double>>, QVector<QVector<double>>, QVector<double>, QVector<double>>
+MainWindow::solveCroutTridiagonal(const QVector<double>& a, const QVector<double>& b, const QVector<double>& c, const QVector<double>& d)
+{
+    int n = b.size();
+    QVector<QVector<double>> L(n, QVector<double>(n, 0.0));
+    QVector<QVector<double>> U(n, QVector<double>(n, 0.0));
+    QVector<double> y(n), x(n);
+
+    QVector<double> l(n), u(n), z(n);
+
+    u[0] = b[0];
+    for (int i = 1; i < n; ++i) {
+        l[i] = a[i] / u[i - 1];
+        u[i] = b[i] - l[i] * c[i - 1];
+    }
+
+    // Forward substitution
+    z[0] = d[0];
+    for (int i = 1; i < n; ++i) {
+        z[i] = d[i] - l[i] * z[i - 1];
+    }
+
+    // Backward substitution
+    x[n - 1] = z[n - 1] / u[n - 1];
+    for (int i = n - 2; i >= 0; --i) {
+        x[i] = (z[i] - c[i] * x[i + 1]) / u[i];
+    }
+
+    // Build L and U
+    for (int i = 0; i < n; ++i) {
+        L[i][i] = 1.0;
+        U[i][i] = u[i];
+        if (i > 0) {
+            L[i][i - 1] = l[i];
+            U[i - 1][i] = c[i - 1];
+        }
+    }
+
+    // Compute y = L^{-1} * b
+    y = z;
+
+    return {L, U, y, x};
+}

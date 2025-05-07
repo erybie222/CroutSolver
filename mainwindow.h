@@ -79,6 +79,9 @@ private:
     QComboBox *matrixTypeComboBox;
     QHBoxLayout *controlsLayout;
 
+    std::tuple<QVector<QVector<double>>, QVector<QVector<double>>, QVector<double>, QVector<double>>
+    solveCroutTridiagonal(const QVector<double>& a, const QVector<double>& b, const QVector<double>& c, const QVector<double>& d);
+
 };
 
 #endif // MAINWINDOW_H

@@ -18,6 +18,7 @@ add_executable(CroutSolver
     crout_solver.hpp
     interval.hpp
     mpreal.h
+    croutsolver.cpp
 )
 
 # Ścieżki do własnych plików nagłówkowych
