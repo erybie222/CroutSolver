@@ -65,8 +65,15 @@ private:
 
     QString selectedType;
 
-    QVector<QVector<QLineEdit *>> matrixInputs;
-    QVector<QLineEdit *> vectorInputs;
+  
+
+    bool parseInterval(const QString &text, interval_arithmetic::Interval<mpfr::mpreal> &result) const;
+    void highlightInvalidField(QLineEdit *field, bool isValid) const;
+
+
+    mutable QVector<QVector<QLineEdit *>> matrixInputs;
+    mutable QVector<QLineEdit *> vectorInputs;
+
 };
 
 #endif // MAINWINDOW_H
