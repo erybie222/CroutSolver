@@ -49,6 +49,7 @@
 #ifndef __MPREAL_H__
 #define __MPREAL_H__
 
+#include <cstdint>
 #include <string>
 #include <iostream>
 #include <sstream>
@@ -60,6 +61,8 @@
 #include <complex>
 #include <algorithm>
 #include <stdint.h>
+
+
 
 // Options
 #define MPREAL_HAVE_MSVC_DEBUGVIEW // Enable Debugger Visualizer for "Debug" builds in MSVC.

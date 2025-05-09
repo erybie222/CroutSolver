@@ -1,7 +1,8 @@
 #include "crout_symmetric_mpreal.h"
 
 using namespace mpfr;
-
+namespace solver {
+    namespace symmetric {
 std::tuple<QVector<QVector<mpreal>>, QVector<QVector<mpreal>>, QVector<mpreal>, QVector<mpreal>>
 solveCroutSymmetric(const QVector<QVector<mpreal>> &A, const QVector<mpreal> &b)
 {
@@ -46,4 +47,6 @@ solveCroutSymmetric(const QVector<QVector<mpreal>> &A, const QVector<mpreal> &b)
     }
 
     return {L, U, y, x};
+}
+    }
 }

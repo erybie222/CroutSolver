@@ -1,5 +1,7 @@
 #include "crout_symmetric_double.h"
-
+namespace solver {
+    namespace symmetric {
+    
 std::tuple<QVector<QVector<double>>, QVector<QVector<double>>, QVector<double>, QVector<double>>
 solveCroutSymmetric(const QVector<QVector<double>> &A, const QVector<double> &b)
 {
@@ -43,4 +45,6 @@ solveCroutSymmetric(const QVector<QVector<double>> &A, const QVector<double> &b)
     }
 
     return {L, U, y, x};
+}
+    }
 }

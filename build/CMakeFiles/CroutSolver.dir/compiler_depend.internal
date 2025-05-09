@@ -13,6 +13,24 @@
  /home/eryk/CroutSolver/mainwindow.cpp
  /home/eryk/CroutSolver/mainwindow.h
  /home/eryk/CroutSolver/mpreal.h
+ /home/eryk/CroutSolver/solver/general/crout_general_double.cpp
+ /home/eryk/CroutSolver/solver/general/crout_general_double.h
+ /home/eryk/CroutSolver/solver/general/crout_general_interval.cpp
+ /home/eryk/CroutSolver/solver/general/crout_general_interval.h
+ /home/eryk/CroutSolver/solver/general/crout_general_mpreal.cpp
+ /home/eryk/CroutSolver/solver/general/crout_general_mpreal.h
+ /home/eryk/CroutSolver/solver/symmetric/crout_symmetric_double.cpp
+ /home/eryk/CroutSolver/solver/symmetric/crout_symmetric_double.h
+ /home/eryk/CroutSolver/solver/symmetric/crout_symmetric_interval.cpp
+ /home/eryk/CroutSolver/solver/symmetric/crout_symmetric_interval.h
+ /home/eryk/CroutSolver/solver/symmetric/crout_symmetric_mpreal.cpp
+ /home/eryk/CroutSolver/solver/symmetric/crout_symmetric_mpreal.h
+ /home/eryk/CroutSolver/solver/tridiagonal/crout_tridiagonal_double.cpp
+ /home/eryk/CroutSolver/solver/tridiagonal/crout_tridiagonal_double.h
+ /home/eryk/CroutSolver/solver/tridiagonal/crout_tridiagonal_interval.cpp
+ /home/eryk/CroutSolver/solver/tridiagonal/crout_tridiagonal_interval.h
+ /home/eryk/CroutSolver/solver/tridiagonal/crout_tridiagonal_mpreal.cpp
+ /home/eryk/CroutSolver/solver/tridiagonal/crout_tridiagonal_mpreal.h
  /usr/bin/cmake
  /usr/include/alloca.h
  /usr/include/asm-generic/errno-base.h

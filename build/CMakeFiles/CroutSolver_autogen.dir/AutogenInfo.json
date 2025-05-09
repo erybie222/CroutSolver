@@ -333,6 +333,60 @@
 			"MU",
 			"EWIEGA46WW/moc_mpreal.cpp",
 			null
+		],
+		[
+			"/home/eryk/CroutSolver/solver/general/crout_general_double.h",
+			"MU",
+			"5W5ZRCLITW/moc_crout_general_double.cpp",
+			null
+		],
+		[
+			"/home/eryk/CroutSolver/solver/general/crout_general_interval.h",
+			"MU",
+			"5W5ZRCLITW/moc_crout_general_interval.cpp",
+			null
+		],
+		[
+			"/home/eryk/CroutSolver/solver/general/crout_general_mpreal.h",
+			"MU",
+			"5W5ZRCLITW/moc_crout_general_mpreal.cpp",
+			null
+		],
+		[
+			"/home/eryk/CroutSolver/solver/symmetric/crout_symmetric_double.h",
+			"MU",
+			"ADENHKQV5C/moc_crout_symmetric_double.cpp",
+			null
+		],
+		[
+			"/home/eryk/CroutSolver/solver/symmetric/crout_symmetric_interval.h",
+			"MU",
+			"ADENHKQV5C/moc_crout_symmetric_interval.cpp",
+			null
+		],
+		[
+			"/home/eryk/CroutSolver/solver/symmetric/crout_symmetric_mpreal.h",
+			"MU",
+			"ADENHKQV5C/moc_crout_symmetric_mpreal.cpp",
+			null
+		],
+		[
+			"/home/eryk/CroutSolver/solver/tridiagonal/crout_tridiagonal_double.h",
+			"MU",
+			"JUHKHE6INK/moc_crout_tridiagonal_double.cpp",
+			null
+		],
+		[
+			"/home/eryk/CroutSolver/solver/tridiagonal/crout_tridiagonal_interval.h",
+			"MU",
+			"JUHKHE6INK/moc_crout_tridiagonal_interval.cpp",
+			null
+		],
+		[
+			"/home/eryk/CroutSolver/solver/tridiagonal/crout_tridiagonal_mpreal.h",
+			"MU",
+			"JUHKHE6INK/moc_crout_tridiagonal_mpreal.cpp",
+			null
 		]
 	],
 	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
@@ -402,7 +456,52 @@
 	"SOURCES" : 
 	[
 		[ "/home/eryk/CroutSolver/main.cpp", "MU", null ],
-		[ "/home/eryk/CroutSolver/mainwindow.cpp", "MU", null ]
+		[ "/home/eryk/CroutSolver/mainwindow.cpp", "MU", null ],
+		[
+			"/home/eryk/CroutSolver/solver/general/crout_general_double.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/eryk/CroutSolver/solver/general/crout_general_interval.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/eryk/CroutSolver/solver/general/crout_general_mpreal.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/eryk/CroutSolver/solver/symmetric/crout_symmetric_double.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/eryk/CroutSolver/solver/symmetric/crout_symmetric_interval.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/eryk/CroutSolver/solver/symmetric/crout_symmetric_mpreal.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/eryk/CroutSolver/solver/tridiagonal/crout_tridiagonal_double.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/eryk/CroutSolver/solver/tridiagonal/crout_tridiagonal_interval.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/eryk/CroutSolver/solver/tridiagonal/crout_tridiagonal_mpreal.cpp",
+			"MU",
+			null
+		]
 	],
 	"UIC_OPTIONS" : [],
 	"UIC_SEARCH_PATHS" : [],

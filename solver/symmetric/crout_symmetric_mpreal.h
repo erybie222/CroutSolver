@@ -4,8 +4,11 @@
 #include <QVector>
 #include <tuple>
 #include <mpreal.h>
-
+namespace solver {
+    namespace symmetric {
 std::tuple<QVector<QVector<mpfr::mpreal>>, QVector<QVector<mpfr::mpreal>>, QVector<mpfr::mpreal>, QVector<mpfr::mpreal>>
 solveCroutSymmetric(const QVector<QVector<mpfr::mpreal>> &A, const QVector<mpfr::mpreal> &b);
-
+  }
+}
 #endif // CROUT_SYMMETRIC_MPREAL_H
+  

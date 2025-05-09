@@ -7,7 +7,8 @@
 
 using namespace mpfr;
 using namespace interval_arithmetic;
-
+namespace solver {
+    namespace tridiagonal {
 std::tuple<
     QVector<Interval<mpreal>>, // L
     QVector<Interval<mpreal>>, // D
@@ -20,5 +21,7 @@ solveCroutTridiagonal(
     const QVector<Interval<mpreal>> &b,
     const QVector<Interval<mpreal>> &c,
     const QVector<Interval<mpreal>> &rhs);
-
+  }
+}
 #endif // CROUT_TRIDIAGONAL_INTERVAL_H
+  

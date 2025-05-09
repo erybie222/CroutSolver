@@ -1,5 +1,7 @@
 #include "crout_symmetric_interval.h"
-
+namespace solver {
+    namespace symmetric {
+    
 std::tuple<
     QVector<QVector<Interval<mpfr::mpreal>>>,
     QVector<QVector<Interval<mpfr::mpreal>>>,
@@ -53,4 +55,6 @@ solveCroutSymmetric(const QVector<QVector<Interval<mpfr::mpreal>>> &A, const QVe
     }
 
     return {L, U, y, x};
+}
+}
 }

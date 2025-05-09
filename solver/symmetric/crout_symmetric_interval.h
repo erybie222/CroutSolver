@@ -6,7 +6,9 @@
 #include "interval.hpp"
 
 using namespace interval_arithmetic;
-
+namespace solver {
+    namespace symmetric {
+    
 std::tuple<
     QVector<QVector<Interval<mpfr::mpreal>>>,
     QVector<QVector<Interval<mpfr::mpreal>>>,
@@ -14,5 +16,6 @@ std::tuple<
     QVector<Interval<mpfr::mpreal>>
 >
 solveCroutSymmetric(const QVector<QVector<Interval<mpfr::mpreal>>> &A, const QVector<Interval<mpfr::mpreal>> &b);
-
+    }
+}
 #endif // CROUT_SYMMETRIC_INTERVAL_H

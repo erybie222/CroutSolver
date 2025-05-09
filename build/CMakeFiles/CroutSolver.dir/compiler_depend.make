@@ -12,6 +12,24 @@ CroutSolver_autogen/timestamp: /home/eryk/CroutSolver/CMakeLists.txt \
   /home/eryk/CroutSolver/mainwindow.cpp \
   /home/eryk/CroutSolver/mainwindow.h \
   /home/eryk/CroutSolver/mpreal.h \
+  /home/eryk/CroutSolver/solver/general/crout_general_double.cpp \
+  /home/eryk/CroutSolver/solver/general/crout_general_double.h \
+  /home/eryk/CroutSolver/solver/general/crout_general_interval.cpp \
+  /home/eryk/CroutSolver/solver/general/crout_general_interval.h \
+  /home/eryk/CroutSolver/solver/general/crout_general_mpreal.cpp \
+  /home/eryk/CroutSolver/solver/general/crout_general_mpreal.h \
+  /home/eryk/CroutSolver/solver/symmetric/crout_symmetric_double.cpp \
+  /home/eryk/CroutSolver/solver/symmetric/crout_symmetric_double.h \
+  /home/eryk/CroutSolver/solver/symmetric/crout_symmetric_interval.cpp \
+  /home/eryk/CroutSolver/solver/symmetric/crout_symmetric_interval.h \
+  /home/eryk/CroutSolver/solver/symmetric/crout_symmetric_mpreal.cpp \
+  /home/eryk/CroutSolver/solver/symmetric/crout_symmetric_mpreal.h \
+  /home/eryk/CroutSolver/solver/tridiagonal/crout_tridiagonal_double.cpp \
+  /home/eryk/CroutSolver/solver/tridiagonal/crout_tridiagonal_double.h \
+  /home/eryk/CroutSolver/solver/tridiagonal/crout_tridiagonal_interval.cpp \
+  /home/eryk/CroutSolver/solver/tridiagonal/crout_tridiagonal_interval.h \
+  /home/eryk/CroutSolver/solver/tridiagonal/crout_tridiagonal_mpreal.cpp \
+  /home/eryk/CroutSolver/solver/tridiagonal/crout_tridiagonal_mpreal.h \
   /usr/bin/cmake \
   /usr/include/alloca.h \
   /usr/include/asm-generic/errno-base.h \
@@ -729,8 +747,6 @@ CroutSolver_autogen/timestamp: /home/eryk/CroutSolver/CMakeLists.txt \
 
 /usr/share/cmake-3.28/Modules/Compiler/TI-DetermineCompiler.cmake:
 
-/usr/share/cmake-3.28/Modules/Compiler/SDCC-C-DetermineCompiler.cmake:
-
 /usr/share/cmake-3.28/Modules/Compiler/PGI-DetermineCompiler.cmake:
 
 /usr/share/cmake-3.28/Modules/Compiler/OrangeC-DetermineCompiler.cmake:
@@ -867,19 +883,35 @@ CroutSolver_autogen/timestamp: /home/eryk/CroutSolver/CMakeLists.txt \
 
 /usr/lib/x86_64-linux-gnu/cmake/Qt6Gui/Qt6GuiConfigVersionImpl.cmake:
 
-/usr/include/time.h:
+/usr/lib/x86_64-linux-gnu/cmake/Qt6Gui/Qt6GuiAdditionalTargetInfo.cmake:
 
-/usr/lib/x86_64-linux-gnu/cmake/Qt6Gui/Qt6GuiDependencies.cmake:
+/usr/lib/x86_64-linux-gnu/cmake/Qt6DBusTools/Qt6DBusToolsVersionlessTargets.cmake:
 
-/usr/include/x86_64-linux-gnu/bits/time.h:
+/usr/share/cmake-3.28/Modules/CMakeFindBinUtils.cmake:
 
-/usr/include/x86_64-linux-gnu/bits/sched.h:
+/usr/lib/x86_64-linux-gnu/cmake/Qt6DBusTools/Qt6DBusToolsTargets.cmake:
 
-/usr/include/x86_64-linux-gnu/bits/local_lim.h:
+/usr/lib/x86_64-linux-gnu/cmake/Qt6DBusTools/Qt6DBusToolsDependencies.cmake:
 
-/usr/include/x86_64-linux-gnu/bits/floatn-common.h:
+/usr/lib/x86_64-linux-gnu/cmake/Qt6DBusTools/Qt6DBusToolsConfigVersionImpl.cmake:
 
-/usr/include/c++/13/bits/requires_hosted.h:
+/usr/lib/x86_64-linux-gnu/cmake/Qt6DBusTools/Qt6DBusToolsConfig.cmake:
+
+/usr/lib/x86_64-linux-gnu/cmake/Qt6DBusTools/Qt6DBusToolsAdditionalTargetInfo.cmake:
+
+/usr/lib/x86_64-linux-gnu/cmake/Qt6DBus/Qt6DBusVersionlessTargets.cmake:
+
+/usr/lib/x86_64-linux-gnu/cmake/Qt6DBus/Qt6DBusTargets-none.cmake:
+
+/usr/lib/x86_64-linux-gnu/cmake/Qt6DBus/Qt6DBusMacros.cmake:
+
+/usr/lib/x86_64-linux-gnu/cmake/Qt6DBus/Qt6DBusDependencies.cmake:
+
+/usr/lib/x86_64-linux-gnu/cmake/Qt6DBus/Qt6DBusConfigVersionImpl.cmake:
+
+/usr/lib/x86_64-linux-gnu/cmake/Qt6DBus/Qt6DBusConfigVersion.cmake:
+
+/usr/lib/x86_64-linux-gnu/cmake/Qt6DBus/Qt6DBusConfig.cmake:
 
 /usr/include/x86_64-linux-gnu/bits/endian.h:
 
@@ -905,17 +937,9 @@ CroutSolver_autogen/timestamp: /home/eryk/CroutSolver/CMakeLists.txt \
 
 /usr/include/c++/13/tr1/riemann_zeta.tcc:
 
-/usr/include/x86_64-linux-gnu/bits/stdint-uintn.h:
-
-/usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h:
-
-/usr/include/x86_64-linux-gnu/bits/select.h:
-
-/usr/include/x86_64-linux-gnu/c++/13/bits/gthr-default.h:
+/home/eryk/CroutSolver/solver/symmetric/crout_symmetric_mpreal.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qbytearrayalgorithms.h:
-
-/usr/include/string.h:
 
 /usr/include/stdlib.h:
 
@@ -927,13 +951,11 @@ CroutSolver_autogen/timestamp: /home/eryk/CroutSolver/CMakeLists.txt \
 
 /usr/include/pthread.h:
 
-/usr/include/x86_64-linux-gnu/bits/posix2_lim.h:
+/home/eryk/CroutSolver/solver/symmetric/crout_symmetric_interval.h:
 
 /usr/include/stdint.h:
 
 /usr/include/linux/limits.h:
-
-/usr/include/x86_64-linux-gnu/bits/pthread_stack_min-dynamic.h:
 
 /usr/lib/x86_64-linux-gnu/cmake/Qt6Widgets/Qt6WidgetsVersionlessTargets.cmake:
 
@@ -945,23 +967,9 @@ CroutSolver_autogen/timestamp: /home/eryk/CroutSolver/CMakeLists.txt \
 
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlayout.h:
 
-/usr/include/c++/13/unordered_map:
-
 /usr/lib/x86_64-linux-gnu/cmake/Qt6DBusTools/Qt6DBusToolsTargets-none.cmake:
 
 /usr/include/c++/13/bits/allocator.h:
-
-/usr/lib/x86_64-linux-gnu/cmake/Qt6Widgets/Qt6WidgetsAdditionalTargetInfo.cmake:
-
-/usr/include/ctype.h:
-
-/usr/include/c++/13/cfloat:
-
-/usr/include/stdc-predef.h:
-
-/usr/include/x86_64-linux-gnu/qt6/QtCore/qabstractitemmodel.h:
-
-/usr/lib/x86_64-linux-gnu/cmake/Qt6CoreTools/Qt6CoreToolsTargets-none.cmake:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qtextstream.h:
 
@@ -991,43 +999,9 @@ CroutSolver_autogen/timestamp: /home/eryk/CroutSolver/CMakeLists.txt \
 
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qabstractspinbox.h:
 
-/usr/include/features.h:
-
-/usr/include/c++/13/string:
-
-/usr/include/x86_64-linux-gnu/bits/stdint-intn.h:
-
-/usr/include/x86_64-linux-gnu/qt6/QtCore/qstringlist.h:
-
-/usr/lib/x86_64-linux-gnu/cmake/Qt6/Qt6ConfigVersionImpl.cmake:
-
-/usr/lib/x86_64-linux-gnu/cmake/Qt6Core/Qt6CoreTargets-none.cmake:
-
 /usr/include/c++/13/sstream:
 
-/usr/include/c++/13/bits/nested_exception.h:
-
-/usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h:
-
-/usr/include/x86_64-linux-gnu/bits/locale.h:
-
-/usr/include/x86_64-linux-gnu/bits/posix1_lim.h:
-
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QSpinBox:
-
-/usr/include/strings.h:
-
-/usr/include/c++/13/iomanip:
-
-/usr/share/cmake-3.28/Modules/Compiler/TinyCC-C-DetermineCompiler.cmake:
-
-/usr/include/c++/13/exception:
-
-/home/eryk/CroutSolver/main.cpp:
-
-/usr/share/cmake-3.28/Modules/CMakeSystemSpecificInformation.cmake:
-
-/usr/include/x86_64-linux-gnu/qt6/QtCore/qnumeric.h:
 
 /usr/include/c++/13/ext/alloc_traits.h:
 
@@ -1040,10 +1014,6 @@ CroutSolver_autogen/timestamp: /home/eryk/CroutSolver/CMakeLists.txt \
 /usr/include/c++/13/tr1/hypergeometric.tcc:
 
 /usr/include/x86_64-linux-gnu/bits/types/wint_t.h:
-
-/usr/include/x86_64-linux-gnu/bits/posix_opt.h:
-
-/usr/include/c++/13/climits:
 
 /usr/include/c++/13/iterator:
 
@@ -1081,12 +1051,6 @@ CroutSolver_autogen/timestamp: /home/eryk/CroutSolver/CMakeLists.txt \
 
 /usr/include/c++/13/new:
 
-/usr/include/x86_64-linux-gnu/bits/setjmp.h:
-
-/usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h:
-
-/usr/include/c++/13/bits/utility.h:
-
 /usr/include/locale.h:
 
 /usr/include/x86_64-linux-gnu/bits/errno.h:
@@ -1094,6 +1058,12 @@ CroutSolver_autogen/timestamp: /home/eryk/CroutSolver/CMakeLists.txt \
 /usr/include/c++/13/bits/stl_pair.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtGui/qbitmap.h:
+
+/usr/share/cmake-3.28/Modules/Compiler/TinyCC-C-DetermineCompiler.cmake:
+
+/usr/include/c++/13/exception:
+
+/home/eryk/CroutSolver/main.cpp:
 
 /usr/include/c++/13/cwchar:
 
@@ -1107,19 +1077,13 @@ CroutSolver_autogen/timestamp: /home/eryk/CroutSolver/CMakeLists.txt \
 
 /usr/include/c++/13/cmath:
 
-/usr/include/c++/13/chrono:
-
 /usr/include/c++/13/compare:
 
 /usr/include/c++/13/cfenv:
 
-/usr/include/x86_64-linux-gnu/bits/pthreadtypes.h:
-
-/usr/include/x86_64-linux-gnu/qt6/QtCore/qscopeguard.h:
-
-/usr/include/x86_64-linux-gnu/bits/stdint-least.h:
-
 /usr/include/c++/13/tr1/gamma.tcc:
+
+/home/eryk/CroutSolver/solver/tridiagonal/crout_tridiagonal_double.h:
 
 /usr/include/c++/13/ext/atomicity.h:
 
@@ -1129,51 +1093,25 @@ CroutSolver_autogen/timestamp: /home/eryk/CroutSolver/CMakeLists.txt \
 
 /usr/include/c++/13/cctype:
 
-/usr/include/x86_64-linux-gnu/bits/timesize.h:
-
-/usr/include/c++/13/bits/char_traits.h:
-
-/usr/include/c++/13/bits/std_function.h:
-
-/usr/include/x86_64-linux-gnu/c++/13/bits/ctype_inline.h:
-
-/usr/lib/x86_64-linux-gnu/cmake/Qt6GuiTools/Qt6GuiToolsTargets-none.cmake:
-
-/usr/include/errno.h:
-
-/home/eryk/CroutSolver/mpreal.h:
-
-/usr/include/x86_64-linux-gnu/qt6/QtCore/qcontiguouscache.h:
-
-/usr/include/c++/13/bits/functional_hash.h:
+/usr/include/c++/13/bits/vector.tcc:
 
 /usr/include/c++/13/optional:
 
-/usr/include/c++/13/bits/vector.tcc:
+/usr/include/c++/13/bits/uniform_int_dist.h:
 
-/usr/include/c++/13/bits/stl_multimap.h:
+/usr/include/c++/13/bits/locale_classes.tcc:
 
-/usr/include/x86_64-linux-gnu/bits/types/__locale_t.h:
+/usr/include/c++/13/cerrno:
 
-/usr/share/cmake-3.28/Modules/Compiler/GNU-CXX-DetermineCompiler.cmake:
+/usr/include/c++/13/bits/stringfwd.h:
 
-/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QMainWindow:
+/usr/include/c++/13/bits/iterator_concepts.h:
 
-/usr/include/c++/13/bits/istream.tcc:
+/usr/include/c++/13/bits/string_view.tcc:
 
-/usr/include/c++/13/typeinfo:
+/usr/share/cmake-3.28/Modules/CMakeSystem.cmake.in:
 
-/usr/lib/x86_64-linux-gnu/cmake/Qt6DBusTools/Qt6DBusToolsVersionlessTargets.cmake:
-
-/usr/include/c++/13/streambuf:
-
-/usr/include/c++/13/pstl/glue_memory_defs.h:
-
-/usr/include/c++/13/bits/memory_resource.h:
-
-/usr/include/c++/13/bits/exception.h:
-
-/usr/include/c++/13/bits/cpp_type_traits.h:
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qgenericatomic.h:
 
 /usr/include/x86_64-linux-gnu/bits/confname.h:
 
@@ -1183,41 +1121,91 @@ CroutSolver_autogen/timestamp: /home/eryk/CroutSolver/CMakeLists.txt \
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qsystemdetection.h:
 
-/usr/include/c++/13/bits/c++0x_warning.h:
+/usr/include/c++/13/bits/stl_tree.h:
 
-/usr/include/x86_64-linux-gnu/sys/cdefs.h:
+/usr/include/c++/13/bits/codecvt.h:
+
+/usr/include/c++/13/bits/stl_relops.h:
+
+/usr/include/c++/13/bits/stl_raw_storage_iter.h:
+
+/usr/include/c++/13/bits/cpp_type_traits.h:
+
+/usr/include/c++/13/bits/char_traits.h:
+
+/usr/include/c++/13/bits/std_function.h:
+
+/usr/include/x86_64-linux-gnu/c++/13/bits/ctype_inline.h:
 
 /usr/include/alloca.h:
 
 /usr/include/x86_64-linux-gnu/gmp.h:
 
-/usr/include/x86_64-linux-gnu/bits/environments.h:
+/usr/include/x86_64-linux-gnu/bits/thread-shared-types.h:
 
-/usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h:
+/usr/include/libintl.h:
 
-/usr/include/x86_64-linux-gnu/qt6/QtGui/qicon.h:
+/usr/include/c++/13/climits:
 
-/usr/lib/x86_64-linux-gnu/cmake/Qt6DBus/Qt6DBusMacros.cmake:
+/usr/include/x86_64-linux-gnu/bits/posix_opt.h:
+
+/home/eryk/CroutSolver/solver/general/crout_general_mpreal.cpp:
 
 /usr/include/c++/13/atomic:
 
 /usr/include/c++/13/bits/streambuf.tcc:
 
-/usr/share/cmake-3.28/Modules/Compiler/Clang-DetermineCompilerInternal.cmake:
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qscopedpointer.h:
 
-/usr/include/c++/13/bits/basic_ios.h:
+/usr/include/c++/13/bits/basic_ios.tcc:
 
-/usr/include/c++/13/bits/locale_classes.tcc:
+/usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h:
 
-/usr/include/c++/13/bits/uniform_int_dist.h:
+/usr/include/c++/13/bits/nested_exception.h:
 
-/home/eryk/CroutSolver/crout_solver.hpp:
+/usr/lib/x86_64-linux-gnu/cmake/Qt6Widgets/Qt6WidgetsAdditionalTargetInfo.cmake:
 
-/usr/include/c++/13/bits/stl_function.h:
+/usr/include/ctype.h:
 
-/usr/include/c++/13/bits/exception_ptr.h:
+/usr/include/c++/13/cfloat:
 
-/usr/include/x86_64-linux-gnu/bits/waitstatus.h:
+/usr/include/c++/13/array:
+
+/usr/share/cmake-3.28/Modules/Compiler/zOS-CXX-DetermineCompiler.cmake:
+
+/usr/include/c++/13/bits/hash_bytes.h:
+
+/home/eryk/CroutSolver/interval.hpp:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qtaggedpointer.h:
+
+/usr/include/c++/13/bits/unique_ptr.h:
+
+/usr/bin/cmake:
+
+/usr/include/x86_64-linux-gnu/bits/types/mbstate_t.h:
+
+/usr/include/c++/13/backward/binders.h:
+
+/usr/lib/x86_64-linux-gnu/cmake/Qt6/QtPublicFindPackageHelpers.cmake:
+
+/home/eryk/CroutSolver/mpreal.h:
+
+/usr/lib/x86_64-linux-gnu/cmake/Qt6GuiTools/Qt6GuiToolsTargets-none.cmake:
+
+/usr/include/errno.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qcontiguouscache.h:
+
+/usr/include/assert.h:
+
+/usr/include/c++/13/backward/auto_ptr.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtGui/qvalidator.h:
+
+/usr/include/strings.h:
+
+/usr/include/c++/13/iomanip:
 
 CroutSolver_autogen/moc_predefs.h:
 
@@ -1225,59 +1213,119 @@ CroutSolver_autogen/moc_predefs.h:
 
 /usr/include/c++/13/complex:
 
-/usr/include/c++/13/backward/auto_ptr.h:
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qiterable.h:
 
-/usr/include/x86_64-linux-gnu/qt6/QtGui/qvalidator.h:
+/usr/include/x86_64-linux-gnu/bits/floatn-common.h:
 
-/usr/include/assert.h:
+/usr/include/c++/13/bits/requires_hosted.h:
 
-/usr/lib/x86_64-linux-gnu/cmake/Qt6Gui/Qt6GuiTargets-none.cmake:
+/home/eryk/CroutSolver/solver/tridiagonal/crout_tridiagonal_interval.cpp:
 
-/usr/include/x86_64-linux-gnu/qt6/QtCore/qpoint.h:
+/usr/share/cmake-3.28/Modules/Compiler/ARMCC-DetermineCompiler.cmake:
 
-/usr/include/c++/13/bits/cxxabi_forced.h:
+/usr/include/x86_64-linux-gnu/bits/floatn.h:
 
-/home/eryk/CroutSolver/interval.hpp:
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qstringalgorithms.h:
 
-/usr/include/x86_64-linux-gnu/qt6/QtCore/qtaggedpointer.h:
+/usr/include/endian.h:
 
-/usr/include/c++/13/debug/debug.h:
+/usr/lib/x86_64-linux-gnu/cmake/Qt6Core/Qt6CoreTargets.cmake:
 
-/usr/include/c++/13/bits/stl_list.h:
+/home/eryk/CroutSolver/crout_solver.hpp:
 
-/usr/share/cmake-3.28/Modules/Compiler/SunPro-C-DetermineCompiler.cmake:
+/usr/include/c++/13/bits/stl_function.h:
 
-/usr/include/x86_64-linux-gnu/qt6/QtCore/qglobalstatic.h:
+/usr/share/cmake-3.28/Modules/Compiler/Clang-DetermineCompilerInternal.cmake:
 
-/usr/include/c++/13/bits/shared_ptr_atomic.h:
-
-/usr/include/x86_64-linux-gnu/qt6/QtCore/qvarlengtharray.h:
+/usr/include/c++/13/bits/basic_ios.h:
 
 CMakeFiles/3.28.3/CMakeSystem.cmake:
 
+/usr/lib/x86_64-linux-gnu/cmake/Qt6Gui/Qt6GuiConfig.cmake:
+
+/usr/include/c++/13/bits/node_handle.h:
+
 /usr/include/x86_64-linux-gnu/gnu/stubs-64.h:
+
+/home/eryk/CroutSolver/solver/general/crout_general_interval.cpp:
 
 /usr/include/c++/13/bits/alloc_traits.h:
 
-/usr/include/c++/13/stdexcept:
+/home/eryk/CroutSolver/solver/tridiagonal/crout_tridiagonal_double.cpp:
 
-/usr/include/c++/13/clocale:
+/usr/include/unistd.h:
 
-/usr/include/x86_64-linux-gnu/sys/syscall.h:
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qstringconverter_base.h:
+
+/usr/share/cmake-3.28/Modules/CMakeSystemSpecificInformation.cmake:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qnumeric.h:
+
+/home/eryk/CroutSolver/solver/symmetric/crout_symmetric_double.cpp:
+
+/usr/include/c++/13/chrono:
+
+/usr/include/string.h:
+
+/home/eryk/CroutSolver/solver/symmetric/crout_symmetric_double.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qscopeguard.h:
+
+/usr/include/x86_64-linux-gnu/bits/pthreadtypes.h:
+
+/usr/include/c++/13/typeinfo:
+
+/usr/include/c++/13/streambuf:
+
+/usr/include/c++/13/pstl/glue_memory_defs.h:
+
+/usr/include/c++/13/bits/memory_resource.h:
+
+/usr/include/c++/13/bits/exception.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qwidget.h:
 
 /usr/share/cmake-3.28/Modules/CheckCSourceCompiles.cmake:
 
 /usr/include/c++/13/bits/allocated_ptr.h:
 
-/usr/include/c++/13/bits/iterator_concepts.h:
+/usr/include/x86_64-linux-gnu/asm/errno.h:
 
-/usr/include/c++/13/cerrno:
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qlocale.h:
 
-/usr/include/c++/13/bits/stringfwd.h:
+/usr/share/cmake-3.28/Modules/Platform/Linux-Determine-CXX.cmake:
 
-/usr/include/c++/13/bits/stl_tree.h:
+/usr/include/c++/13/cstring:
 
-/usr/include/c++/13/bits/codecvt.h:
+/usr/include/x86_64-linux-gnu/c++/13/bits/gthr.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qmap.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qabstractbutton.h:
+
+/usr/include/stdc-predef.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qabstractitemmodel.h:
+
+/usr/lib/x86_64-linux-gnu/cmake/Qt6CoreTools/Qt6CoreToolsTargets-none.cmake:
+
+/usr/include/features.h:
+
+/usr/include/c++/13/string:
+
+/usr/include/x86_64-linux-gnu/bits/stdint-intn.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qstringlist.h:
+
+/usr/lib/x86_64-linux-gnu/cmake/Qt6/Qt6ConfigVersionImpl.cmake:
+
+/usr/lib/x86_64-linux-gnu/cmake/Qt6Core/Qt6CoreTargets-none.cmake:
+
+/usr/share/cmake-3.28/Modules/Compiler/SDCC-C-DetermineCompiler.cmake:
+
+/home/eryk/CroutSolver/solver/general/crout_general_double.cpp:
+
+/usr/include/c++/13/bits/istream.tcc:
 
 /home/eryk/CroutSolver/CMakeLists.txt:
 
@@ -1289,29 +1337,31 @@ CMakeFiles/3.28.3/CMakeSystem.cmake:
 
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qtwidgetsexports.h:
 
-/usr/share/cmake-3.28/Modules/Compiler/zOS-CXX-DetermineCompiler.cmake:
+/home/eryk/CroutSolver/solver/general/crout_general_mpreal.h:
 
-/usr/include/c++/13/bits/hash_bytes.h:
+/usr/include/c++/13/bits/c++0x_warning.h:
 
-/usr/lib/x86_64-linux-gnu/cmake/Qt6Widgets/Qt6WidgetsTargets.cmake:
+/usr/include/x86_64-linux-gnu/sys/cdefs.h:
 
-/usr/include/asm-generic/errno-base.h:
-
-/usr/include/c++/13/bits/stl_iterator_base_funcs.h:
-
-/usr/include/c++/13/array:
+/usr/include/c++/13/bits/stl_algobase.h:
 
 /usr/include/c++/13/algorithm:
 
-/usr/include/c++/13/bits/stl_raw_storage_iter.h:
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qlogging.h:
 
-/usr/include/x86_64-linux-gnu/qt6/QtCore/qiterable.h:
+/usr/include/c++/13/numbers:
 
-/usr/lib/x86_64-linux-gnu/cmake/Qt6DBus/Qt6DBusConfigVersion.cmake:
+/home/eryk/CroutSolver/solver/symmetric/crout_symmetric_interval.cpp:
 
-/usr/include/x86_64-linux-gnu/bits/getopt_core.h:
+/usr/include/x86_64-linux-gnu/qt6/QtGui/qtransform.h:
 
-/usr/include/c++/13/bits/stl_vector.h:
+/usr/include/c++/13/tr1/modified_bessel_func.tcc:
+
+/usr/lib/x86_64-linux-gnu/cmake/Qt6CoreTools/Qt6CoreToolsConfig.cmake:
+
+/home/eryk/CroutSolver/solver/tridiagonal/crout_tridiagonal_mpreal.h:
+
+/usr/lib/x86_64-linux-gnu/cmake/Qt6/Qt6ConfigVersion.cmake:
 
 /usr/share/cmake-3.28/Modules/Compiler/Watcom-DetermineCompiler.cmake:
 
@@ -1319,33 +1369,77 @@ CMakeFiles/3.28.3/CMakeSystem.cmake:
 
 /usr/include/x86_64-linux-gnu/bits/uio_lim.h:
 
-/usr/include/c++/13/tr1/special_function_util.h:
-
 /usr/include/c++/13/tr1/poly_laguerre.tcc:
+
+/usr/include/c++/13/tr1/special_function_util.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtGui/qwindowdefs.h:
 
-/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qwidget.h:
+/usr/include/x86_64-linux-gnu/bits/posix2_lim.h:
+
+/usr/include/c++/13/bits/shared_ptr_atomic.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qvarlengtharray.h:
+
+/usr/include/c++/13/debug/debug.h:
+
+/usr/include/c++/13/bits/stl_list.h:
+
+/usr/share/cmake-3.28/Modules/Compiler/SunPro-C-DetermineCompiler.cmake:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qglobalstatic.h:
 
 /usr/include/c++/13/bits/ranges_cmp.h:
 
-/usr/include/x86_64-linux-gnu/qt6/QtCore/qscopedpointer.h:
+/usr/lib/x86_64-linux-gnu/cmake/Qt6Widgets/Qt6WidgetsTargets.cmake:
 
-/usr/include/c++/13/bits/basic_ios.tcc:
+/usr/include/asm-generic/errno-base.h:
 
-/usr/include/c++/13/backward/binders.h:
+/usr/include/c++/13/bits/stl_iterator_base_funcs.h:
 
-/usr/lib/x86_64-linux-gnu/cmake/Qt6/QtPublicFindPackageHelpers.cmake:
+/usr/include/c++/13/bits/stl_multimap.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/__locale_t.h:
+
+/usr/share/cmake-3.28/Modules/Compiler/GNU-CXX-DetermineCompiler.cmake:
+
+/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QMainWindow:
+
+/usr/include/x86_64-linux-gnu/bits/waitstatus.h:
+
+/usr/include/c++/13/bits/exception_ptr.h:
+
+/usr/include/c++/13/bits/functional_hash.h:
+
+/usr/include/x86_64-linux-gnu/bits/environments.h:
+
+/usr/lib/x86_64-linux-gnu/cmake/Qt6Gui/Qt6GuiTargets-none.cmake:
+
+/usr/include/c++/13/bits/cxxabi_forced.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qpoint.h:
+
+/home/eryk/CroutSolver/solver/symmetric/crout_symmetric_mpreal.cpp:
+
+/usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtGui/qicon.h:
+
+/usr/include/c++/13/stdexcept:
+
+/usr/include/c++/13/clocale:
+
+/usr/include/x86_64-linux-gnu/sys/syscall.h:
+
+/usr/include/x86_64-linux-gnu/bits/sched.h:
+
+/usr/include/x86_64-linux-gnu/bits/timesize.h:
 
 /usr/include/c++/13/bits/locale_facets.h:
 
 /usr/include/c++/13/bit:
 
 /usr/include/x86_64-linux-gnu/qt6/QtGui/qpolygon.h:
-
-/usr/include/x86_64-linux-gnu/asm/errno.h:
-
-/usr/include/x86_64-linux-gnu/qt6/QtCore/qlocale.h:
 
 /usr/include/c++/13/utility:
 
@@ -1360,6 +1454,10 @@ CMakeFiles/3.28.3/CMakeSystem.cmake:
 /usr/include/c++/13/bits/max_size_type.h:
 
 /usr/include/c++/13/debug/assertions.h:
+
+/home/eryk/CroutSolver/solver/tridiagonal/crout_tridiagonal_mpreal.cpp:
+
+/usr/include/time.h:
 
 /usr/include/c++/13/bits/memoryfwd.h:
 
@@ -1380,6 +1478,26 @@ CMakeFiles/3.28.3/CMakeSystem.cmake:
 /usr/include/c++/13/bits/invoke.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qvector.h:
+
+/usr/include/c++/13/tr1/beta_function.tcc:
+
+/usr/include/c++/13/bits/utility.h:
+
+/usr/include/x86_64-linux-gnu/bits/setjmp.h:
+
+/usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h:
+
+/usr/include/c++/13/bits/uses_allocator_args.h:
+
+/usr/include/c++/13/variant:
+
+/usr/include/c++/13/bits/atomic_base.h:
+
+/usr/include/c++/13/bits/new_allocator.h:
+
+/usr/include/c++/13/bits/stl_uninitialized.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtGui/qtguiexports.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qurl.h:
 
@@ -1407,6 +1525,18 @@ CMakeFiles/3.28.3/CMakeCXXCompiler.cmake:
 
 /usr/include/c++/13/bits/quoted_string.h:
 
+/home/eryk/CroutSolver/solver/general/crout_general_interval.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qglobal.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QLineEdit:
+
+/usr/include/c++/13/bits/stl_construct.h:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qchar.h:
+
+/usr/include/c++/13/bits/std_mutex.h:
+
 /usr/include/c++/13/bits/ostream_insert.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qabstractitemdelegate.h:
@@ -1417,21 +1547,7 @@ CMakeFiles/3.28.3/CMakeCXXCompiler.cmake:
 
 /usr/include/c++/13/bits/ranges_algobase.h:
 
-/usr/include/c++/13/tr1/beta_function.tcc:
-
 /usr/include/c++/13/bits/locale_facets.tcc:
-
-/usr/lib/x86_64-linux-gnu/cmake/Qt6DBus/Qt6DBusTargets-none.cmake:
-
-/usr/include/c++/13/bits/string_view.tcc:
-
-/usr/include/libintl.h:
-
-/usr/include/x86_64-linux-gnu/bits/thread-shared-types.h:
-
-/usr/share/cmake-3.28/Modules/CMakeSystem.cmake.in:
-
-/usr/include/x86_64-linux-gnu/qt6/QtCore/qgenericatomic.h:
 
 /usr/include/c++/13/bits/shared_ptr.h:
 
@@ -1445,15 +1561,11 @@ CMakeFiles/3.28.3/CMakeCXXCompiler.cmake:
 
 /usr/lib/x86_64-linux-gnu/cmake/Qt6Core/Qt6CoreAdditionalTargetInfo.cmake:
 
-/usr/share/cmake-3.28/Modules/Platform/Linux-GNU-CXX.cmake:
+/usr/include/c++/13/unordered_map:
 
-/usr/include/limits.h:
+/home/eryk/CroutSolver/solver/general/crout_general_double.h:
 
-/usr/include/c++/13/cstdlib:
-
-/usr/include/c++/13/cstdint:
-
-/usr/include/c++/13/bits/postypes.h:
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qstringliteral.h:
 
 /usr/share/cmake-3.28/Modules/CheckCXXSourceCompiles.cmake:
 
@@ -1463,27 +1575,23 @@ CMakeFiles/3.28.3/CMakeCXXCompiler.cmake:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qbindingstorage.h:
 
+/usr/include/c++/13/bits/postypes.h:
+
+/usr/share/cmake-3.28/Modules/Platform/Linux-GNU-CXX.cmake:
+
+/usr/include/limits.h:
+
+/usr/include/c++/13/cstdlib:
+
+/usr/include/c++/13/cstdint:
+
 /usr/include/c++/13/cstddef:
 
 /usr/include/c++/13/bits/stl_algo.h:
 
-/usr/include/c++/13/bits/stl_algobase.h:
-
 /usr/share/cmake-3.28/Modules/Compiler/VisualAge-CXX-DetermineCompiler.cmake:
 
 /usr/include/c++/13/bits/stl_bvector.h:
-
-/usr/include/c++/13/bits/std_mutex.h:
-
-/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QLineEdit:
-
-/usr/include/c++/13/bits/stl_construct.h:
-
-/usr/include/x86_64-linux-gnu/qt6/QtCore/qchar.h:
-
-/usr/include/x86_64-linux-gnu/bits/libc-header-start.h:
-
-/usr/lib/x86_64-linux-gnu/cmake/Qt6DBusTools/Qt6DBusToolsAdditionalTargetInfo.cmake:
 
 /usr/include/c++/13/bits/functexcept.h:
 
@@ -1505,19 +1613,9 @@ CMakeFiles/3.28.3/CMakeCXXCompiler.cmake:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qrect.h:
 
-/usr/include/unistd.h:
-
-/usr/include/x86_64-linux-gnu/qt6/QtCore/qstringconverter_base.h:
-
-/usr/include/c++/13/bits/stl_uninitialized.h:
-
-/usr/include/c++/13/bits/new_allocator.h:
-
-/usr/include/x86_64-linux-gnu/qt6/QtGui/qtguiexports.h:
+/usr/include/c++/13/locale:
 
 /usr/include/x86_64-linux-gnu/bits/getopt_posix.h:
-
-/usr/include/c++/13/locale:
 
 /usr/include/c++/13/bits/stl_map.h:
 
@@ -1525,19 +1623,33 @@ CMakeFiles/3.28.3/CMakeCXXCompiler.cmake:
 
 /usr/include/c++/13/bits/stl_numeric.h:
 
-/usr/include/c++/13/bits/stl_relops.h:
+/usr/include/c++/13/bits/stl_vector.h:
 
-/usr/include/c++/13/bits/unique_ptr.h:
+/usr/include/x86_64-linux-gnu/bits/getopt_core.h:
 
-/usr/bin/cmake:
+/usr/include/x86_64-linux-gnu/bits/libc-header-start.h:
 
-/usr/include/x86_64-linux-gnu/bits/types/mbstate_t.h:
+/usr/include/x86_64-linux-gnu/bits/local_lim.h:
 
-/usr/include/c++/13/variant:
+/usr/include/x86_64-linux-gnu/bits/posix1_lim.h:
 
-/usr/include/c++/13/bits/atomic_base.h:
+/usr/include/x86_64-linux-gnu/bits/locale.h:
 
-/usr/include/c++/13/bits/uses_allocator_args.h:
+/usr/include/x86_64-linux-gnu/bits/pthread_stack_min-dynamic.h:
+
+/usr/lib/x86_64-linux-gnu/cmake/Qt6Gui/Qt6GuiDependencies.cmake:
+
+/usr/include/x86_64-linux-gnu/bits/time.h:
+
+/usr/include/x86_64-linux-gnu/bits/stdint-least.h:
+
+/usr/include/x86_64-linux-gnu/bits/stdint-uintn.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h:
+
+/usr/include/x86_64-linux-gnu/bits/select.h:
+
+/usr/include/x86_64-linux-gnu/c++/13/bits/gthr-default.h:
 
 /usr/include/c++/13/bits/locale_conv.h:
 
@@ -1589,11 +1701,11 @@ CMakeFiles/3.28.3/CMakeCXXCompiler.cmake:
 
 /usr/include/x86_64-linux-gnu/bits/types/error_t.h:
 
-/usr/include/c++/13/bits/list.tcc:
-
 /usr/include/c++/13/type_traits:
 
 /usr/include/features-time64.h:
+
+/usr/include/c++/13/bits/list.tcc:
 
 /usr/include/x86_64-linux-gnu/bits/types/locale_t.h:
 
@@ -1619,10 +1731,6 @@ CMakeFiles/3.28.3/CMakeCXXCompiler.cmake:
 
 /usr/include/x86_64-linux-gnu/bits/typesizes.h:
 
-/usr/include/c++/13/bits/node_handle.h:
-
-/usr/lib/x86_64-linux-gnu/cmake/Qt6Gui/Qt6GuiConfig.cmake:
-
 /usr/include/x86_64-linux-gnu/bits/unistd_ext.h:
 
 /usr/include/x86_64-linux-gnu/bits/waitflags.h:
@@ -1641,10 +1749,6 @@ CMakeFiles/3.28.3/CMakeCXXCompiler.cmake:
 
 /usr/include/x86_64-linux-gnu/c++/13/bits/atomic_word.h:
 
-/usr/lib/x86_64-linux-gnu/cmake/Qt6DBusTools/Qt6DBusToolsConfig.cmake:
-
-/usr/lib/x86_64-linux-gnu/cmake/Qt6Gui/Qt6GuiAdditionalTargetInfo.cmake:
-
 /usr/include/x86_64-linux-gnu/bits/wchar.h:
 
 /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h:
@@ -1660,20 +1764,6 @@ CMakeFiles/3.28.3/CMakeCXXCompiler.cmake:
 /usr/include/x86_64-linux-gnu/c++/13/bits/cpu_defines.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qprocessordetection.h:
-
-/usr/share/cmake-3.28/Modules/Platform/Linux-Determine-CXX.cmake:
-
-/usr/include/c++/13/cstring:
-
-/usr/include/x86_64-linux-gnu/c++/13/bits/gthr.h:
-
-/usr/include/c++/13/numbers:
-
-/usr/include/x86_64-linux-gnu/qt6/QtCore/qlogging.h:
-
-/usr/include/x86_64-linux-gnu/qt6/QtCore/qmap.h:
-
-/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qabstractbutton.h:
 
 /usr/share/cmake-3.28/Modules/Compiler/SunPro-CXX-DetermineCompiler.cmake:
 
@@ -1757,8 +1847,6 @@ CMakeFiles/3.28.3/CMakeCXXCompiler.cmake:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qforeach.h:
 
-/usr/include/x86_64-linux-gnu/qt6/QtCore/qglobal.h:
-
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qhash.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtGui/qregion.h:
@@ -1773,6 +1861,10 @@ CMakeFiles/3.28.3/CMakeCXXCompiler.cmake:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qmath.h:
 
+/usr/lib/x86_64-linux-gnu/cmake/Qt6DBusTools/Qt6DBusToolsConfigVersion.cmake:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qobjectdefs.h:
+
 /usr/include/c++/13/bits/specfun.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qtcore-config.h:
@@ -1782,8 +1874,6 @@ CMakeFiles/3.28.3/CMakeCXXCompiler.cmake:
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qnamespace.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qobject_impl.h:
-
-/usr/lib/x86_64-linux-gnu/cmake/Qt6DBusTools/Qt6DBusToolsDependencies.cmake:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qobjectdefs_impl.h:
 
@@ -1811,17 +1901,11 @@ CMakeFiles/3.28.3/CMakeCXXCompiler.cmake:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qshareddata_impl.h:
 
+/usr/lib/x86_64-linux-gnu/cmake/Qt6DBus/Qt6DBusTargets.cmake:
+
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qsharedpointer.h:
+
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qstring.h:
-
-/usr/share/cmake-3.28/Modules/Compiler/ARMCC-DetermineCompiler.cmake:
-
-/usr/include/x86_64-linux-gnu/bits/floatn.h:
-
-/usr/include/x86_64-linux-gnu/qt6/QtCore/qstringalgorithms.h:
-
-/usr/include/endian.h:
-
-/usr/lib/x86_64-linux-gnu/cmake/Qt6Core/Qt6CoreTargets.cmake:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qstringfwd.h:
 
@@ -1830,8 +1914,6 @@ CMakeFiles/3.28.3/CMakeCXXCompiler.cmake:
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qtconfigmacros.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtGui/qpixmap.h:
-
-/usr/include/x86_64-linux-gnu/qt6/QtCore/qstringliteral.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qstringmatcher.h:
 
@@ -1905,14 +1987,6 @@ CMakeFiles/3.28.3/CMakeCXXCompiler.cmake:
 
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qstyle.h:
 
-/usr/include/x86_64-linux-gnu/qt6/QtGui/qtransform.h:
-
-/usr/include/c++/13/tr1/modified_bessel_func.tcc:
-
-/usr/lib/x86_64-linux-gnu/cmake/Qt6CoreTools/Qt6CoreToolsConfig.cmake:
-
-/usr/lib/x86_64-linux-gnu/cmake/Qt6/Qt6ConfigVersion.cmake:
-
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QHBoxLayout:
 
 /usr/share/cmake-3.28/Modules/Compiler/FujitsuClang-DetermineCompiler.cmake:
@@ -1927,8 +2001,6 @@ CMakeFiles/3.28.3/CMakeCXXCompiler.cmake:
 
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlayoutitem.h:
 
-/usr/lib/x86_64-linux-gnu/cmake/Qt6DBusTools/Qt6DBusToolsConfigVersionImpl.cmake:
-
 /usr/include/x86_64-linux-gnu/bits/xopen_lim.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlineedit.h:
@@ -1940,8 +2012,6 @@ CMakeFiles/3.28.3/CMakeCXXCompiler.cmake:
 /usr/include/x86_64-linux-gnu/qt6/QtCore/qhashfunctions.h:
 
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qpushbutton.h:
-
-/usr/lib/x86_64-linux-gnu/cmake/Qt6DBus/Qt6DBusConfig.cmake:
 
 /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qsizepolicy.h:
 
@@ -1974,6 +2044,8 @@ CMakeFiles/3.28.3/CMakeCXXCompiler.cmake:
 /usr/include/x86_64-linux-gnu/sys/types.h:
 
 /usr/lib/x86_64-linux-gnu/cmake/Qt6/3rdparty/kwin/FindXKB.cmake:
+
+/home/eryk/CroutSolver/solver/tridiagonal/crout_tridiagonal_interval.h:
 
 /usr/lib/x86_64-linux-gnu/cmake/Qt6/FindWrapOpenGL.cmake:
 
@@ -2042,21 +2114,3 @@ CMakeFiles/3.28.3/CMakeCXXCompiler.cmake:
 /usr/lib/x86_64-linux-gnu/cmake/Qt6GuiTools/Qt6GuiToolsTargets.cmake:
 
 /usr/lib/x86_64-linux-gnu/cmake/Qt6DBus/Qt6DBusAdditionalTargetInfo.cmake:
-
-/usr/lib/x86_64-linux-gnu/cmake/Qt6DBus/Qt6DBusConfigVersionImpl.cmake:
-
-/usr/lib/x86_64-linux-gnu/cmake/Qt6DBus/Qt6DBusDependencies.cmake:
-
-/usr/include/x86_64-linux-gnu/qt6/QtCore/qsharedpointer.h:
-
-/usr/lib/x86_64-linux-gnu/cmake/Qt6DBus/Qt6DBusTargets.cmake:
-
-/usr/lib/x86_64-linux-gnu/cmake/Qt6DBus/Qt6DBusVersionlessTargets.cmake:
-
-/usr/include/x86_64-linux-gnu/qt6/QtCore/qobjectdefs.h:
-
-/usr/lib/x86_64-linux-gnu/cmake/Qt6DBusTools/Qt6DBusToolsConfigVersion.cmake:
-
-/usr/share/cmake-3.28/Modules/CMakeFindBinUtils.cmake:
-
-/usr/lib/x86_64-linux-gnu/cmake/Qt6DBusTools/Qt6DBusToolsTargets.cmake:

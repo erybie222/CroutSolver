@@ -1,5 +1,7 @@
 #include "crout_general_double.h"
-
+namespace solver {
+    namespace general {
+    
 std::tuple<QVector<QVector<double>>, QVector<QVector<double>>, QVector<double>, QVector<double>>
 solveCroutGeneral(const QVector<QVector<double>> &A, const QVector<double> &b)
 {
@@ -44,4 +46,6 @@ solveCroutGeneral(const QVector<QVector<double>> &A, const QVector<double> &b)
     }
 
     return {L, U, y, x};
+}
+    }
 }

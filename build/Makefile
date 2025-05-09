@@ -227,6 +227,222 @@ mainwindow.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/CroutSolver.dir/build.make CMakeFiles/CroutSolver.dir/mainwindow.cpp.s
 .PHONY : mainwindow.cpp.s
 
+solver/general/crout_general_double.o: solver/general/crout_general_double.cpp.o
+.PHONY : solver/general/crout_general_double.o
+
+# target to build an object file
+solver/general/crout_general_double.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CroutSolver.dir/build.make CMakeFiles/CroutSolver.dir/solver/general/crout_general_double.cpp.o
+.PHONY : solver/general/crout_general_double.cpp.o
+
+solver/general/crout_general_double.i: solver/general/crout_general_double.cpp.i
+.PHONY : solver/general/crout_general_double.i
+
+# target to preprocess a source file
+solver/general/crout_general_double.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CroutSolver.dir/build.make CMakeFiles/CroutSolver.dir/solver/general/crout_general_double.cpp.i
+.PHONY : solver/general/crout_general_double.cpp.i
+
+solver/general/crout_general_double.s: solver/general/crout_general_double.cpp.s
+.PHONY : solver/general/crout_general_double.s
+
+# target to generate assembly for a file
+solver/general/crout_general_double.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CroutSolver.dir/build.make CMakeFiles/CroutSolver.dir/solver/general/crout_general_double.cpp.s
+.PHONY : solver/general/crout_general_double.cpp.s
+
+solver/general/crout_general_interval.o: solver/general/crout_general_interval.cpp.o
+.PHONY : solver/general/crout_general_interval.o
+
+# target to build an object file
+solver/general/crout_general_interval.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CroutSolver.dir/build.make CMakeFiles/CroutSolver.dir/solver/general/crout_general_interval.cpp.o
+.PHONY : solver/general/crout_general_interval.cpp.o
+
+solver/general/crout_general_interval.i: solver/general/crout_general_interval.cpp.i
+.PHONY : solver/general/crout_general_interval.i
+
+# target to preprocess a source file
+solver/general/crout_general_interval.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CroutSolver.dir/build.make CMakeFiles/CroutSolver.dir/solver/general/crout_general_interval.cpp.i
+.PHONY : solver/general/crout_general_interval.cpp.i
+
+solver/general/crout_general_interval.s: solver/general/crout_general_interval.cpp.s
+.PHONY : solver/general/crout_general_interval.s
+
+# target to generate assembly for a file
+solver/general/crout_general_interval.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CroutSolver.dir/build.make CMakeFiles/CroutSolver.dir/solver/general/crout_general_interval.cpp.s
+.PHONY : solver/general/crout_general_interval.cpp.s
+
+solver/general/crout_general_mpreal.o: solver/general/crout_general_mpreal.cpp.o
+.PHONY : solver/general/crout_general_mpreal.o
+
+# target to build an object file
+solver/general/crout_general_mpreal.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CroutSolver.dir/build.make CMakeFiles/CroutSolver.dir/solver/general/crout_general_mpreal.cpp.o
+.PHONY : solver/general/crout_general_mpreal.cpp.o
+
+solver/general/crout_general_mpreal.i: solver/general/crout_general_mpreal.cpp.i
+.PHONY : solver/general/crout_general_mpreal.i
+
+# target to preprocess a source file
+solver/general/crout_general_mpreal.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CroutSolver.dir/build.make CMakeFiles/CroutSolver.dir/solver/general/crout_general_mpreal.cpp.i
+.PHONY : solver/general/crout_general_mpreal.cpp.i
+
+solver/general/crout_general_mpreal.s: solver/general/crout_general_mpreal.cpp.s
+.PHONY : solver/general/crout_general_mpreal.s
+
+# target to generate assembly for a file
+solver/general/crout_general_mpreal.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CroutSolver.dir/build.make CMakeFiles/CroutSolver.dir/solver/general/crout_general_mpreal.cpp.s
+.PHONY : solver/general/crout_general_mpreal.cpp.s
+
+solver/symmetric/crout_symmetric_double.o: solver/symmetric/crout_symmetric_double.cpp.o
+.PHONY : solver/symmetric/crout_symmetric_double.o
+
+# target to build an object file
+solver/symmetric/crout_symmetric_double.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CroutSolver.dir/build.make CMakeFiles/CroutSolver.dir/solver/symmetric/crout_symmetric_double.cpp.o
+.PHONY : solver/symmetric/crout_symmetric_double.cpp.o
+
+solver/symmetric/crout_symmetric_double.i: solver/symmetric/crout_symmetric_double.cpp.i
+.PHONY : solver/symmetric/crout_symmetric_double.i
+
+# target to preprocess a source file
+solver/symmetric/crout_symmetric_double.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CroutSolver.dir/build.make CMakeFiles/CroutSolver.dir/solver/symmetric/crout_symmetric_double.cpp.i
+.PHONY : solver/symmetric/crout_symmetric_double.cpp.i
+
+solver/symmetric/crout_symmetric_double.s: solver/symmetric/crout_symmetric_double.cpp.s
+.PHONY : solver/symmetric/crout_symmetric_double.s
+
+# target to generate assembly for a file
+solver/symmetric/crout_symmetric_double.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CroutSolver.dir/build.make CMakeFiles/CroutSolver.dir/solver/symmetric/crout_symmetric_double.cpp.s
+.PHONY : solver/symmetric/crout_symmetric_double.cpp.s
+
+solver/symmetric/crout_symmetric_interval.o: solver/symmetric/crout_symmetric_interval.cpp.o
+.PHONY : solver/symmetric/crout_symmetric_interval.o
+
+# target to build an object file
+solver/symmetric/crout_symmetric_interval.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CroutSolver.dir/build.make CMakeFiles/CroutSolver.dir/solver/symmetric/crout_symmetric_interval.cpp.o
+.PHONY : solver/symmetric/crout_symmetric_interval.cpp.o
+
+solver/symmetric/crout_symmetric_interval.i: solver/symmetric/crout_symmetric_interval.cpp.i
+.PHONY : solver/symmetric/crout_symmetric_interval.i
+
+# target to preprocess a source file
+solver/symmetric/crout_symmetric_interval.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CroutSolver.dir/build.make CMakeFiles/CroutSolver.dir/solver/symmetric/crout_symmetric_interval.cpp.i
+.PHONY : solver/symmetric/crout_symmetric_interval.cpp.i
+
+solver/symmetric/crout_symmetric_interval.s: solver/symmetric/crout_symmetric_interval.cpp.s
+.PHONY : solver/symmetric/crout_symmetric_interval.s
+
+# target to generate assembly for a file
+solver/symmetric/crout_symmetric_interval.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CroutSolver.dir/build.make CMakeFiles/CroutSolver.dir/solver/symmetric/crout_symmetric_interval.cpp.s
+.PHONY : solver/symmetric/crout_symmetric_interval.cpp.s
+
+solver/symmetric/crout_symmetric_mpreal.o: solver/symmetric/crout_symmetric_mpreal.cpp.o
+.PHONY : solver/symmetric/crout_symmetric_mpreal.o
+
+# target to build an object file
+solver/symmetric/crout_symmetric_mpreal.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CroutSolver.dir/build.make CMakeFiles/CroutSolver.dir/solver/symmetric/crout_symmetric_mpreal.cpp.o
+.PHONY : solver/symmetric/crout_symmetric_mpreal.cpp.o
+
+solver/symmetric/crout_symmetric_mpreal.i: solver/symmetric/crout_symmetric_mpreal.cpp.i
+.PHONY : solver/symmetric/crout_symmetric_mpreal.i
+
+# target to preprocess a source file
+solver/symmetric/crout_symmetric_mpreal.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CroutSolver.dir/build.make CMakeFiles/CroutSolver.dir/solver/symmetric/crout_symmetric_mpreal.cpp.i
+.PHONY : solver/symmetric/crout_symmetric_mpreal.cpp.i
+
+solver/symmetric/crout_symmetric_mpreal.s: solver/symmetric/crout_symmetric_mpreal.cpp.s
+.PHONY : solver/symmetric/crout_symmetric_mpreal.s
+
+# target to generate assembly for a file
+solver/symmetric/crout_symmetric_mpreal.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CroutSolver.dir/build.make CMakeFiles/CroutSolver.dir/solver/symmetric/crout_symmetric_mpreal.cpp.s
+.PHONY : solver/symmetric/crout_symmetric_mpreal.cpp.s
+
+solver/tridiagonal/crout_tridiagonal_double.o: solver/tridiagonal/crout_tridiagonal_double.cpp.o
+.PHONY : solver/tridiagonal/crout_tridiagonal_double.o
+
+# target to build an object file
+solver/tridiagonal/crout_tridiagonal_double.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CroutSolver.dir/build.make CMakeFiles/CroutSolver.dir/solver/tridiagonal/crout_tridiagonal_double.cpp.o
+.PHONY : solver/tridiagonal/crout_tridiagonal_double.cpp.o
+
+solver/tridiagonal/crout_tridiagonal_double.i: solver/tridiagonal/crout_tridiagonal_double.cpp.i
+.PHONY : solver/tridiagonal/crout_tridiagonal_double.i
+
+# target to preprocess a source file
+solver/tridiagonal/crout_tridiagonal_double.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CroutSolver.dir/build.make CMakeFiles/CroutSolver.dir/solver/tridiagonal/crout_tridiagonal_double.cpp.i
+.PHONY : solver/tridiagonal/crout_tridiagonal_double.cpp.i
+
+solver/tridiagonal/crout_tridiagonal_double.s: solver/tridiagonal/crout_tridiagonal_double.cpp.s
+.PHONY : solver/tridiagonal/crout_tridiagonal_double.s
+
+# target to generate assembly for a file
+solver/tridiagonal/crout_tridiagonal_double.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CroutSolver.dir/build.make CMakeFiles/CroutSolver.dir/solver/tridiagonal/crout_tridiagonal_double.cpp.s
+.PHONY : solver/tridiagonal/crout_tridiagonal_double.cpp.s
+
+solver/tridiagonal/crout_tridiagonal_interval.o: solver/tridiagonal/crout_tridiagonal_interval.cpp.o
+.PHONY : solver/tridiagonal/crout_tridiagonal_interval.o
+
+# target to build an object file
+solver/tridiagonal/crout_tridiagonal_interval.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CroutSolver.dir/build.make CMakeFiles/CroutSolver.dir/solver/tridiagonal/crout_tridiagonal_interval.cpp.o
+.PHONY : solver/tridiagonal/crout_tridiagonal_interval.cpp.o
+
+solver/tridiagonal/crout_tridiagonal_interval.i: solver/tridiagonal/crout_tridiagonal_interval.cpp.i
+.PHONY : solver/tridiagonal/crout_tridiagonal_interval.i
+
+# target to preprocess a source file
+solver/tridiagonal/crout_tridiagonal_interval.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CroutSolver.dir/build.make CMakeFiles/CroutSolver.dir/solver/tridiagonal/crout_tridiagonal_interval.cpp.i
+.PHONY : solver/tridiagonal/crout_tridiagonal_interval.cpp.i
+
+solver/tridiagonal/crout_tridiagonal_interval.s: solver/tridiagonal/crout_tridiagonal_interval.cpp.s
+.PHONY : solver/tridiagonal/crout_tridiagonal_interval.s
+
+# target to generate assembly for a file
+solver/tridiagonal/crout_tridiagonal_interval.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CroutSolver.dir/build.make CMakeFiles/CroutSolver.dir/solver/tridiagonal/crout_tridiagonal_interval.cpp.s
+.PHONY : solver/tridiagonal/crout_tridiagonal_interval.cpp.s
+
+solver/tridiagonal/crout_tridiagonal_mpreal.o: solver/tridiagonal/crout_tridiagonal_mpreal.cpp.o
+.PHONY : solver/tridiagonal/crout_tridiagonal_mpreal.o
+
+# target to build an object file
+solver/tridiagonal/crout_tridiagonal_mpreal.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CroutSolver.dir/build.make CMakeFiles/CroutSolver.dir/solver/tridiagonal/crout_tridiagonal_mpreal.cpp.o
+.PHONY : solver/tridiagonal/crout_tridiagonal_mpreal.cpp.o
+
+solver/tridiagonal/crout_tridiagonal_mpreal.i: solver/tridiagonal/crout_tridiagonal_mpreal.cpp.i
+.PHONY : solver/tridiagonal/crout_tridiagonal_mpreal.i
+
+# target to preprocess a source file
+solver/tridiagonal/crout_tridiagonal_mpreal.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CroutSolver.dir/build.make CMakeFiles/CroutSolver.dir/solver/tridiagonal/crout_tridiagonal_mpreal.cpp.i
+.PHONY : solver/tridiagonal/crout_tridiagonal_mpreal.cpp.i
+
+solver/tridiagonal/crout_tridiagonal_mpreal.s: solver/tridiagonal/crout_tridiagonal_mpreal.cpp.s
+.PHONY : solver/tridiagonal/crout_tridiagonal_mpreal.s
+
+# target to generate assembly for a file
+solver/tridiagonal/crout_tridiagonal_mpreal.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CroutSolver.dir/build.make CMakeFiles/CroutSolver.dir/solver/tridiagonal/crout_tridiagonal_mpreal.cpp.s
+.PHONY : solver/tridiagonal/crout_tridiagonal_mpreal.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -247,6 +463,33 @@ help:
 	@echo "... mainwindow.o"
 	@echo "... mainwindow.i"
 	@echo "... mainwindow.s"
+	@echo "... solver/general/crout_general_double.o"
+	@echo "... solver/general/crout_general_double.i"
+	@echo "... solver/general/crout_general_double.s"
+	@echo "... solver/general/crout_general_interval.o"
+	@echo "... solver/general/crout_general_interval.i"
+	@echo "... solver/general/crout_general_interval.s"
+	@echo "... solver/general/crout_general_mpreal.o"
+	@echo "... solver/general/crout_general_mpreal.i"
+	@echo "... solver/general/crout_general_mpreal.s"
+	@echo "... solver/symmetric/crout_symmetric_double.o"
+	@echo "... solver/symmetric/crout_symmetric_double.i"
+	@echo "... solver/symmetric/crout_symmetric_double.s"
+	@echo "... solver/symmetric/crout_symmetric_interval.o"
+	@echo "... solver/symmetric/crout_symmetric_interval.i"
+	@echo "... solver/symmetric/crout_symmetric_interval.s"
+	@echo "... solver/symmetric/crout_symmetric_mpreal.o"
+	@echo "... solver/symmetric/crout_symmetric_mpreal.i"
+	@echo "... solver/symmetric/crout_symmetric_mpreal.s"
+	@echo "... solver/tridiagonal/crout_tridiagonal_double.o"
+	@echo "... solver/tridiagonal/crout_tridiagonal_double.i"
+	@echo "... solver/tridiagonal/crout_tridiagonal_double.s"
+	@echo "... solver/tridiagonal/crout_tridiagonal_interval.o"
+	@echo "... solver/tridiagonal/crout_tridiagonal_interval.i"
+	@echo "... solver/tridiagonal/crout_tridiagonal_interval.s"
+	@echo "... solver/tridiagonal/crout_tridiagonal_mpreal.o"
+	@echo "... solver/tridiagonal/crout_tridiagonal_mpreal.i"
+	@echo "... solver/tridiagonal/crout_tridiagonal_mpreal.s"
 .PHONY : help
 
 

@@ -1,5 +1,7 @@
 #include "crout_general_interval.h"
-
+namespace solver {
+    namespace general {
+    
 std::tuple<QVector<QVector<Interval<mpreal>>>, QVector<QVector<Interval<mpreal>>>, QVector<Interval<mpreal>>, QVector<Interval<mpreal>>>
 solveCroutGeneral(const QVector<QVector<Interval<mpreal>>> &A, const QVector<Interval<mpreal>> &b)
 {
@@ -44,4 +46,6 @@ solveCroutGeneral(const QVector<QVector<Interval<mpreal>>> &A, const QVector<Int
     }
 
     return {L, U, y, x};
+}
+    }
 }

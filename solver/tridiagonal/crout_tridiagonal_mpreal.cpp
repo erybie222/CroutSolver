@@ -1,5 +1,6 @@
 #include "crout_tridiagonal_mpreal.h"
-
+namespace solver {
+    namespace tridiagonal {
 std::tuple<
     QVector<mpreal>,
     QVector<mpreal>,
@@ -40,4 +41,6 @@ std::tuple<
         x[i] = (y[i] - U[i] * x[i + 1]) / D[i];
 
     return {L, D, U, y, x};
+}
+    }
 }

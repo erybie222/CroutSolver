@@ -1,6 +1,7 @@
 #include "crout_tridiagonal_double.h"
 #include <stdexcept>
-
+namespace solver {
+    namespace tridiagonal {
 std::tuple<
     QVector<double>, // a (subdiagonal)
     QVector<double>, // b (main diagonal)
@@ -44,4 +45,6 @@ solveCroutTridiagonal(const QVector<double> &a_in, const QVector<double> &b_in, 
         x[i] = y[i] - U[i] * x[i + 1];
 
     return {L, b, c, y, x};
+}
+    }
 }

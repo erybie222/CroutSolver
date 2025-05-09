@@ -84,12 +84,12 @@ CMakeFiles/CroutSolver.dir/all: CMakeFiles/CroutSolver_autogen_timestamp_deps.di
 CMakeFiles/CroutSolver.dir/all: CMakeFiles/CroutSolver_autogen.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/CroutSolver.dir/build.make CMakeFiles/CroutSolver.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/CroutSolver.dir/build.make CMakeFiles/CroutSolver.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/eryk/CroutSolver/build/CMakeFiles --progress-num=1,2,3,4,5 "Built target CroutSolver"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/eryk/CroutSolver/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13,14 "Built target CroutSolver"
 .PHONY : CMakeFiles/CroutSolver.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/CroutSolver.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/eryk/CroutSolver/build/CMakeFiles 6
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/eryk/CroutSolver/build/CMakeFiles 15
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/CroutSolver.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/eryk/CroutSolver/build/CMakeFiles 0
 .PHONY : CMakeFiles/CroutSolver.dir/rule
@@ -136,7 +136,7 @@ CMakeFiles/CroutSolver_autogen_timestamp_deps.dir/clean:
 CMakeFiles/CroutSolver_autogen.dir/all: CMakeFiles/CroutSolver_autogen_timestamp_deps.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/CroutSolver_autogen.dir/build.make CMakeFiles/CroutSolver_autogen.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/CroutSolver_autogen.dir/build.make CMakeFiles/CroutSolver_autogen.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/eryk/CroutSolver/build/CMakeFiles --progress-num=6 "Built target CroutSolver_autogen"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/eryk/CroutSolver/build/CMakeFiles --progress-num=15 "Built target CroutSolver_autogen"
 .PHONY : CMakeFiles/CroutSolver_autogen.dir/all
 
 # Build rule for subdir invocation for target.

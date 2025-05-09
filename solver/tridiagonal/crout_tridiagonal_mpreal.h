@@ -6,7 +6,8 @@
 #include "mpreal.h"
 
 using namespace mpfr;
-
+namespace solver {
+    namespace tridiagonal {
 std::tuple<
     QVector<mpreal>, // L (subdiagonal with diagonal elements)
     QVector<mpreal>, // b (main diagonal)
@@ -20,5 +21,7 @@ solveCroutTridiagonal(
     const QVector<mpreal> &c,  // superdiagonal (n - 1)
     const QVector<mpreal> &rhs // right-hand side (n)
 );
-
+ }
+}
 #endif // CROUT_TRIDIAGONAL_MPREAL_H
+   

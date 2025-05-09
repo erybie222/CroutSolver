@@ -6,8 +6,12 @@
 #include "mpreal.h"
 
 using namespace mpfr;
-
+namespace solver {
+    namespace general {
+    
 std::tuple<QVector<QVector<mpreal>>, QVector<QVector<mpreal>>, QVector<mpreal>, QVector<mpreal>>
 solveCroutGeneral(const QVector<QVector<mpreal>> &A, const QVector<mpreal> &b);
-
+  }
+}
 #endif // CROUT_GENERAL_MPREAL_H
+  

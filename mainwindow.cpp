@@ -10,9 +10,25 @@
 #include <QGroupBox>
 #include <QFrame>
 #include <QApplication>
-#include "CroutSolver.h"
+#include "qstring_utils.hpp"
 
+#include <sstream>
 
+#include "solver/general/crout_general_double.h"
+#include "solver/general/crout_general_mpreal.h"
+#include "solver/general/crout_general_interval.h"
+
+#include "solver/symmetric/crout_symmetric_double.h"
+#include "solver/symmetric/crout_symmetric_mpreal.h"
+#include "solver/symmetric/crout_symmetric_interval.h"
+
+#include "solver/tridiagonal/crout_tridiagonal_double.h"
+#include "solver/tridiagonal/crout_tridiagonal_mpreal.h"
+#include "solver/tridiagonal/crout_tridiagonal_interval.h"
+
+using namespace solver::general;
+using namespace solver::symmetric;
+using namespace solver::tridiagonal;
 
 using namespace mpfr;
 using namespace interval_arithmetic;
@@ -22,539 +38,350 @@ MainWindow::~MainWindow() = default;
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-    qApp->setStyleSheet(R"(
-        QWidget {
-            background-color: #2b2b2b;
-            color: #f0f0f0;
-            font-family: Consolas, monospace;
-            font-size: 14px;
-        }
-        QLineEdit {
-            background-color: #3c3f41;
-            border: 1px solid #555;
-            border-radius: 4px;
-            padding: 4px;
-            color: #f0f0f0;
-        }
-        QLineEdit:focus {
-            border: 1px solid #007acc;
-        }
-        QPushButton {
-            background-color: #007acc;
-            border: none;
-            padding: 6px 12px;
-            color: white;
-            border-radius: 4px;
-        }
-        QPushButton:hover {
-            background-color: #005999;
-        }
-        QGroupBox {
-            border: 1px solid #555;
-            margin-top: 10px;
-        }
-        QGroupBox::title {
-            subcontrol-origin: margin;
-            subcontrol-position: top left;
-            padding: 0 3px;
-        }
-    )");
-    
+    QWidget *centralWidget = new QWidget(this);
+    setCentralWidget(centralWidget);
 
-    QWidget *central = new QWidget(this);
-    controlsLayout = new QHBoxLayout;
+    mainLayout = new QVBoxLayout(centralWidget);
+    controlsLayout = new QHBoxLayout();
+    matrixLayout = new QGridLayout();
+    vectorLayout = new QVBoxLayout();
 
-    // Pole wyboru typu macierzy
-    controlsLayout->addWidget(new QLabel("Typ macierzy:"));
-    matrixTypeComboBox = new QComboBox(this);
-    matrixTypeComboBox->addItem("Dowolna", "general");
-    matrixTypeComboBox->addItem("Symetryczna", "symmetric");
-    matrixTypeComboBox->addItem("Trójdiagonalna", "tridiagonal");
-    controlsLayout->addWidget(matrixTypeComboBox);
-
-
-    // Layout górny — kontrolki
-    controlsLayout->addWidget(new QLabel("Rozmiar macierzy:"));
     matrixSizeSpinBox = new QSpinBox(this);
-    matrixSizeSpinBox->setRange(2, 10);
+    matrixSizeSpinBox->setMinimum(2);
+    matrixSizeSpinBox->setMaximum(10);
     matrixSizeSpinBox->setValue(3);
-    controlsLayout->addWidget(matrixSizeSpinBox);
 
-    controlsLayout->addWidget(new QLabel("Typ danych:"));
     dataTypeComboBox = new QComboBox(this);
-    dataTypeComboBox->addItem("Liczby zmiennoprzecinkowe (double)", "double");
-    dataTypeComboBox->addItem("Liczby wysokiej precyzji (mpreal)", "mpreal");
-    dataTypeComboBox->addItem("Przedziały liczbowe (interval)", "interval");
-    controlsLayout->addWidget(dataTypeComboBox);
-    controlsLayout->addStretch();
+    dataTypeComboBox->addItem("double");
+    dataTypeComboBox->addItem("mpreal");
+    dataTypeComboBox->addItem("interval");
 
+    matrixTypeComboBox = new QComboBox(this);
+    matrixTypeComboBox->addItem("general");
+    matrixTypeComboBox->addItem("symmetric");
+    matrixTypeComboBox->addItem("tridiagonal");
 
-    mainLayout = new QVBoxLayout(central);  // <-- TO JEST KLUCZOWE!
-    mainLayout->addLayout(controlsLayout);
-
-    QLabel *labelA = new QLabel("Macierz A:", this);
-    labelA->setAlignment(Qt::AlignLeft);
-    
-
-    // Layouty dla macierzy i wektora — tworzenie
-    matrixLayout = new QGridLayout;
-    vectorLayout = new QVBoxLayout;
-    matrixLayout->setSpacing(2);
-    vectorLayout->setSpacing(2);
-
-    // Kolumna dla macierzy A z etykietą
-    QVBoxLayout *matrixColumn = new QVBoxLayout;
-    matrixColumn->addWidget(new QLabel("Macierz A:", this));
-    matrixColumn->addLayout(matrixLayout);
-
-    // Separator
-    QFrame *separator = new QFrame(this);
-    separator->setFrameShape(QFrame::VLine);
-    separator->setLineWidth(1);
-
-    // Kolumna dla wektora b z etykietą
-    QVBoxLayout *vectorColumn = new QVBoxLayout;
-    vectorColumn->addWidget(new QLabel("Wektor b:", this));
-    vectorColumn->addLayout(vectorLayout);
-
-    // Layout grupujący macierz i wektor
-    QHBoxLayout *matrixGroup = new QHBoxLayout;
-    matrixGroup->addLayout(matrixColumn);
-    matrixGroup->addWidget(separator);
-    matrixGroup->addLayout(vectorColumn);
-
-    QGroupBox *inputGroup = new QGroupBox("Dane wejściowe", this);
-    inputGroup->setLayout(matrixGroup);
-    inputGroup->setContentsMargins(10, 10, 10, 10);
-    inputGroup->setStyleSheet(R"(
-        QGroupBox {
-            background-color: transparent;
-            border: 1px solid #555;
-            margin-top: 10px;
-            color: #f0f0f0;
-        }
-        QGroupBox::title {
-            subcontrol-origin: margin;
-            left: 10px;
-            padding: 0 3px;
-            color: #f0f0f0;
-        }
-    )");
-    
-
-    mainLayout->addWidget(inputGroup);
-
-    // Przycisk i pole wynikowe
-    solveButton = new QPushButton("Rozwiąż", this);
-    mainLayout->addWidget(solveButton);
-
+    solveButton = new QPushButton("Solve", this);
     solutionTextEdit = new QTextEdit(this);
-    solutionTextEdit->setStyleSheet(R"(
-        QTextEdit {
-            font-family: Consolas, monospace;
-            font-size: 13px;
-            background-color: #1e1e1e;
-            color: #d4d4d4;
-            border: 1px solid #555;
-            padding: 6px;
-        }
-    )");
-    
     solutionTextEdit->setReadOnly(true);
-    QFont font("Courier");
-    font.setStyleHint(QFont::Monospace);
-    solutionTextEdit->setFont(font);
 
-    QGroupBox *resultGroup = new QGroupBox("Wynik rozwiązania", this);
-    QVBoxLayout *resultLayout = new QVBoxLayout(resultGroup);
-    mainLayout->setContentsMargins(10, 10, 10, 10);
-    mainLayout->setSpacing(10);
+    controlsLayout->addWidget(new QLabel("Matrix size:", this));
+    controlsLayout->addWidget(matrixSizeSpinBox);
+    controlsLayout->addWidget(new QLabel("Data type:", this));
+    controlsLayout->addWidget(dataTypeComboBox);
+    controlsLayout->addWidget(new QLabel("Matrix type:", this));
+    controlsLayout->addWidget(matrixTypeComboBox);
+    controlsLayout->addWidget(solveButton);
 
-    resultLayout->addWidget(solutionTextEdit);
-    resultGroup->setContentsMargins(10, 10, 10, 10);
-    mainLayout->addWidget(resultGroup);
+    QHBoxLayout *inputLayout = new QHBoxLayout();
+    QVBoxLayout *matrixBoxLayout = new QVBoxLayout();
+    QVBoxLayout *vectorBoxLayout = new QVBoxLayout();
 
-    setCentralWidget(central);
+    QLabel *matrixLabel = new QLabel("Matrix A:");
+    QLabel *vectorLabel = new QLabel("Vector b:");
 
-    // Połączenia sygnałów
-    connect(matrixSizeSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &MainWindow::createMatrixInputs);
-    connect(dataTypeComboBox, &QComboBox::currentIndexChanged, this, [this](int) {
-        selectedType = dataTypeComboBox->currentData().toString();
-        createMatrixInputs(matrixSizeSpinBox->value());
-    });
-    connect(solveButton, &QPushButton::clicked, this, &MainWindow::solveSystem);
-    connect(matrixTypeComboBox, &QComboBox::currentIndexChanged, this, [this](int) {
-        createMatrixInputs(matrixSizeSpinBox->value());
-    });
-    
-    // Inicjalizacja
-    selectedType = dataTypeComboBox->currentData().toString();
+    QFrame *matrixFrame = new QFrame(this);
+    matrixFrame->setFrameShape(QFrame::StyledPanel);
+    matrixFrame->setLayout(matrixLayout);
+
+    QFrame *vectorFrame = new QFrame(this);
+    vectorFrame->setFrameShape(QFrame::StyledPanel);
+    vectorFrame->setLayout(vectorLayout);
+
+    matrixBoxLayout->addWidget(matrixLabel);
+    matrixBoxLayout->addWidget(matrixFrame);
+    vectorBoxLayout->addWidget(vectorLabel);
+    vectorBoxLayout->addWidget(vectorFrame);
+
+    inputLayout->addLayout(matrixBoxLayout);
+    inputLayout->addLayout(vectorBoxLayout);
+
+    mainLayout->addLayout(controlsLayout);
+    mainLayout->addLayout(inputLayout);
+    mainLayout->addWidget(solutionTextEdit);
+
     createMatrixInputs(matrixSizeSpinBox->value());
+
+    connect(matrixSizeSpinBox, QOverload<int>::of(&QSpinBox::valueChanged),
+            this, [=](int size) { createMatrixInputs(size); });
+
+    connect(solveButton, &QPushButton::clicked,
+            this, &MainWindow::solveSystem);
 }
 
-
-void MainWindow::createMatrixInputs(int size)
-{
-    QString type = selectedType.toLower();
-
-    // Czyścimy stare pola
-    QLayoutItem *child;
-    while ((child = matrixLayout->takeAt(0)))
-    {
-        delete child->widget();
-        delete child;
+void MainWindow::createMatrixInputs(int size) {
+    // Usuń stare widżety z layoutów
+    QLayoutItem *item;
+    while ((item = matrixLayout->takeAt(0)) != nullptr) {
+        delete item->widget();
+        delete item;
     }
-    while ((child = vectorLayout->takeAt(0)))
-    {
-        delete child->widget();
-        delete child;
+    while ((item = vectorLayout->takeAt(0)) != nullptr) {
+        delete item->widget();
+        delete item;
     }
 
+    // Wyczyść wektory przechowujące QLineEdity
     matrixInputs.clear();
     vectorInputs.clear();
 
-    for (int i = 0; i < size; ++i)
-    {
+    // Utwórz nowe pola dla macierzy A i wektora b
+    for (int i = 0; i < size; ++i) {
         QVector<QLineEdit *> row;
-        for (int j = 0; j < size; ++j)
-        {
-            if (type == "interval")
-            {
-                QHBoxLayout *cellLayout = new QHBoxLayout;
-                mainLayout->setContentsMargins(10, 10, 10, 10);
-                mainLayout->setSpacing(10);
-
-                QLineEdit *left = new QLineEdit(this);
-                QLineEdit *right = new QLineEdit(this);
-                left->setFixedWidth(40);
-                right->setFixedWidth(40);
-                left->setAlignment(Qt::AlignCenter);
-                right->setAlignment(Qt::AlignCenter);
-                cellLayout->addWidget(left);
-                cellLayout->addWidget(right);
-
-                left->setStyleSheet("background-color: #404040; color: #ffaaaa;");
-                right->setStyleSheet("background-color: #404040; color: #aaffaa;");
-
-
-                QWidget *container = new QWidget(this);
-                container->setLayout(cellLayout);
-                matrixLayout->addWidget(container, i, j);
-
-                row.append(left);
-                row.append(right);
-            }
-            else
-            {
-                QLineEdit *edit = new QLineEdit(this);
-                edit->setFixedWidth(60);
-                edit->setAlignment(Qt::AlignCenter);
-                vectorLayout->setContentsMargins(10, 0, 0, 0);
-                edit->setStyleSheet(R"(
-                    QLineEdit {
-                        background-color: #fdfdfd;
-                        border: 1px solid #ccc;
-                        border-radius: 4px;
-                        padding: 4px;
-                    }
-                    QLineEdit:focus {
-                        border: 1px solid #66afe9;
-                    }
-                )");
-                
-                matrixLayout->addWidget(edit, i, j);
-                row.append(edit);
-            }
+        for (int j = 0; j < size; ++j) {
+            QLineEdit *lineEdit = new QLineEdit(this);
+            lineEdit->setFixedWidth(60);
+            matrixLayout->addWidget(lineEdit, i, j);
+            row.append(lineEdit);
         }
         matrixInputs.append(row);
 
-        if (type == "interval")
-        {
-            QHBoxLayout *vecLayout = new QHBoxLayout;
-            QLineEdit *left = new QLineEdit(this);
-            QLineEdit *right = new QLineEdit(this);
-            left->setFixedWidth(40);
-            right->setFixedWidth(40);
-            left->setAlignment(Qt::AlignCenter);
-            right->setAlignment(Qt::AlignCenter);
-            vecLayout->addWidget(left);
-            vecLayout->addWidget(right);
-            QWidget *container = new QWidget(this);
-            container->setLayout(vecLayout);
-            vectorLayout->addWidget(container);
-            vectorInputs.append(left);
-            vectorInputs.append(right);
-            left->setStyleSheet(R"(
-                QLineEdit {
-                    background-color: #fdfdfd;
-                    border: 1px solid #ccc;
-                    border-radius: 4px;
-                    padding: 4px;
-                }
-                QLineEdit:focus {
-                    border: 1px solid #66afe9;
-                }
-            )");
-            
-            right->setStyleSheet(R"(
-                QLineEdit {
-                    background-color: #fdfdfd;
-                    border: 1px solid #ccc;
-                    border-radius: 4px;
-                    padding: 4px;
-                }
-                QLineEdit:focus {
-                    border: 1px solid #66afe9;
-                }
-            )");
-            
-        }
-        else
-        {
-            QLineEdit *edit = new QLineEdit(this);
-            edit->setFixedWidth(60);
-            edit->setAlignment(Qt::AlignCenter);
-            vectorLayout->addWidget(edit);
-            vectorInputs.append(edit);
-        }
+        QLineEdit *vecEdit = new QLineEdit(this);
+        vecEdit->setFixedWidth(60);
+        vectorLayout->addWidget(vecEdit);
+        vectorInputs.append(vecEdit);
     }
+
+    // Wymuś odświeżenie widoku
+    matrixLayout->update();
+    vectorLayout->update();
 }
 
-void MainWindow::solveSystem()
-{
-    int size = matrixSizeSpinBox->value();
-    QString type = dataTypeComboBox->currentData().toString();
-    QString matrixKind = matrixTypeComboBox->currentData().toString();  // general / symmetric / tridiagonal
 
-    if (type == "double")
-{
-    QString matrixKind = matrixTypeComboBox->currentData().toString();
+void MainWindow::solveSystem() {
+    const int size = matrixInputs.size();
+    const QString matrixType = matrixTypeComboBox->currentText();
+    const QString dataType = dataTypeComboBox->currentText();
 
-    if (matrixKind == "tridiagonal")
-    {
-        QVector<double> a(size, 0), b_diag(size), c(size, 0), d(size);
-        for (int i = 0; i < size; ++i)
-        {
-            if (i > 0)
-                a[i] = matrixInputs[i][i - 1]->text().toDouble();
-            b_diag[i] = matrixInputs[i][i]->text().toDouble();
-            if (i < size - 1)
-                c[i] = matrixInputs[i][i + 1]->text().toDouble();
-            d[i] = vectorInputs[i]->text().toDouble();
-        }
+    if (dataType == "double") {
+        QVector<QVector<double>> A = getMatrixDouble();
+        QVector<double> b = getVectorDouble();
+        QVector<QVector<double>> L, U;
+        QVector<double> y, x;
 
-        auto [L, U, y, x] = solveCroutTridiagonal(a, b_diag, c, d);
-        displaySolutionDetails(L, U, y, x);
-    }
-    else // symmetric lub general
-    {
-        QVector<QVector<double>> A(size, QVector<double>(size));
-        QVector<double> b(size);
-
-        for (int i = 0; i < size; ++i)
-        {
-            for (int j = 0; j < size; ++j)
-                A[i][j] = matrixInputs[i][j]->text().toDouble();
-            b[i] = vectorInputs[i]->text().toDouble();
-        }
-
-        auto [L, U, y, x] = solveCroutFull(A, b);
-        displaySolutionDetails(L, U, y, x);
-    }
-}
-
-    else if (type == "mpreal")
-    {
-        QVector<QVector<mpreal>> A(size, QVector<mpreal>(size));
-        QVector<mpreal> b(size);
-
-        for (int i = 0; i < size; ++i)
-        {
-            for (int j = 0; j < size; ++j)
-                A[i][j] = mpreal(matrixInputs[i][j]->text().toStdString());
-            b[i] = mpreal(vectorInputs[i]->text().toStdString());
-        }
-
-        auto [L, U, y, x] = CroutSolverMP::solve(A, b, matrixKind);
-        displaySolutionDetails(L, U, y, x);
-    }
-    else if (type == "interval")
-    {
-        QVector<QVector<Interval<mpreal>>> A(size, QVector<Interval<mpreal>>(size));
-        QVector<Interval<mpreal>> b(size);
-
-        for (int i = 0; i < size; ++i)
-        {
-            for (int j = 0; j < size; ++j)
-            {
-                int idx = j * 2;
-                mpreal left = mpreal(matrixInputs[i][idx]->text().toStdString());
-                mpreal right = mpreal(matrixInputs[i][idx + 1]->text().toStdString());
-                A[i][j] = Interval<mpreal>(left, right);
+        if (matrixType == "general")
+            std::tie(L, U, y, x) = solveCroutGeneral(A, b);
+        else if (matrixType == "symmetric")
+            std::tie(L, U, y, x) = solveCroutSymmetric(A, b);
+        else if (matrixType == "tridiagonal") {
+            QVector<double> a(size), d(size), c(size);
+            for (int i = 0; i < size; ++i) {
+                d[i] = A[i][i];
+                if (i > 0) a[i] = A[i][i - 1];
+                if (i < size - 1) c[i] = A[i][i + 1];
             }
+            QList<double> l, diag, up, yList, xList;
+            std::tie(l, diag, up, yList, xList) = solveCroutTridiagonal(a, d, c, b);
 
-            int vIdx = i * 2;
-            mpreal left = mpreal(vectorInputs[vIdx]->text().toStdString());
-            mpreal right = mpreal(vectorInputs[vIdx + 1]->text().toStdString());
-            b[i] = Interval<mpreal>(left, right);
+            L = QVector<QVector<double>>(size, QVector<double>(size, 0.0));
+            U = QVector<QVector<double>>(size, QVector<double>(size, 0.0));
+            y.resize(size); x.resize(size);
+            for (int i = 0; i < size; ++i) {
+                L[i][i] = 1.0;
+                if (i > 0) L[i][i - 1] = l[i];
+                U[i][i] = diag[i];
+                if (i < size - 1) U[i][i + 1] = up[i];
+                y[i] = yList[i];
+                x[i] = xList[i];
+            }
         }
 
-        auto [L, U, y, x] = CroutSolverInterval::solve(A, b, matrixKind);
+        displaySolutionDetails(L, U, y, x);
+    }
+
+    else if (dataType == "mpreal") {
+        QVector<QVector<mpfr::mpreal>> A = getMatrixMpreal();
+        QVector<mpfr::mpreal> b = getVectorMpreal();
+        QVector<QVector<mpfr::mpreal>> L, U;
+        QVector<mpfr::mpreal> y, x;
+
+        if (matrixType == "general")
+            std::tie(L, U, y, x) = solveCroutGeneral(A, b);
+        else if (matrixType == "symmetric")
+            std::tie(L, U, y, x) = solveCroutSymmetric(A, b);
+        else if (matrixType == "tridiagonal") {
+            QVector<mpfr::mpreal> a(size), d(size), c(size);
+            for (int i = 0; i < size; ++i) {
+                d[i] = A[i][i];
+                if (i > 0) a[i] = A[i][i - 1];
+                if (i < size - 1) c[i] = A[i][i + 1];
+            }
+            QList<mpfr::mpreal> l, diag, up, yList, xList;
+            std::tie(l, diag, up, yList, xList) = solveCroutTridiagonal(a, d, c, b);
+
+            L = QVector<QVector<mpfr::mpreal>>(size, QVector<mpfr::mpreal>(size, 0.0));
+            U = QVector<QVector<mpfr::mpreal>>(size, QVector<mpfr::mpreal>(size, 0.0));
+            y.resize(size); x.resize(size);
+            for (int i = 0; i < size; ++i) {
+                L[i][i] = 1.0;
+                if (i > 0) L[i][i - 1] = l[i];
+                U[i][i] = diag[i];
+                if (i < size - 1) U[i][i + 1] = up[i];
+                y[i] = yList[i];
+                x[i] = xList[i];
+            }
+        }
+
+        displaySolutionDetails(L, U, y, x);
+    }
+
+    else if (dataType == "interval") {
+        using Interval = interval_arithmetic::Interval<mpfr::mpreal>;
+        QVector<QVector<Interval>> A = getMatrixInterval();
+        QVector<Interval> b = getVectorInterval();
+        QVector<QVector<Interval>> L, U;
+        QVector<Interval> y, x;
+
+        if (matrixType == "general")
+            std::tie(L, U, y, x) = solveCroutGeneral(A, b);
+        else if (matrixType == "symmetric")
+            std::tie(L, U, y, x) = solveCroutSymmetric(A, b);
+        else if (matrixType == "tridiagonal") {
+            QVector<Interval> a(size), d(size), c(size);
+            for (int i = 0; i < size; ++i) {
+                d[i] = A[i][i];
+                if (i > 0) a[i] = A[i][i - 1];
+                if (i < size - 1) c[i] = A[i][i + 1];
+            }
+            QList<Interval> l, diag, up, yList, xList;
+            std::tie(l, diag, up, yList, xList) = solveCroutTridiagonal(a, d, c, b);
+
+            L = QVector<QVector<Interval>>(size, QVector<Interval>(size));
+            U = QVector<QVector<Interval>>(size, QVector<Interval>(size));
+            y.resize(size); x.resize(size);
+            for (int i = 0; i < size; ++i) {
+                L[i][i] = Interval(1.0 , 1.0);
+                if (i > 0) L[i][i - 1] = l[i];
+                U[i][i] = diag[i];
+                if (i < size - 1) U[i][i + 1] = up[i];
+                y[i] = yList[i];
+                x[i] = xList[i];
+            }
+        }
+
         displaySolutionDetails(L, U, y, x);
     }
 }
 
+// --- GETTERY ---
 
-template <typename T>
-QString MainWindow::toQString(const T &val)
-{
-    if constexpr (std::is_same_v<T, mpreal>)
-        return QString::fromStdString(val.toString());
-    else if constexpr (std::is_same_v<T, Interval<mpreal>>)
-        return QString("[%1, %2]").arg(QString::fromStdString(val.a.toString())).arg(QString::fromStdString(val.b.toString()));
-    else
-        return QString::number(val);
+QVector<QVector<double>> MainWindow::getMatrixDouble() const {
+    QVector<QVector<double>> matrix(matrixInputs.size());
+    for (int i = 0; i < matrixInputs.size(); ++i) {
+        matrix[i].resize(matrixInputs[i].size());
+        for (int j = 0; j < matrixInputs[i].size(); ++j)
+            matrix[i][j] = matrixInputs[i][j]->text().toDouble();
+    }
+    return matrix;
 }
 
-void MainWindow::displaySolutionDetails(const QVector<QVector<double>> &L, const QVector<QVector<double>> &U, const QVector<double> &y, const QVector<double> &x)
-{
-    QString result;
-    int n = x.size();
-
-    result += "Macierz L:\n";
-    for (const auto &row : L)
-    {
-        for (const auto &val : row)
-            result += toQString(val).leftJustified(15);
-        result += '\n';
-    }
-
-    result += "\nMacierz U:\n";
-    for (const auto &row : U)
-    {
-        for (const auto &val : row)
-            result += toQString(val).leftJustified(15);
-        result += '\n';
-    }
-
-    result += "\nWektor y (z równania Ly = b):\n";
-    for (int i = 0; i < n; ++i)
-        result += QString("y[%1] = %2\n").arg(i).arg(toQString(y[i]));
-
-    result += "\nWektor x (rozwiązanie):\n";
-    for (int i = 0; i < n; ++i)
-        result += QString("x[%1] = %2\n").arg(i).arg(toQString(x[i]));
-
-    solutionTextEdit->setText(result);
+QVector<double> MainWindow::getVectorDouble() const {
+    QVector<double> vec(vectorInputs.size());
+    for (int i = 0; i < vectorInputs.size(); ++i)
+        vec[i] = vectorInputs[i]->text().toDouble();
+    return vec;
 }
 
-
-
-void MainWindow::displaySolutionDetails(const QVector<QVector<mpreal>> &L, const QVector<QVector<mpreal>> &U, const QVector<mpreal> &y, const QVector<mpreal> &x)
-{
-    QString result;
-    int n = x.size();
-
-    result += "Macierz L:\n";
-    for (const auto &row : L)
-    {
-        for (const auto &val : row)
-            result += toQString(val).leftJustified(15);
-        result += '\n';
+QVector<QVector<mpfr::mpreal>> MainWindow::getMatrixMpreal() const {
+    QVector<QVector<mpfr::mpreal>> matrix(matrixInputs.size());
+    for (int i = 0; i < matrixInputs.size(); ++i) {
+        matrix[i].resize(matrixInputs[i].size());
+        for (int j = 0; j < matrixInputs[i].size(); ++j)
+            matrix[i][j] = mpfr::mpreal(matrixInputs[i][j]->text().toStdString());
     }
-
-    result += "\nMacierz U:\n";
-    for (const auto &row : U)
-    {
-        for (const auto &val : row)
-            result += toQString(val).leftJustified(15);
-        result += '\n';
-    }
-
-    result += "\nWektor y (z równania Ly = b):\n";
-    for (int i = 0; i < n; ++i)
-        result += QString("y[%1] = %2\n").arg(i).arg(toQString(y[i]));
-
-    result += "\nWektor x (rozwiązanie):\n";
-    for (int i = 0; i < n; ++i)
-        result += QString("x[%1] = %2\n").arg(i).arg(toQString(x[i]));
-
-    solutionTextEdit->setText(result);
+    return matrix;
 }
 
-
-void MainWindow::displaySolutionDetails(const QVector<QVector<Interval<mpreal>>> &L, const QVector<QVector<Interval<mpreal>>> &U, const QVector<Interval<mpreal>> &y, const QVector<Interval<mpreal>> &x)
-{
-    QString result;
-    int n = x.size();
-
-    result += "Macierz L:\n";
-    for (const auto &row : L)
-    {
-        for (const auto &val : row)
-            result += toQString(val).leftJustified(15);
-        result += '\n';
-    }
-
-    result += "\nMacierz U:\n";
-    for (const auto &row : U)
-    {
-        for (const auto &val : row)
-            result += toQString(val).leftJustified(15);
-        result += '\n';
-    }
-
-    result += "\nWektor y (z równania Ly = b):\n";
-    for (int i = 0; i < n; ++i)
-        result += QString("y[%1] = %2\n").arg(i).arg(toQString(y[i]));
-
-    result += "\nWektor x (rozwiązanie):\n";
-    for (int i = 0; i < n; ++i)
-        result += QString("x[%1] = %2\n").arg(i).arg(toQString(x[i]));
-
-    solutionTextEdit->setText(result);
+QVector<mpfr::mpreal> MainWindow::getVectorMpreal() const {
+    QVector<mpfr::mpreal> vec(vectorInputs.size());
+    for (int i = 0; i < vectorInputs.size(); ++i)
+        vec[i] = mpfr::mpreal(vectorInputs[i]->text().toStdString());
+    return vec;
 }
 
-std::tuple<QVector<QVector<double>>, QVector<QVector<double>>, QVector<double>, QVector<double>>
-MainWindow::solveCroutTridiagonal(const QVector<double>& a, const QVector<double>& b, const QVector<double>& c, const QVector<double>& d)
-{
-    int n = b.size();
-    QVector<QVector<double>> L(n, QVector<double>(n, 0.0));
-    QVector<QVector<double>> U(n, QVector<double>(n, 0.0));
-    QVector<double> y(n), x(n);
-
-    QVector<double> l(n), u(n), z(n);
-
-    u[0] = b[0];
-    for (int i = 1; i < n; ++i) {
-        l[i] = a[i] / u[i - 1];
-        u[i] = b[i] - l[i] * c[i - 1];
-    }
-
-    // Forward substitution
-    z[0] = d[0];
-    for (int i = 1; i < n; ++i) {
-        z[i] = d[i] - l[i] * z[i - 1];
-    }
-
-    // Backward substitution
-    x[n - 1] = z[n - 1] / u[n - 1];
-    for (int i = n - 2; i >= 0; --i) {
-        x[i] = (z[i] - c[i] * x[i + 1]) / u[i];
-    }
-
-    // Build L and U
-    for (int i = 0; i < n; ++i) {
-        L[i][i] = 1.0;
-        U[i][i] = u[i];
-        if (i > 0) {
-            L[i][i - 1] = l[i];
-            U[i - 1][i] = c[i - 1];
+QVector<QVector<interval_arithmetic::Interval<mpfr::mpreal>>> MainWindow::getMatrixInterval() const {
+    QVector<QVector<interval_arithmetic::Interval<mpfr::mpreal>>> matrix(matrixInputs.size());
+    for (int i = 0; i < matrixInputs.size(); ++i) {
+        matrix[i].resize(matrixInputs[i].size());
+        for (int j = 0; j < matrixInputs[i].size(); ++j) {
+            QStringList bounds = matrixInputs[i][j]->text().split(';');
+            if (bounds.size() == 2) {
+                mpfr::mpreal a(bounds[0].toStdString());
+                mpfr::mpreal b(bounds[1].toStdString());
+                matrix[i][j] = interval_arithmetic::Interval<mpfr::mpreal>(a, b);
+            }
         }
     }
+    return matrix;
+}
 
-    // Compute y = L^{-1} * b
-    y = z;
 
-    return {L, U, y, x};
+QVector<interval_arithmetic::Interval<mpfr::mpreal>> MainWindow::getVectorInterval() const {
+    QVector<interval_arithmetic::Interval<mpfr::mpreal>> vec(vectorInputs.size());
+    for (int i = 0; i < vectorInputs.size(); ++i) {
+        QStringList bounds = vectorInputs[i]->text().split(';');
+        if (bounds.size() == 2) {
+            mpfr::mpreal a(bounds[0].toStdString());
+            mpfr::mpreal b(bounds[1].toStdString());
+            vec[i] = interval_arithmetic::Interval<mpfr::mpreal>(a, b);
+        }
+    }
+    return vec;
+}
+
+
+// --- DISPLAY ---
+
+void MainWindow::displaySolutionDetails(
+    const QVector<QVector<double>> &L,
+    const QVector<QVector<double>> &U,
+    const QVector<double> &y,
+    const QVector<double> &x)
+{
+    solutionTextEdit->append("L matrix:");
+    for (const auto &row : L)
+        solutionTextEdit->append(QStringUtils::toQStringVector(row));
+    solutionTextEdit->append("U matrix:");
+    for (const auto &row : U)
+        solutionTextEdit->append(QStringUtils::toQStringVector(row));
+    solutionTextEdit->append("y vector:");
+    solutionTextEdit->append(QStringUtils::toQStringVector(y));
+    solutionTextEdit->append("x vector:");
+    solutionTextEdit->append(QStringUtils::toQStringVector(x));
+}
+
+void MainWindow::displaySolutionDetails(
+    const QVector<QVector<mpfr::mpreal>> &L,
+    const QVector<QVector<mpfr::mpreal>> &U,
+    const QVector<mpfr::mpreal> &y,
+    const QVector<mpfr::mpreal> &x)
+{
+    solutionTextEdit->append("L matrix (mpreal):");
+    for (const auto &row : L)
+        solutionTextEdit->append(QStringUtils::toQStringVector(row));
+    solutionTextEdit->append("U matrix (mpreal):");
+    for (const auto &row : U)
+        solutionTextEdit->append(QStringUtils::toQStringVector(row));
+    solutionTextEdit->append("y vector:");
+    solutionTextEdit->append(QStringUtils::toQStringVector(y));
+    solutionTextEdit->append("x vector:");
+    solutionTextEdit->append(QStringUtils::toQStringVector(x));
+}
+
+void MainWindow::displaySolutionDetails(
+    const QVector<QVector<interval_arithmetic::Interval<mpfr::mpreal>>> &L,
+    const QVector<QVector<interval_arithmetic::Interval<mpfr::mpreal>>> &U,
+    const QVector<interval_arithmetic::Interval<mpfr::mpreal>> &y,
+    const QVector<interval_arithmetic::Interval<mpfr::mpreal>> &x)
+{
+    solutionTextEdit->append("L matrix (interval):");
+    for (const auto &row : L)
+        solutionTextEdit->append(QStringUtils::toQStringVector(row));
+    solutionTextEdit->append("U matrix (interval):");
+    for (const auto &row : U)
+        solutionTextEdit->append(QStringUtils::toQStringVector(row));
+    solutionTextEdit->append("y vector:");
+    solutionTextEdit->append(QStringUtils::toQStringVector(y));
+    solutionTextEdit->append("x vector:");
+    solutionTextEdit->append(QStringUtils::toQStringVector(x));
 }

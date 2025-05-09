@@ -14,11 +14,21 @@ add_executable(CroutSolver
     main.cpp
     mainwindow.cpp
     mainwindow.h
-    mainwindow.ui
     crout_solver.hpp
     interval.hpp
     mpreal.h
-    croutsolver.cpp
+
+    solver/general/crout_general_double.cpp
+    solver/general/crout_general_mpreal.cpp
+    solver/general/crout_general_interval.cpp
+
+    solver/symmetric/crout_symmetric_double.cpp
+    solver/symmetric/crout_symmetric_mpreal.cpp
+    solver/symmetric/crout_symmetric_interval.cpp
+
+    solver/tridiagonal/crout_tridiagonal_double.cpp
+    solver/tridiagonal/crout_tridiagonal_mpreal.cpp
+    solver/tridiagonal/crout_tridiagonal_interval.cpp
 )
 
 # Ścieżki do własnych plików nagłówkowych
@@ -34,4 +44,5 @@ target_link_libraries(CroutSolver
     mpfr
     gmp
 )
+
 add_definitions(-DMPFR_USE_NO_MACRO -DMPFR_USE_INTMAX_T)

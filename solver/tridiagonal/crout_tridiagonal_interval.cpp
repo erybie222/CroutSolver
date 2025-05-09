@@ -1,5 +1,6 @@
 #include "crout_tridiagonal_interval.h"
-
+namespace solver {
+    namespace tridiagonal {
 std::tuple<
     QVector<Interval<mpreal>>, // L
     QVector<Interval<mpreal>>, // D
@@ -49,4 +50,6 @@ solveCroutTridiagonal(
     }
 
     return {L, D, U, y, x};
+}
+    }
 }

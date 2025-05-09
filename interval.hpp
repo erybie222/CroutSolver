@@ -1,6 +1,7 @@
 #ifndef INTERVAL_HPP_
 #define INTERVAL_HPP_
 
+#include <cstdint>
 #include <iostream>
 #include <iomanip>
 #include <sstream>
@@ -12,6 +13,7 @@
 #include <typeinfo>
 #include <mpfr.h>
 #include <mpreal.h>
+
 
 namespace interval_arithmetic
 {
@@ -71,8 +73,17 @@ namespace interval_arithmetic
         Interval operator*(const Interval &i);
         Interval operator*(const long double &l);
         Interval operator*(const int &i);
-        Interval operator/(const Interval &i);
-
+        Interval<T> operator/(const Interval<T> &i) const {
+            // implementacja
+            if (i.a <= 0 && i.b >= 0)
+        {
+            throw std::runtime_error("Division by interval containing 0.");
+        }
+        T vals[] = {a / i.a, a / i.b, b / i.a, b / i.b};
+        T min = *std::min_element(std::begin(vals), std::end(vals));
+        T max = *std::max_element(std::begin(vals), std::end(vals));
+        return Interval<T>(min, max);
+        }
         T Mid();
         T GetWidth();
         static void Initialize();
@@ -157,18 +168,18 @@ namespace interval_arithmetic
         return (*this) * Interval<T>(static_cast<T>(i), static_cast<T>(i));
     }
 
-    template <typename T>
-    Interval<T> Interval<T>::operator/(const Interval<T> &i)
-    {
-        if (i.a <= 0 && i.b >= 0)
-        {
-            throw std::runtime_error("Division by interval containing 0.");
-        }
-        T vals[] = {a / i.a, a / i.b, b / i.a, b / i.b};
-        T min = *std::min_element(std::begin(vals), std::end(vals));
-        T max = *std::max_element(std::begin(vals), std::end(vals));
-        return Interval<T>(min, max);
-    }
+    // template <typename T>
+    // Interval<T> Interval<T>::operator/(const Interval<T> &i)
+    // {
+    //     if (i.a <= 0 && i.b >= 0)
+    //     {
+    //         throw std::runtime_error("Division by interval containing 0.");
+    //     }
+    //     T vals[] = {a / i.a, a / i.b, b / i.a, b / i.b};
+    //     T min = *std::min_element(std::begin(vals), std::end(vals));
+    //     T max = *std::max_element(std::begin(vals), std::end(vals));
+    //     return Interval<T>(min, max);
+    // }
 
     template <typename T>
     T Interval<T>::Mid()
@@ -266,6 +277,12 @@ namespace interval_arithmetic
         left = lss.str();
         right = rss.str();
     }
+
+    template <typename T>
+std::ostream& operator<<(std::ostream& os, const interval_arithmetic::Interval<T>& i) {
+    os << "[" << i.a << ", " << i.b << "]";
+    return os;
+}
 
 } // namespace interval_arithmetic
 
