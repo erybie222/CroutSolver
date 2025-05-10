@@ -240,34 +240,45 @@ void MainWindow::createMatrixInputs(int size) {
         for (int j = 0; j < size; ++j) {
             if (isInterval) {
                 QFrame *cellWidget = new QFrame();
-                QHBoxLayout *layout = new QHBoxLayout(cellWidget);
-                layout->setContentsMargins(0, 0, 0, 0);
-                layout->setSpacing(2);
+QHBoxLayout *layout = new QHBoxLayout(cellWidget);
+layout->setContentsMargins(0, 0, 0, 0);
+layout->setSpacing(2);
 
-                QLabel *leftBracket = new QLabel("[");
-                QLabel *semicolon = new QLabel(";");
-                QLabel *rightBracket = new QLabel("]");
+QLabel *leftBracket = new QLabel("[");
+QLabel *semicolon = new QLabel(";");
+QLabel *rightBracket = new QLabel("]");
 
-                leftBracket->setAlignment(Qt::AlignCenter);
-                semicolon->setAlignment(Qt::AlignCenter);
-                rightBracket->setAlignment(Qt::AlignCenter);
+leftBracket->setAlignment(Qt::AlignCenter);
+semicolon->setAlignment(Qt::AlignCenter);
+rightBracket->setAlignment(Qt::AlignCenter);
 
-                QLineEdit *low = new QLineEdit("0");
-                QLineEdit *high = new QLineEdit("0");
+QLineEdit *low = new QLineEdit("0");
+QLineEdit *high = new QLineEdit("0");
 
-                low->setFixedWidth(40);
-                high->setFixedWidth(40);
-                low->setAlignment(Qt::AlignCenter);
-                high->setAlignment(Qt::AlignCenter);
+low->setFixedWidth(40);
+high->setFixedWidth(40);
+low->setAlignment(Qt::AlignCenter);
+high->setAlignment(Qt::AlignCenter);
 
-                layout->addWidget(leftBracket);
-                layout->addWidget(low);
-                layout->addWidget(semicolon);
-                layout->addWidget(high);
-                layout->addWidget(rightBracket);
+// Ustawienia jak w wektorze b
+leftBracket->setFixedWidth(10);
+semicolon->setFixedWidth(10);
+rightBracket->setFixedWidth(10);
+leftBracket->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+semicolon->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+rightBracket->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+low->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+high->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
-                matrixLayout->addWidget(cellWidget, i, j);
-                intervalRow.append(QPair<QLineEdit*, QLineEdit*>(low, high));
+layout->addWidget(leftBracket);
+layout->addWidget(low);
+layout->addWidget(semicolon);
+layout->addWidget(high);
+layout->addWidget(rightBracket);
+
+cellWidget->setLayout(layout);
+matrixLayout->addWidget(cellWidget, i, j);
+
             } else {
                 QLineEdit *edit = new QLineEdit("0");
                 edit->setFixedWidth(60);
@@ -284,36 +295,59 @@ void MainWindow::createMatrixInputs(int size) {
 
         // Wektor b
         if (isInterval) {
-            QFrame *bFrame = new QFrame();
-            QHBoxLayout *rowLayout = new QHBoxLayout(bFrame);
-            rowLayout->setContentsMargins(0, 0, 0, 0);
-            rowLayout->setSpacing(2);
+            for (int i = 0; i < size; ++i) {
+                // Ustawienie w jednej linii (nie w gridzie)
+                QHBoxLayout *rowLayout = new QHBoxLayout();
+                rowLayout->setContentsMargins(0, 0, 0, 0);
+                rowLayout->setSpacing(2);
+        
+                QLabel *leftBracket = new QLabel("[");
+                QLabel *semicolon = new QLabel(";");
+                QLabel *rightBracket = new QLabel("]");
+        
+                QLineEdit *low = new QLineEdit("0");
+                QLineEdit *high = new QLineEdit("0");
+        
+                // Stałe rozmiary, by nie rozciągało
+                leftBracket->setFixedWidth(10);
+                semicolon->setFixedWidth(10);
+                rightBracket->setFixedWidth(10);
+        
+                low->setFixedWidth(40);
+                high->setFixedWidth(40);
+        
+                // Wyrównanie
+                leftBracket->setAlignment(Qt::AlignCenter);
+                semicolon->setAlignment(Qt::AlignCenter);
+                rightBracket->setAlignment(Qt::AlignCenter);
+                low->setAlignment(Qt::AlignCenter);
+                high->setAlignment(Qt::AlignCenter);
+        
+                // Wymuszenie braku rozciągania
+                leftBracket->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+                semicolon->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+                rightBracket->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+                low->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+                high->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        
+                rowLayout->addWidget(leftBracket);
+                rowLayout->addWidget(low);
+                rowLayout->addWidget(semicolon);
+                rowLayout->addWidget(high);
+                rowLayout->addWidget(rightBracket);
+        
+                QWidget *rowWidget = new QWidget();
+                rowWidget->setLayout(rowLayout);
+                rowWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);  // zapobiega rozciąganiu
+        
+                vectorLayout->addWidget(rowWidget);
+                vectorInputsInterval.append(QPair<QLineEdit*, QLineEdit*>(low, high));
 
-            QLabel *leftBracket = new QLabel("[");
-            QLabel *semicolon = new QLabel(";");
-            QLabel *rightBracket = new QLabel("]");
-
-            leftBracket->setAlignment(Qt::AlignCenter);
-            semicolon->setAlignment(Qt::AlignCenter);
-            rightBracket->setAlignment(Qt::AlignCenter);
-
-            QLineEdit *low = new QLineEdit("0");
-            QLineEdit *high = new QLineEdit("0");
-
-            low->setFixedWidth(40);
-            high->setFixedWidth(40);
-            low->setAlignment(Qt::AlignCenter);
-            high->setAlignment(Qt::AlignCenter);
-
-            rowLayout->addWidget(leftBracket);
-            rowLayout->addWidget(low);
-            rowLayout->addWidget(semicolon);
-            rowLayout->addWidget(high);
-            rowLayout->addWidget(rightBracket);
-
-            vectorLayout->addWidget(bFrame);
-            vectorInputsInterval.append(QPair<QLineEdit*, QLineEdit*>(low, high));
-        } else {
+            }
+        }
+        
+        
+        else {
             QLineEdit *bEdit = new QLineEdit("0");
             bEdit->setFixedWidth(60);
             bEdit->setAlignment(Qt::AlignCenter);
