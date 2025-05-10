@@ -73,15 +73,32 @@ MainWindow::MainWindow(QWidget *parent)
     matrixLayout = new QGridLayout();
     QGroupBox *matrixGroup = new QGroupBox("Matrix A");
     matrixGroup->setLayout(matrixLayout);
+    matrixGroup->setStyleSheet("QGroupBox { border: 1px solid gray; margin-top: 10px; } QGroupBox::title { subcontrol-origin: margin; left: 10px; padding: 0 3px 0 3px; }");
 
     // === Wektor b ===
     vectorLayout = new QVBoxLayout();
     QGroupBox *vectorGroup = new QGroupBox("Vector b");
     vectorGroup->setLayout(vectorLayout);
+    vectorGroup->setStyleSheet("QGroupBox { border: 1px solid gray; margin-top: 10px; } QGroupBox::title { subcontrol-origin: margin; left: 10px; padding: 0 3px 0 3px; }");
+
 
     QHBoxLayout *inputLayout = new QHBoxLayout();
+    inputLayout->setSpacing(20); // opcjonalnie, lepszy odstęp
+
     inputLayout->addWidget(matrixGroup);
+
+    // --- SEPARATOR ---
+    QFrame *separator = new QFrame();
+    separator->setFrameShape(QFrame::VLine);
+    separator->setFrameShadow(QFrame::Sunken);
+    separator->setLineWidth(1);
+    separator->setMidLineWidth(0);
+    inputLayout->addWidget(separator);
+    // ------------------
+
     inputLayout->addWidget(vectorGroup);
+
+    
 
     // === Wyniki ===
     solutionTextEdit = new QTextEdit();
@@ -122,6 +139,80 @@ MainWindow::MainWindow(QWidget *parent)
 }
 
 
+bool MainWindow::parseInterval(const QString &text, interval_arithmetic::Interval<mpfr::mpreal> &result) const {
+    QString cleanedText = normalizeIntervalText(text);
+    QStringList bounds = cleanedText.split(';');
+
+    if (bounds.size() != 2)
+        return false;
+
+    bool ok = true;
+    mpfr::mpreal a(bounds[0].toStdString(), 10);
+    mpfr::mpreal b(bounds[1].toStdString(), 10);
+
+    if (a > b) {
+        ok = false;
+    }
+
+    result = interval_arithmetic::Interval<mpfr::mpreal>(a, b);
+    return ok;
+}
+
+void MainWindow::highlightInvalidField(QLineEdit *field, bool isValid) const {
+    if (isValid) {
+        field->setStyleSheet("");
+        field->setToolTip("");
+    } else {
+        field->setStyleSheet("background-color: #ffcccc;");
+        field->setToolTip("Invalid input");
+    }
+}
+
+QVector<QVector<interval_arithmetic::Interval<mpfr::mpreal>>> MainWindow::getMatrixInterval() const {
+    QVector<QVector<interval_arithmetic::Interval<mpfr::mpreal>>> matrix(matrixInputsInterval.size());
+    for (int i = 0; i < matrixInputsInterval.size(); ++i) {
+        matrix[i].resize(matrixInputsInterval[i].size());
+        for (int j = 0; j < matrixInputsInterval[i].size(); ++j) {
+            QLineEdit *lowField = matrixInputsInterval[i][j].first;
+            QLineEdit *highField = matrixInputsInterval[i][j].second;
+
+            bool ok1 = true, ok2 = true;
+            mpfr::mpreal a(lowField->text().toStdString());
+            mpfr::mpreal b(highField->text().toStdString());
+
+            bool valid = (a <= b);
+            matrix[i][j] = valid ? interval_arithmetic::Interval<mpfr::mpreal>(a, b)
+                                 : interval_arithmetic::Interval<mpfr::mpreal>(0, 0);
+
+            QString style = valid ? "" : "background-color: #ffcccc;";
+            lowField->setStyleSheet(style);
+            highField->setStyleSheet(style);
+        }
+    }
+    return matrix;
+}
+
+QVector<interval_arithmetic::Interval<mpfr::mpreal>> MainWindow::getVectorInterval() const {
+    QVector<interval_arithmetic::Interval<mpfr::mpreal>> vector(vectorInputsInterval.size());
+    for (int i = 0; i < vectorInputsInterval.size(); ++i) {
+        QLineEdit *lowField = vectorInputsInterval[i].first;
+        QLineEdit *highField = vectorInputsInterval[i].second;
+
+        bool ok1 = true, ok2 = true;
+        mpfr::mpreal a(lowField->text().toStdString());
+        mpfr::mpreal b(highField->text().toStdString());
+
+        bool valid = (a <= b);
+        vector[i] = valid ? interval_arithmetic::Interval<mpfr::mpreal>(a, b)
+                          : interval_arithmetic::Interval<mpfr::mpreal>(0, 0);
+
+        QString style = valid ? "" : "background-color: #ffcccc;";
+        lowField->setStyleSheet(style);
+        highField->setStyleSheet(style);
+    }
+    return vector;
+}
+
 
 void MainWindow::createMatrixInputs(int size) {
     // Czyszczenie poprzednich pól
@@ -137,47 +228,119 @@ void MainWindow::createMatrixInputs(int size) {
 
     matrixInputs.clear();
     vectorInputs.clear();
+    matrixInputsInterval.clear();
+    vectorInputsInterval.clear();
 
-    // Tworzenie nowych pól wejściowych
+    bool isInterval = (dataTypeComboBox->currentText() == "interval");
+
     for (int i = 0; i < size; ++i) {
         QVector<QLineEdit*> row;
-        for (int j = 0; j < size; ++j) {
-            QLineEdit *lineEdit = new QLineEdit();
-            lineEdit->setFixedWidth(60);
-            lineEdit->setAlignment(Qt::AlignCenter);
-            lineEdit->setPlaceholderText("0");
-            matrixLayout->addWidget(lineEdit, i, j);
-            row.push_back(lineEdit);
-        }
-        matrixInputs.push_back(row);
+        QVector<QPair<QLineEdit*, QLineEdit*>> intervalRow;
 
-        QLineEdit *bEdit = new QLineEdit();
-        bEdit->setFixedWidth(60);
-        bEdit->setAlignment(Qt::AlignCenter);
-        bEdit->setPlaceholderText("0");
-        vectorLayout->addWidget(bEdit);
-        vectorInputs.push_back(bEdit);
+        for (int j = 0; j < size; ++j) {
+            if (isInterval) {
+                QFrame *cellWidget = new QFrame();
+                QHBoxLayout *layout = new QHBoxLayout(cellWidget);
+                layout->setContentsMargins(0, 0, 0, 0);
+                layout->setSpacing(2);
+
+                QLabel *leftBracket = new QLabel("[");
+                QLabel *semicolon = new QLabel(";");
+                QLabel *rightBracket = new QLabel("]");
+
+                leftBracket->setAlignment(Qt::AlignCenter);
+                semicolon->setAlignment(Qt::AlignCenter);
+                rightBracket->setAlignment(Qt::AlignCenter);
+
+                QLineEdit *low = new QLineEdit("0");
+                QLineEdit *high = new QLineEdit("0");
+
+                low->setFixedWidth(40);
+                high->setFixedWidth(40);
+                low->setAlignment(Qt::AlignCenter);
+                high->setAlignment(Qt::AlignCenter);
+
+                layout->addWidget(leftBracket);
+                layout->addWidget(low);
+                layout->addWidget(semicolon);
+                layout->addWidget(high);
+                layout->addWidget(rightBracket);
+
+                matrixLayout->addWidget(cellWidget, i, j);
+                intervalRow.append(QPair<QLineEdit*, QLineEdit*>(low, high));
+            } else {
+                QLineEdit *edit = new QLineEdit("0");
+                edit->setFixedWidth(60);
+                edit->setAlignment(Qt::AlignCenter);
+                matrixLayout->addWidget(edit, i, j);
+                row.append(edit);
+            }
+        }
+
+        if (isInterval)
+            matrixInputsInterval.append(intervalRow);
+        else
+            matrixInputs.append(row);
+
+        // Wektor b
+        if (isInterval) {
+            QFrame *bFrame = new QFrame();
+            QHBoxLayout *rowLayout = new QHBoxLayout(bFrame);
+            rowLayout->setContentsMargins(0, 0, 0, 0);
+            rowLayout->setSpacing(2);
+
+            QLabel *leftBracket = new QLabel("[");
+            QLabel *semicolon = new QLabel(";");
+            QLabel *rightBracket = new QLabel("]");
+
+            leftBracket->setAlignment(Qt::AlignCenter);
+            semicolon->setAlignment(Qt::AlignCenter);
+            rightBracket->setAlignment(Qt::AlignCenter);
+
+            QLineEdit *low = new QLineEdit("0");
+            QLineEdit *high = new QLineEdit("0");
+
+            low->setFixedWidth(40);
+            high->setFixedWidth(40);
+            low->setAlignment(Qt::AlignCenter);
+            high->setAlignment(Qt::AlignCenter);
+
+            rowLayout->addWidget(leftBracket);
+            rowLayout->addWidget(low);
+            rowLayout->addWidget(semicolon);
+            rowLayout->addWidget(high);
+            rowLayout->addWidget(rightBracket);
+
+            vectorLayout->addWidget(bFrame);
+            vectorInputsInterval.append(QPair<QLineEdit*, QLineEdit*>(low, high));
+        } else {
+            QLineEdit *bEdit = new QLineEdit("0");
+            bEdit->setFixedWidth(60);
+            bEdit->setAlignment(Qt::AlignCenter);
+            vectorLayout->addWidget(bEdit);
+            vectorInputs.append(bEdit);
+        }
     }
 }
 
-bool MainWindow::parseInterval(const QString &text, interval_arithmetic::Interval<mpfr::mpreal> &result) const {
-    QStringList bounds = text.split(';');
-    if (bounds.size() != 2) return false;
 
-    bool ok1 = true, ok2 = true;
-    mpfr::mpreal a(bounds[0].toStdString());
-    mpfr::mpreal b(bounds[1].toStdString());
-
-    result = interval_arithmetic::Interval<mpfr::mpreal>(a, b);
-    return ok1 && ok2;
-}
-
-void MainWindow::highlightInvalidField(QLineEdit *field, bool isValid) const {
+void MainWindow::highlightInvalidField(QLineEdit *field, bool isValid, const QString &message) const {
     if (isValid) {
         field->setStyleSheet("");
+        field->setToolTip("");  // czyść
     } else {
-        field->setStyleSheet("background-color: #ffcccc;");
+        QString color = (message.contains("a > b")) ? "#fff2cc" : "#ffcccc";
+        field->setStyleSheet(QString("background-color: %1;").arg(color));
+        field->setToolTip(message);
     }
+}
+
+
+QString MainWindow::normalizeIntervalText(const QString &text) const {
+    QString cleaned = text.trimmed();
+    cleaned.replace(",", ";");
+    cleaned.replace(QRegularExpression("\\s+"), ""); // usuń wszystkie spacje
+    return cleaned;
 }
 
 
@@ -332,32 +495,6 @@ QVector<mpfr::mpreal> MainWindow::getVectorMpreal() const {
         vec[i] = mpfr::mpreal(vectorInputs[i]->text().toStdString());
     return vec;
 }
-
-QVector<QVector<interval_arithmetic::Interval<mpfr::mpreal>>> MainWindow::getMatrixInterval() const {
-    QVector<QVector<interval_arithmetic::Interval<mpfr::mpreal>>> matrix(matrixInputs.size());
-    for (int i = 0; i < matrixInputs.size(); ++i) {
-        matrix[i].resize(matrixInputs[i].size());
-        for (int j = 0; j < matrixInputs[i].size(); ++j) {
-            interval_arithmetic::Interval<mpfr::mpreal> interval;
-            bool ok = parseInterval(matrixInputs[i][j]->text(), interval);
-            highlightInvalidField(matrixInputs[i][j], ok);
-            matrix[i][j] = ok ? interval : interval_arithmetic::Interval<mpfr::mpreal>(0, 0);
-        }
-    }
-    return matrix;
-}
-
-QVector<interval_arithmetic::Interval<mpfr::mpreal>> MainWindow::getVectorInterval() const {
-    QVector<interval_arithmetic::Interval<mpfr::mpreal>> vec(vectorInputs.size());
-    for (int i = 0; i < vectorInputs.size(); ++i) {
-        interval_arithmetic::Interval<mpfr::mpreal> interval;
-        bool ok = parseInterval(vectorInputs[i]->text(), interval);
-        highlightInvalidField(vectorInputs[i], ok);
-        vec[i] = ok ? interval : interval_arithmetic::Interval<mpfr::mpreal>(0, 0);
-    }
-    return vec;
-}
-
 
 
 // --- DISPLAY ---

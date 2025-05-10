@@ -69,10 +69,17 @@ private:
 
     bool parseInterval(const QString &text, interval_arithmetic::Interval<mpfr::mpreal> &result) const;
     void highlightInvalidField(QLineEdit *field, bool isValid) const;
+    void highlightInvalidField(QLineEdit *field, bool isValid, const QString &message) const;
 
+
+    QString normalizeIntervalText(const QString &text) const;
+    
 
     mutable QVector<QVector<QLineEdit *>> matrixInputs;
     mutable QVector<QLineEdit *> vectorInputs;
+
+    QVector<QVector<QPair<QLineEdit*, QLineEdit*>>> matrixInputsInterval;
+    QVector<QPair<QLineEdit*, QLineEdit*>> vectorInputsInterval;
 
 };
 
