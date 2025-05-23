@@ -126,6 +126,13 @@ MainWindow::MainWindow(QWidget *parent)
         createMatrixInputs(newSize);
     });
 
+        // w MainWindow::MainWindow(...), tuż po connect(matrixSizeSpinBox, …)
+    connect(dataTypeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=](){
+        solutionTextEdit->clear();
+        createMatrixInputs(matrixSizeSpinBox->value());
+    });
+
+
     connect(solveButton, &QPushButton::clicked, this, [=]() {
         solutionTextEdit->clear();
         solveSystem();
@@ -216,147 +223,124 @@ QVector<interval_arithmetic::Interval<mpfr::mpreal>> MainWindow::getVectorInterv
 
 
 void MainWindow::createMatrixInputs(int size) {
-    // Czyszczenie poprzednich pól
+    // Usuń stare widgety
     QLayoutItem *child;
-    while ((child = matrixLayout->takeAt(0)) != nullptr) {
+    while ((child = matrixLayout->takeAt(0))) {
         delete child->widget();
         delete child;
     }
-    while ((child = vectorLayout->takeAt(0)) != nullptr) {
+    while ((child = vectorLayout->takeAt(0))) {
         delete child->widget();
         delete child;
     }
-
     matrixInputs.clear();
-    vectorInputs.clear();
     matrixInputsInterval.clear();
+    vectorInputs.clear();
     vectorInputsInterval.clear();
 
     bool isInterval = (dataTypeComboBox->currentText() == "interval");
 
+    // === MACIERZ A ===
     for (int i = 0; i < size; ++i) {
-        QVector<QLineEdit*> row;
-        QVector<QPair<QLineEdit*, QLineEdit*>> intervalRow;
-
+        QVector<QLineEdit*>        row;
+        QVector<QPair<QLineEdit*,QLineEdit*>> intervalRow;
         for (int j = 0; j < size; ++j) {
             if (isInterval) {
-                QFrame *cellWidget = new QFrame();
-QHBoxLayout *layout = new QHBoxLayout(cellWidget);
-layout->setContentsMargins(0, 0, 0, 0);
-layout->setSpacing(2);
+                // przedział [low;high]
+                QFrame *cell = new QFrame();
+                QHBoxLayout *lay = new QHBoxLayout(cell);
+                lay->setContentsMargins(0,0,0,0);
+                lay->setSpacing(2);
 
-QLabel *leftBracket = new QLabel("[");
-QLabel *semicolon = new QLabel(";");
-QLabel *rightBracket = new QLabel("]");
+                QLabel    *Lb = new QLabel("[");
+                QLineEdit *low = new QLineEdit("0");
+                QLabel    *Sb = new QLabel(";");
+                QLineEdit *high= new QLineEdit("0");
+                QLabel    *Rb = new QLabel("]");
 
-leftBracket->setAlignment(Qt::AlignCenter);
-semicolon->setAlignment(Qt::AlignCenter);
-rightBracket->setAlignment(Qt::AlignCenter);
+                // najpierw ustalamy sizePolicy dla etykiet
+                for (QLabel *lab : {Lb,Sb,Rb}) {
+                    lab->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+                    lab->setFixedWidth(10);
+                    lab->setAlignment(Qt::AlignCenter);
+                }
+                // potem dla pól edycji
+                for (QLineEdit *edit : {low, high}) {
+                    edit->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+                    edit->setFixedWidth(40);
+                    edit->setAlignment(Qt::AlignCenter);
+                }
 
-QLineEdit *low = new QLineEdit("0");
-QLineEdit *high = new QLineEdit("0");
+                lay->addWidget(Lb);
+                lay->addWidget(low);
+                lay->addWidget(Sb);
+                lay->addWidget(high);
+                lay->addWidget(Rb);
+                matrixLayout->addWidget(cell, i, j);
 
-low->setFixedWidth(40);
-high->setFixedWidth(40);
-low->setAlignment(Qt::AlignCenter);
-high->setAlignment(Qt::AlignCenter);
-
-// Ustawienia jak w wektorze b
-leftBracket->setFixedWidth(10);
-semicolon->setFixedWidth(10);
-rightBracket->setFixedWidth(10);
-leftBracket->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-semicolon->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-rightBracket->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-low->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-high->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-
-layout->addWidget(leftBracket);
-layout->addWidget(low);
-layout->addWidget(semicolon);
-layout->addWidget(high);
-layout->addWidget(rightBracket);
-
-cellWidget->setLayout(layout);
-matrixLayout->addWidget(cellWidget, i, j);
-
-            } else {
-                QLineEdit *edit = new QLineEdit("0");
-                edit->setFixedWidth(60);
-                edit->setAlignment(Qt::AlignCenter);
-                matrixLayout->addWidget(edit, i, j);
-                row.append(edit);
+                intervalRow.emplace_back(low, high);
+            }
+            else {
+                QLineEdit *e = new QLineEdit("0");
+                e->setFixedWidth(60);
+                e->setAlignment(Qt::AlignCenter);
+                matrixLayout->addWidget(e, i, j);
+                row.append(e);
             }
         }
-
         if (isInterval)
             matrixInputsInterval.append(intervalRow);
         else
             matrixInputs.append(row);
+    }
 
-        // Wektor b
-        if (isInterval) {
-            for (int i = 0; i < size; ++i) {
-                // Ustawienie w jednej linii (nie w gridzie)
-                QHBoxLayout *rowLayout = new QHBoxLayout();
-                rowLayout->setContentsMargins(0, 0, 0, 0);
-                rowLayout->setSpacing(2);
-        
-                QLabel *leftBracket = new QLabel("[");
-                QLabel *semicolon = new QLabel(";");
-                QLabel *rightBracket = new QLabel("]");
-        
-                QLineEdit *low = new QLineEdit("0");
-                QLineEdit *high = new QLineEdit("0");
-        
-                // Stałe rozmiary, by nie rozciągało
-                leftBracket->setFixedWidth(10);
-                semicolon->setFixedWidth(10);
-                rightBracket->setFixedWidth(10);
-        
-                low->setFixedWidth(40);
-                high->setFixedWidth(40);
-        
-                // Wyrównanie
-                leftBracket->setAlignment(Qt::AlignCenter);
-                semicolon->setAlignment(Qt::AlignCenter);
-                rightBracket->setAlignment(Qt::AlignCenter);
-                low->setAlignment(Qt::AlignCenter);
-                high->setAlignment(Qt::AlignCenter);
-        
-                // Wymuszenie braku rozciągania
-                leftBracket->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-                semicolon->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-                rightBracket->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-                low->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-                high->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        
-                rowLayout->addWidget(leftBracket);
-                rowLayout->addWidget(low);
-                rowLayout->addWidget(semicolon);
-                rowLayout->addWidget(high);
-                rowLayout->addWidget(rightBracket);
-        
-                QWidget *rowWidget = new QWidget();
-                rowWidget->setLayout(rowLayout);
-                rowWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);  // zapobiega rozciąganiu
-        
-                vectorLayout->addWidget(rowWidget);
-                vectorInputsInterval.append(QPair<QLineEdit*, QLineEdit*>(low, high));
+    // === WEKTOR b ===
+    if (isInterval) {
+        for (int i = 0; i < size; ++i) {
+            QFrame *cell = new QFrame();
+            QHBoxLayout *lay = new QHBoxLayout(cell);
+            lay->setContentsMargins(0,0,0,0);
+            lay->setSpacing(2);
 
+            QLabel    *Lb = new QLabel("[");
+            QLineEdit *low = new QLineEdit("0");
+            QLabel    *Sb = new QLabel(";");
+            QLineEdit *high= new QLineEdit("0");
+            QLabel    *Rb = new QLabel("]");
+
+            for (QLabel *lab : {Lb,Sb,Rb}) {
+                lab->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+                lab->setFixedWidth(10);
+                lab->setAlignment(Qt::AlignCenter);
             }
+            for (QLineEdit *edit : {low, high}) {
+                edit->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+                edit->setFixedWidth(40);
+                edit->setAlignment(Qt::AlignCenter);
+            }
+
+            lay->addWidget(Lb);
+            lay->addWidget(low);
+            lay->addWidget(Sb);
+            lay->addWidget(high);
+            lay->addWidget(Rb);
+            vectorLayout->addWidget(cell);
+
+            vectorInputsInterval.emplace_back(low, high);
         }
-        
-        
-        else {
-            QLineEdit *bEdit = new QLineEdit("0");
-            bEdit->setFixedWidth(60);
-            bEdit->setAlignment(Qt::AlignCenter);
-            vectorLayout->addWidget(bEdit);
-            vectorInputs.append(bEdit);
+    }
+    else {
+        for (int i = 0; i < size; ++i) {
+            QLineEdit *e = new QLineEdit("0");
+            e->setFixedWidth(60);
+            e->setAlignment(Qt::AlignCenter);
+            vectorLayout->addWidget(e);
+            vectorInputs.append(e);
         }
     }
 }
+
+
 
 
 void MainWindow::highlightInvalidField(QLineEdit *field, bool isValid, const QString &message) const {
@@ -381,149 +365,129 @@ QString MainWindow::normalizeIntervalText(const QString &text) const {
 
 
 void MainWindow::solveSystem() {
-    const int size = matrixSizeSpinBox->value();
+    const int n = matrixSizeSpinBox->value();
     const QString matrixType = matrixTypeComboBox->currentText();
-    const QString dataType = dataTypeComboBox->currentText();
+    const QString dataType   = dataTypeComboBox->currentText();
+
+    solutionTextEdit->clear();
 
     if (dataType == "double") {
-        QVector<QVector<double>> A = getMatrixDouble();
-        QVector<double> b = getVectorDouble();
+        // 1) Pobierz A i b
+        auto A = getMatrixDouble();
+        auto b = getVectorDouble();
+
+        // 2) Rozwiąż
         QVector<QVector<double>> L, U;
         QVector<double> y, x;
-
         if (matrixType == "general") {
             std::tie(L, U, y, x) = solveCroutGeneral(A, b);
-        } else if (matrixType == "symmetric") {
-            std::tie(L, U, y, x) = solveCroutSymmetric(A, b);
-        } else if (matrixType == "tridiagonal") {
-
-        
-
-            QVector<double> a(size - 1), d(size), c(size - 1);
-
-            for (int i = 0; i < size; ++i) {
-                d[i] = A[i][i];  // przekątna główna
-            
-                if (i < size - 1)
-                    c[i] = A[i][i + 1];  // nadprzekątna
-            
-                if (i > 0)
-                    a[i - 1] = A[i][i - 1];  // podprzekątna
-            }
-            
-            
-
-                
-        
-            QList<double> l, diag, up, yList, xList;
-            std::tie(l, diag, up, yList, xList) = solveCroutTridiagonal(a, d, c, b);
-        
-            // Tu dopiero po std::tie
-            L = QVector<QVector<double>>(size, QVector<double>(size, 0.0));
-            U = QVector<QVector<double>>(size, QVector<double>(size, 0.0));
-            y = QVector<double>(size);
-            x = QVector<double>(size);
-        
-            for (int i = 0; i < size; ++i) {
-                L[i][i] = 1.0;
-                if (i > 0) L[i][i - 1] = l[i - 1];  // ✅ poprawnie
-                U[i][i] = diag[i];
-                if (i < size - 1) U[i][i + 1] = up[i];
-                y[i] = yList[i];
-                x[i] = xList[i];
-            }
-            
-            
-            
         }
-        
+        else if (matrixType == "symmetric") {
+            std::tie(L, U, y, x) = solveCroutSymmetric(A, b);
+        }
+        else {  // tridiagonal
+            QVector<double> a(n-1), d(n), c(n-1);
+            for (int i = 0; i < n; ++i) {
+                d[i] = A[i][i];
+                if (i < n-1) c[i] = A[i][i+1];
+                if (i > 0)   a[i-1] = A[i][i-1];
+            }
+            QList<double> l, diag, up, yL, xL;
+            std::tie(l, diag, up, yL, xL) = solveCroutTridiagonal(a, d, c, b);
+
+            L = QVector<QVector<double>>(n, QVector<double>(n, 0.0));
+            U = QVector<QVector<double>>(n, QVector<double>(n, 0.0));
+            y.resize(n); x.resize(n);
+            for (int i = 0; i < n; ++i) {
+                L[i][i] = 1.0;
+                if (i > 0)       L[i][i-1] = l[i-1];
+                U[i][i] = diag[i];
+                if (i < n-1)     U[i][i+1] = up[i];
+                y[i]    = yL[i];
+                x[i]    = xL[i];
+            }
+        }
 
         displaySolutionDetails(L, U, y, x);
     }
-
     else if (dataType == "mpreal") {
-        QVector<QVector<mpfr::mpreal>> A = getMatrixMpreal();
-        QVector<mpfr::mpreal> b = getVectorMpreal();
-        QVector<QVector<mpfr::mpreal>> L, U;
-        QVector<mpfr::mpreal> y, x;
+        using M = mpfr::mpreal;
+        auto A = getMatrixMpreal();
+        auto b = getVectorMpreal();
 
+        QVector<QVector<M>> L, U;
+        QVector<M> y, x;
         if (matrixType == "general") {
             std::tie(L, U, y, x) = solveCroutGeneral(A, b);
-        } else if (matrixType == "symmetric") {
-            std::tie(L, U, y, x) = solveCroutSymmetric(A, b);
-        } else if (matrixType == "tridiagonal") {
-            QVector<mpfr::mpreal> a(size - 1), d(size), c(size - 1);
-            for (int i = 0; i < size; ++i) {
-                d[i] = A[i][1];
-                if (i < size - 1)
-                    c[i] = A[i][2];
-                if (i > 0)
-                    a[i - 1] = A[i][0];
-            }
-        
-            QList<mpfr::mpreal> l, diag, up, yList, xList;
-            std::tie(l, diag, up, yList, xList) = solveCroutTridiagonal(a, d, c, b);
-        
-            L = QVector<QVector<mpfr::mpreal>>(size, QVector<mpfr::mpreal>(size, 0.0));
-            U = QVector<QVector<mpfr::mpreal>>(size, QVector<mpfr::mpreal>(size, 0.0));
-            y = QVector<mpfr::mpreal>(size);
-            x = QVector<mpfr::mpreal>(size);
-        
-            for (int i = 0; i < size; ++i) {
-                L[i][i] = 1.0;
-                if (i > 0) L[i][i - 1] = l[i - 1] / diag[i - 1];
-                U[i][i] = diag[i];
-                if (i < size - 1) U[i][i + 1] = up[i];
-                y[i] = yList[i];
-                x[i] = xList[i];
-            }
-        
-            displaySolutionDetails(L, U, y, x);
         }
-        
-
-    else if (dataType == "interval") {
-        using Interval = interval_arithmetic::Interval<mpfr::mpreal>;
-        QVector<QVector<Interval>> A = getMatrixInterval();
-        QVector<Interval> b = getVectorInterval();
-        QVector<QVector<Interval>> L, U;
-        QVector<Interval> y, x;
-
-        if (matrixType == "general") {
-            std::tie(L, U, y, x) = solveCroutGeneral(A, b);
-        } else if (matrixType == "symmetric") {
+        else if (matrixType == "symmetric") {
             std::tie(L, U, y, x) = solveCroutSymmetric(A, b);
-        } else if (matrixType == "tridiagonal") {
-            QVector<Interval> a(size - 1), d(size), c(size - 1);
-            for (int i = 0; i < size - 1; ++i) {
-                a[i] = A[i + 1][0];
-                c[i] = A[i][2];
+        }
+        else {  // tridiagonal
+            QVector<M> a(n-1), d(n), c(n-1);
+            for (int i = 0; i < n; ++i) {
+                d[i] = A[i][i];
+                if (i < n-1) c[i] = A[i][i+1];
+                if (i > 0)   a[i-1] = A[i][i-1];
             }
-            for (int i = 0; i < size; ++i) {
-                d[i] = A[i][1];
-            }
+            QList<M> l, diag, up, yL, xL;
+            std::tie(l, diag, up, yL, xL) = solveCroutTridiagonal(a, d, c, b);
 
-            QList<Interval> l, diag, up, yList, xList;
-            std::tie(l, diag, up, yList, xList) = solveCroutTridiagonal(a, d, c, b);
-
-            L = QVector<QVector<Interval>>(size, QVector<Interval>(size));
-            U = QVector<QVector<Interval>>(size, QVector<Interval>(size));
-            y = QVector<Interval>(size);
-            x = QVector<Interval>(size);
-            for (int i = 0; i < size; ++i) {
-                L[i][i] = Interval(1.0, 1.0);
-                if (i > 0) L[i][i - 1] = l[i];
+            L = QVector<QVector<M>>(n, QVector<M>(n, 0));
+            U = QVector<QVector<M>>(n, QVector<M>(n, 0));
+            y.resize(n); x.resize(n);
+            for (int i = 0; i < n; ++i) {
+                L[i][i] = 1;
+                if (i > 0)       L[i][i-1] = l[i-1] / diag[i-1];
                 U[i][i] = diag[i];
-                if (i < size - 1) U[i][i + 1] = up[i];
-                y[i] = yList[i];
-                x[i] = xList[i];
+                if (i < n-1)     U[i][i+1] = up[i];
+                y[i]    = yL[i];
+                x[i]    = xL[i];
             }
         }
-    
+
         displaySolutionDetails(L, U, y, x);
     }
+    else {  // interval<mpreal>
+        using I = interval_arithmetic::Interval<mpfr::mpreal>;
+        auto A = getMatrixInterval();
+        auto b = getVectorInterval();
+
+        QVector<QVector<I>> L, U;
+        QVector<I> y, x;
+        if (matrixType == "general") {
+            std::tie(L, U, y, x) = solveCroutGeneral(A, b);
+        }
+        else if (matrixType == "symmetric") {
+            std::tie(L, U, y, x) = solveCroutSymmetric(A, b);
+        }
+        else {  // tridiagonal
+            QVector<I> a(n-1), d(n), c(n-1);
+            for (int i = 0; i < n; ++i) {
+                d[i] = A[i][i];
+                if (i < n-1) c[i] = A[i][i+1];
+                if (i > 0)   a[i-1] = A[i][i-1];
+            }
+            QList<I> l, diag, up, yL, xL;
+            std::tie(l, diag, up, yL, xL) = solveCroutTridiagonal(a, d, c, b);
+
+            L = QVector<QVector<I>>(n, QVector<I>(n));
+            U = QVector<QVector<I>>(n, QVector<I>(n));
+            y.resize(n); x.resize(n);
+            for (int i = 0; i < n; ++i) {
+                L[i][i] = I(1,1);
+                if (i > 0)       L[i][i-1] = l[i-1];
+                U[i][i] = diag[i];
+                if (i < n-1)     U[i][i+1] = up[i];
+                y[i]    = yL[i];
+                x[i]    = xL[i];
+            }
+        }
+
+        displaySolutionDetails(L, U, y, x);
     }
 }
+
 
 // --- GETTERY ---
 
