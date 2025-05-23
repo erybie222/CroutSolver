@@ -428,6 +428,8 @@ CMakeFiles/CroutSolver.dir/mainwindow.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QList \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qlist.h \
  /home/eryk/CroutSolver/mpreal.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QStringBuilder \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qstringbuilder.h \
  /home/eryk/CroutSolver/solver/general/crout_general_double.h \
  /home/eryk/CroutSolver/solver/general/crout_general_mpreal.h \
  /home/eryk/CroutSolver/solver/general/crout_general_interval.h \

@@ -11,6 +11,7 @@
 #include <QFrame>
 #include <QApplication>
 #include "qstring_utils.hpp"
+#include <QtCore/QStringBuilder> 
 
 #include <sstream>
 
@@ -380,7 +381,7 @@ QString MainWindow::normalizeIntervalText(const QString &text) const {
 
 
 void MainWindow::solveSystem() {
-    const int size = matrixInputs.size();
+    const int size = matrixSizeSpinBox->value();
     const QString matrixType = matrixTypeComboBox->currentText();
     const QString dataType = dataTypeComboBox->currentText();
 
@@ -390,32 +391,52 @@ void MainWindow::solveSystem() {
         QVector<QVector<double>> L, U;
         QVector<double> y, x;
 
-        if (matrixType == "general")
+        if (matrixType == "general") {
             std::tie(L, U, y, x) = solveCroutGeneral(A, b);
-        else if (matrixType == "symmetric")
+        } else if (matrixType == "symmetric") {
             std::tie(L, U, y, x) = solveCroutSymmetric(A, b);
-        else if (matrixType == "tridiagonal") {
-            QVector<double> a(size), d(size), c(size);
+        } else if (matrixType == "tridiagonal") {
+
+        
+
+            QVector<double> a(size - 1), d(size), c(size - 1);
+
             for (int i = 0; i < size; ++i) {
-                d[i] = A[i][i];
-                if (i > 0) a[i] = A[i][i - 1];
-                if (i < size - 1) c[i] = A[i][i + 1];
+                d[i] = A[i][i];  // przekątna główna
+            
+                if (i < size - 1)
+                    c[i] = A[i][i + 1];  // nadprzekątna
+            
+                if (i > 0)
+                    a[i - 1] = A[i][i - 1];  // podprzekątna
             }
+            
+            
+
+                
+        
             QList<double> l, diag, up, yList, xList;
             std::tie(l, diag, up, yList, xList) = solveCroutTridiagonal(a, d, c, b);
-
+        
+            // Tu dopiero po std::tie
             L = QVector<QVector<double>>(size, QVector<double>(size, 0.0));
             U = QVector<QVector<double>>(size, QVector<double>(size, 0.0));
-            y.resize(size); x.resize(size);
+            y = QVector<double>(size);
+            x = QVector<double>(size);
+        
             for (int i = 0; i < size; ++i) {
                 L[i][i] = 1.0;
-                if (i > 0) L[i][i - 1] = l[i];
+                if (i > 0) L[i][i - 1] = l[i - 1];  // ✅ poprawnie
                 U[i][i] = diag[i];
                 if (i < size - 1) U[i][i + 1] = up[i];
                 y[i] = yList[i];
                 x[i] = xList[i];
             }
+            
+            
+            
         }
+        
 
         displaySolutionDetails(L, U, y, x);
     }
@@ -426,35 +447,40 @@ void MainWindow::solveSystem() {
         QVector<QVector<mpfr::mpreal>> L, U;
         QVector<mpfr::mpreal> y, x;
 
-        if (matrixType == "general")
+        if (matrixType == "general") {
             std::tie(L, U, y, x) = solveCroutGeneral(A, b);
-        else if (matrixType == "symmetric")
+        } else if (matrixType == "symmetric") {
             std::tie(L, U, y, x) = solveCroutSymmetric(A, b);
-        else if (matrixType == "tridiagonal") {
-            QVector<mpfr::mpreal> a(size), d(size), c(size);
+        } else if (matrixType == "tridiagonal") {
+            QVector<mpfr::mpreal> a(size - 1), d(size), c(size - 1);
             for (int i = 0; i < size; ++i) {
-                d[i] = A[i][i];
-                if (i > 0) a[i] = A[i][i - 1];
-                if (i < size - 1) c[i] = A[i][i + 1];
+                d[i] = A[i][1];
+                if (i < size - 1)
+                    c[i] = A[i][2];
+                if (i > 0)
+                    a[i - 1] = A[i][0];
             }
+        
             QList<mpfr::mpreal> l, diag, up, yList, xList;
             std::tie(l, diag, up, yList, xList) = solveCroutTridiagonal(a, d, c, b);
-
+        
             L = QVector<QVector<mpfr::mpreal>>(size, QVector<mpfr::mpreal>(size, 0.0));
             U = QVector<QVector<mpfr::mpreal>>(size, QVector<mpfr::mpreal>(size, 0.0));
-            y.resize(size); x.resize(size);
+            y = QVector<mpfr::mpreal>(size);
+            x = QVector<mpfr::mpreal>(size);
+        
             for (int i = 0; i < size; ++i) {
                 L[i][i] = 1.0;
-                if (i > 0) L[i][i - 1] = l[i];
+                if (i > 0) L[i][i - 1] = l[i - 1] / diag[i - 1];
                 U[i][i] = diag[i];
                 if (i < size - 1) U[i][i + 1] = up[i];
                 y[i] = yList[i];
                 x[i] = xList[i];
             }
+        
+            displaySolutionDetails(L, U, y, x);
         }
-
-        displaySolutionDetails(L, U, y, x);
-    }
+        
 
     else if (dataType == "interval") {
         using Interval = interval_arithmetic::Interval<mpfr::mpreal>;
@@ -463,25 +489,29 @@ void MainWindow::solveSystem() {
         QVector<QVector<Interval>> L, U;
         QVector<Interval> y, x;
 
-        if (matrixType == "general")
+        if (matrixType == "general") {
             std::tie(L, U, y, x) = solveCroutGeneral(A, b);
-        else if (matrixType == "symmetric")
+        } else if (matrixType == "symmetric") {
             std::tie(L, U, y, x) = solveCroutSymmetric(A, b);
-        else if (matrixType == "tridiagonal") {
-            QVector<Interval> a(size), d(size), c(size);
-            for (int i = 0; i < size; ++i) {
-                d[i] = A[i][i];
-                if (i > 0) a[i] = A[i][i - 1];
-                if (i < size - 1) c[i] = A[i][i + 1];
+        } else if (matrixType == "tridiagonal") {
+            QVector<Interval> a(size - 1), d(size), c(size - 1);
+            for (int i = 0; i < size - 1; ++i) {
+                a[i] = A[i + 1][0];
+                c[i] = A[i][2];
             }
+            for (int i = 0; i < size; ++i) {
+                d[i] = A[i][1];
+            }
+
             QList<Interval> l, diag, up, yList, xList;
             std::tie(l, diag, up, yList, xList) = solveCroutTridiagonal(a, d, c, b);
 
             L = QVector<QVector<Interval>>(size, QVector<Interval>(size));
             U = QVector<QVector<Interval>>(size, QVector<Interval>(size));
-            y.resize(size); x.resize(size);
+            y = QVector<Interval>(size);
+            x = QVector<Interval>(size);
             for (int i = 0; i < size; ++i) {
-                L[i][i] = Interval(1.0 , 1.0);
+                L[i][i] = Interval(1.0, 1.0);
                 if (i > 0) L[i][i - 1] = l[i];
                 U[i][i] = diag[i];
                 if (i < size - 1) U[i][i + 1] = up[i];
@@ -489,8 +519,9 @@ void MainWindow::solveSystem() {
                 x[i] = xList[i];
             }
         }
-
+    
         displaySolutionDetails(L, U, y, x);
+    }
     }
 }
 
@@ -533,56 +564,66 @@ QVector<mpfr::mpreal> MainWindow::getVectorMpreal() const {
 
 // --- DISPLAY ---
 
-void MainWindow::displaySolutionDetails(
-    const QVector<QVector<double>> &L,
-    const QVector<QVector<double>> &U,
-    const QVector<double> &y,
-    const QVector<double> &x)
-{
-    solutionTextEdit->append("L matrix:");
-    for (const auto &row : L)
-        solutionTextEdit->append(QStringUtils::toQStringVector(row));
-    solutionTextEdit->append("U matrix:");
-    for (const auto &row : U)
-        solutionTextEdit->append(QStringUtils::toQStringVector(row));
-    solutionTextEdit->append("y vector:");
-    solutionTextEdit->append(QStringUtils::toQStringVector(y));
-    solutionTextEdit->append("x vector:");
-    solutionTextEdit->append(QStringUtils::toQStringVector(x));
+
+
+// --- helper to force 3-digit exponent in a "%.14E" string ---
+static QString pad3exp(const QString &s) {
+    int epos = s.indexOf('E');
+    if (epos < 0 || epos + 2 >= s.size()) return s;
+    QChar sign = s[epos+1];       // '+' or '-'
+    QString digs = s.mid(epos+2); // e.g. "01" or "10"
+    if (digs.size() == 2) 
+        digs.prepend('0');        // "01" -> "001"
+    return s.left(epos+2) + digs; // "…E-0" + "01"
 }
 
+// --- DISPLAY for double --------------------------------------
 void MainWindow::displaySolutionDetails(
-    const QVector<QVector<mpfr::mpreal>> &L,
-    const QVector<QVector<mpfr::mpreal>> &U,
-    const QVector<mpfr::mpreal> &y,
-    const QVector<mpfr::mpreal> &x)
+    const QVector<QVector<double>> & /*L*/,
+    const QVector<QVector<double>> & /*U*/,
+    const QVector<double> &        /*y*/,
+    const QVector<double> &         x)
 {
-    solutionTextEdit->append("L matrix (mpreal):");
-    for (const auto &row : L)
-        solutionTextEdit->append(QStringUtils::toQStringVector(row));
-    solutionTextEdit->append("U matrix (mpreal):");
-    for (const auto &row : U)
-        solutionTextEdit->append(QStringUtils::toQStringVector(row));
-    solutionTextEdit->append("y vector:");
-    solutionTextEdit->append(QStringUtils::toQStringVector(y));
-    solutionTextEdit->append("x vector:");
-    solutionTextEdit->append(QStringUtils::toQStringVector(x));
+    QStringList parts;
+    for (int i = 0; i < x.size(); ++i) {
+        // "%.14E" gives 14 digits + scientific; then pad to 3-digit exponent
+        QString xi = pad3exp(QString::asprintf("%.14E", x[i]).toUpper());
+        parts << QString("d[%1] = %2").arg(i+1).arg(xi);
+    }
+    solutionTextEdit->append(parts.join(", "));
+    solutionTextEdit->append("st = 0");
 }
 
+// --- DISPLAY for mpreal ------------------------------------
 void MainWindow::displaySolutionDetails(
-    const QVector<QVector<interval_arithmetic::Interval<mpfr::mpreal>>> &L,
-    const QVector<QVector<interval_arithmetic::Interval<mpfr::mpreal>>> &U,
-    const QVector<interval_arithmetic::Interval<mpfr::mpreal>> &y,
-    const QVector<interval_arithmetic::Interval<mpfr::mpreal>> &x)
+    const QVector<QVector<mpfr::mpreal>> & /*L*/,
+    const QVector<QVector<mpfr::mpreal>> & /*U*/,
+    const QVector<mpfr::mpreal> &         /*y*/,
+    const QVector<mpfr::mpreal> &         x)
 {
-    solutionTextEdit->append("L matrix (interval):");
-    for (const auto &row : L)
-        solutionTextEdit->append(QStringUtils::toQStringVector(row));
-    solutionTextEdit->append("U matrix (interval):");
-    for (const auto &row : U)
-        solutionTextEdit->append(QStringUtils::toQStringVector(row));
-    solutionTextEdit->append("y vector:");
-    solutionTextEdit->append(QStringUtils::toQStringVector(y));
-    solutionTextEdit->append("x vector:");
-    solutionTextEdit->append(QStringUtils::toQStringVector(x));
+    QStringList parts;
+    for (int i = 0; i < x.size(); ++i) {
+        double d = x[i].toDouble(); 
+        QString xi = pad3exp(QString::asprintf("%.14E", d).toUpper());
+        parts << QString("d[%1] = %2").arg(i+1).arg(xi);
+    }
+    solutionTextEdit->append(parts.join(", "));
+    solutionTextEdit->append("st = 0");
+}
+
+// --- DISPLAY for interval<mpreal> --------------------------
+void MainWindow::displaySolutionDetails(
+    const QVector<QVector<interval_arithmetic::Interval<mpfr::mpreal>>> & /*L*/,
+    const QVector<QVector<interval_arithmetic::Interval<mpfr::mpreal>>> & /*U*/,
+    const QVector<interval_arithmetic::Interval<mpfr::mpreal>> &         /*y*/,
+    const QVector<interval_arithmetic::Interval<mpfr::mpreal>> &         x)
+{
+    // for intervals we just show the full "[aE…,bE…]" via your QStringUtils helper:
+    QStringList parts;
+    for (int i = 0; i < x.size(); ++i) {
+        QString xi = QStringUtils::toQString(x[i]).toUpper();
+        parts << QString("d[%1] = %2").arg(i+1).arg(xi);
+    }
+    solutionTextEdit->append(parts.join(", "));
+    solutionTextEdit->append("st = 0");
 }

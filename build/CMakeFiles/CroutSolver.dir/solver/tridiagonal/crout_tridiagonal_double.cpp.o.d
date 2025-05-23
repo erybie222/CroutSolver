@@ -1,7 +1,6 @@
 CMakeFiles/CroutSolver.dir/solver/tridiagonal/crout_tridiagonal_double.cpp.o: \
  /home/eryk/CroutSolver/solver/tridiagonal/crout_tridiagonal_double.cpp \
  /usr/include/stdc-predef.h \
- /home/eryk/CroutSolver/solver/tridiagonal/crout_tridiagonal_double.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/QVector \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qvector.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qlist.h \
@@ -259,4 +258,7 @@ CMakeFiles/CroutSolver.dir/solver/tridiagonal/crout_tridiagonal_double.cpp.o: \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qbytearraylist.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qstringlist.h \
  /usr/include/x86_64-linux-gnu/qt6/QtCore/qalgorithms.h \
- /usr/include/x86_64-linux-gnu/qt6/QtCore/qstringmatcher.h
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qstringmatcher.h \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/QList \
+ /usr/include/x86_64-linux-gnu/qt6/QtCore/qlist.h \
+ /home/eryk/CroutSolver/solver/tridiagonal/crout_tridiagonal_double.h
