@@ -400,7 +400,7 @@ void MainWindow::solveSystem() {
             y.resize(n); x.resize(n);
             for (int i = 0; i < n; ++i) {
                 L[i][i] = 1.0;
-                if (i > 0)       L[i][i-1] = l[i-1];
+                if (i > 0)       L[i][i-1] = l[i-1] ;
                 U[i][i] = diag[i];
                 if (i < n-1)     U[i][i+1] = up[i];
                 y[i]    = yL[i];
@@ -476,7 +476,7 @@ void MainWindow::solveSystem() {
             y.resize(n); x.resize(n);
             for (int i = 0; i < n; ++i) {
                 L[i][i] = I(1,1);
-                if (i > 0)       L[i][i-1] = l[i-1];
+                if (i > 0)       L[i][i-1] = l[i-1] ;
                 U[i][i] = diag[i];
                 if (i < n-1)     U[i][i+1] = up[i];
                 y[i]    = yL[i];
@@ -576,18 +576,24 @@ void MainWindow::displaySolutionDetails(
 }
 
 // --- DISPLAY for interval<mpreal> --------------------------
+// --- DISPLAY for interval<mpreal> --------------------------
 void MainWindow::displaySolutionDetails(
-    const QVector<QVector<interval_arithmetic::Interval<mpfr::mpreal>>> & /*L*/,
-    const QVector<QVector<interval_arithmetic::Interval<mpfr::mpreal>>> & /*U*/,
-    const QVector<interval_arithmetic::Interval<mpfr::mpreal>> &         /*y*/,
-    const QVector<interval_arithmetic::Interval<mpfr::mpreal>> &         x)
+    const QVector<QVector<interval_arithmetic::Interval<mpfr::mpreal>>>& /*L*/,
+    const QVector<QVector<interval_arithmetic::Interval<mpfr::mpreal>>>& /*U*/,
+    const QVector<interval_arithmetic::Interval<mpfr::mpreal>>& /*y*/,
+    const QVector<interval_arithmetic::Interval<mpfr::mpreal>>& x)
 {
-    // for intervals we just show the full "[aE…,bE…]" via your QStringUtils helper:
     QStringList parts;
     for (int i = 0; i < x.size(); ++i) {
         QString xi = QStringUtils::toQString(x[i]).toUpper();
+        // change the comma separator into a semicolon and strip any spaces:
+        xi.replace(",", ";");
+        xi.replace(" ", "");
         parts << QString("d[%1] = %2").arg(i+1).arg(xi);
+    
     }
     solutionTextEdit->append(parts.join(", "));
     solutionTextEdit->append("st = 0");
 }
+
+
