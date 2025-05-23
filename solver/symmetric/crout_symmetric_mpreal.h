@@ -1,14 +1,25 @@
-#ifndef CROUT_SYMMETRIC_MPREAL_H
-#define CROUT_SYMMETRIC_MPREAL_H
-
-#include <QVector>
+#pragma once
 #include <tuple>
+#include <QVector>
 #include <mpreal.h>
+
 namespace solver {
-    namespace symmetric {
-std::tuple<QVector<QVector<mpfr::mpreal>>, QVector<QVector<mpfr::mpreal>>, QVector<mpfr::mpreal>, QVector<mpfr::mpreal>>
-solveCroutSymmetric(const QVector<QVector<mpfr::mpreal>> &A, const QVector<mpfr::mpreal> &b);
-  }
-}
-#endif // CROUT_SYMMETRIC_MPREAL_H
-  
+namespace symmetric {
+
+/**
+ * Crout–LDLᵀ dla macierzy symetrycznej w precyzji mpfr::mpreal.
+ * Zwraca (L, U, y, x), gdzie U = D·Lᵀ.
+ */
+std::tuple<
+    QVector<QVector<mpfr::mpreal>>,  // L
+    QVector<QVector<mpfr::mpreal>>,  // U
+    QVector<mpfr::mpreal>,           // y
+    QVector<mpfr::mpreal>            // x
+>
+solveCroutSymmetric(
+    const QVector<QVector<mpfr::mpreal>>& A,
+    const QVector<mpfr::mpreal>&         b
+);
+
+} // namespace symmetric
+} // namespace solver

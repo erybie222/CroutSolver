@@ -1,60 +1,75 @@
 #include "crout_symmetric_interval.h"
+#include <stdexcept>
+
 namespace solver {
-    namespace symmetric {
-    
-std::tuple<
-    QVector<QVector<Interval<mpfr::mpreal>>>,
-    QVector<QVector<Interval<mpfr::mpreal>>>,
-    QVector<Interval<mpfr::mpreal>>,
-    QVector<Interval<mpfr::mpreal>>
->
-solveCroutSymmetric(const QVector<QVector<Interval<mpfr::mpreal>>> &A, const QVector<Interval<mpfr::mpreal>> &b)
+namespace symmetric {
+
+auto solveCroutSymmetric(
+    const QVector<QVector<I>>& A,
+    const QVector<I>&          b
+) -> std::tuple<
+         QVector<QVector<I>>,
+         QVector<QVector<I>>,
+         QVector<I>,
+         QVector<I>
+     >
 {
-    using Interval = Interval<mpfr::mpreal>;
     int n = A.size();
+    if (b.size() != n)
+        throw std::invalid_argument("Vector size does not match matrix dimension.");
 
-    QVector<QVector<Interval>> L(n, QVector<Interval>(n));
-    QVector<QVector<Interval>> U(n, QVector<Interval>(n));
-    QVector<Interval> y(n), x(n);
+    QVector<QVector<I>> L(n, QVector<I>(n));
+    QVector<I> D(n);
+    QVector<QVector<I>> U(n, QVector<I>(n));
+    QVector<I> y(n), x(n);
 
+    // Crout–LDLᵀ
+    for (int j = 0; j < n; ++j) {
+        I sum = A[j][j];
+        for (int k = 0; k < j; ++k)
+            sum = sum - (L[j][k] * D[k] * L[j][k]);
+        D[j] = sum;
+        // pivot = [0;0]?
+        if (D[j].a == mpfr::mpreal(0) && D[j].b == mpfr::mpreal(0))
+            throw std::runtime_error("Zero pivot in interval LDLᵀ");
+
+        L[j][j] = I(mpfr::mpreal(1), mpfr::mpreal(1));
+        for (int i = j + 1; i < n; ++i) {
+            sum = A[i][j];
+            for (int k = 0; k < j; ++k)
+                sum = sum - (L[i][k] * D[k] * L[j][k]);
+            L[i][j] = sum / D[j];
+        }
+    }
+
+    // U = D * Lᵀ
     for (int i = 0; i < n; ++i)
-    {
-        L[i][i] = Interval(1, 1);
         for (int j = i; j < n; ++j)
-        {
-            Interval sum(0, 0);
-            for (int k = 0; k < i; ++k)
-                sum = sum + L[i][k] * U[k][j];
-            U[i][j] = A[i][j] - sum;
-            U[j][i] = U[i][j]; // Symmetry
-        }
+            U[i][j] = D[i] * L[j][i];
 
-        for (int j = i + 1; j < n; ++j)
-        {
-            Interval sum(0, 0);
-            for (int k = 0; k < i; ++k)
-                sum = sum + L[j][k] * U[k][i];
-            L[j][i] = (A[j][i] - sum) / U[i][i];
-        }
-    }
-
-    for (int i = 0; i < n; ++i)
-    {
-        Interval sum(0, 0);
+    // forward: L·y = b
+    for (int i = 0; i < n; ++i) {
+        I s = b[i];
         for (int k = 0; k < i; ++k)
-            sum = sum + L[i][k] * y[k];
-        y[i] = (b[i] - sum) / L[i][i];
+            s = s - (L[i][k] * y[k]);
+        y[i] = s;  // L[i][i] == 1
     }
 
-    for (int i = n - 1; i >= 0; --i)
-    {
-        Interval sum(0, 0);
+    // middle: D·z = y
+    QVector<I> z(n);
+    for (int i = 0; i < n; ++i)
+        z[i] = y[i] / D[i];
+
+    // backward: Lᵀ·x = z
+    for (int i = n - 1; i >= 0; --i) {
+        I s = z[i];
         for (int k = i + 1; k < n; ++k)
-            sum = sum + U[i][k] * x[k];
-        x[i] = (y[i] - sum) / U[i][i];
+            s = s - (L[k][i] * x[k]);
+        x[i] = s;  // L[i][i] == 1
     }
 
     return {L, U, y, x};
 }
-}
-}
+
+} // namespace symmetric
+} // namespace solver

@@ -1,21 +1,27 @@
-#ifndef CROUT_SYMMETRIC_INTERVAL_H
-#define CROUT_SYMMETRIC_INTERVAL_H
-
-#include <QVector>
+#pragma once
 #include <tuple>
+#include <QVector>
 #include "interval.hpp"
 
-using namespace interval_arithmetic;
 namespace solver {
-    namespace symmetric {
-    
+namespace symmetric {
+
+using I = interval_arithmetic::Interval<mpfr::mpreal>;
+
+/**
+ * Crout–LDLᵀ dla macierzy symetrycznej w precyzji przedziałowej.
+ * Zwraca (L, U, y, x), gdzie U = D·Lᵀ.
+ */
 std::tuple<
-    QVector<QVector<Interval<mpfr::mpreal>>>,
-    QVector<QVector<Interval<mpfr::mpreal>>>,
-    QVector<Interval<mpfr::mpreal>>,
-    QVector<Interval<mpfr::mpreal>>
+    QVector<QVector<I>>,  // L
+    QVector<QVector<I>>,  // U
+    QVector<I>,           // y
+    QVector<I>            // x
 >
-solveCroutSymmetric(const QVector<QVector<Interval<mpfr::mpreal>>> &A, const QVector<Interval<mpfr::mpreal>> &b);
-    }
-}
-#endif // CROUT_SYMMETRIC_INTERVAL_H
+solveCroutSymmetric(
+    const QVector<QVector<I>>& A,
+    const QVector<I>&          b
+);
+
+} // namespace symmetric
+} // namespace solver

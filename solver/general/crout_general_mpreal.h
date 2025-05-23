@@ -1,17 +1,25 @@
-#ifndef CROUT_GENERAL_MPREAL_H
-#define CROUT_GENERAL_MPREAL_H
-
-#include <QVector>
+#pragma once
 #include <tuple>
-#include "mpreal.h"
+#include <QVector>
+#include <mpreal.h>
 
-using namespace mpfr;
 namespace solver {
-    namespace general {
-    
-std::tuple<QVector<QVector<mpreal>>, QVector<QVector<mpreal>>, QVector<mpreal>, QVector<mpreal>>
-solveCroutGeneral(const QVector<QVector<mpreal>> &A, const QVector<mpreal> &b);
-  }
-}
-#endif // CROUT_GENERAL_MPREAL_H
-  
+namespace general {
+
+/**
+ * Crout (LU) dla dowolnej macierzy w precyzji mpfr::mpreal.
+ * Zwraca (L, U, y, x).
+ */
+std::tuple<
+    QVector<QVector<mpfr::mpreal>>,  // L
+    QVector<QVector<mpfr::mpreal>>,  // U
+    QVector<mpfr::mpreal>,           // y
+    QVector<mpfr::mpreal>            // x
+>
+solveCroutGeneral(
+    const QVector<QVector<mpfr::mpreal>>& A,
+    const QVector<mpfr::mpreal>&         b
+);
+
+} // namespace general
+} // namespace solver
