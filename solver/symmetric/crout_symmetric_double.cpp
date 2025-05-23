@@ -1,61 +1,79 @@
 #include "crout_symmetric_double.h"
-#include <QVector>
 #include <stdexcept>
 
 namespace solver {
 namespace symmetric {
 
-std::tuple<
-    QVector<QVector<double>>, // L
-    QVector<QVector<double>>, // U
-    QVector<double>,          // y
-    QVector<double>           // x
->
-solveCroutSymmetric(const QVector<QVector<double>> &A, const QVector<double> &b)
+std::tuple<QVector<QVector<double>>,
+           QVector<QVector<double>>,
+           QVector<double>,
+           QVector<double>>
+solveCroutSymmetric(const QVector<QVector<double>> &A,
+                    const QVector<double>         &b)
 {
-    const int n = A.size();
+    int n = A.size();
     if (b.size() != n)
         throw std::invalid_argument("Vector size does not match matrix dimension.");
 
+    // L: dolna trójkątna z jedynkami na diag., D: diag vector, U = D * Lᵀ
     QVector<QVector<double>> L(n, QVector<double>(n, 0.0));
+    QVector<double>         D(n, 0.0);
     QVector<QVector<double>> U(n, QVector<double>(n, 0.0));
     QVector<double> y(n), x(n);
 
-    // Crout's decomposition for symmetric matrix A = LU (U is transpose of L)
+    // Crout–LDLᵀ
     for (int j = 0; j < n; ++j) {
-        for (int i = j; i < n; ++i) {
-            double sum = A[i][j];
-            for (int k = 0; k < j; ++k)
-                sum -= L[i][k] * L[j][k];
-            L[i][j] = sum / L[j][j == 0 ? 0 : j];
+        // obliczamy D[j] i kolumnę L[i][j], i>=j
+        double sum;
+        // najpierw D[j] = A[j][j] - Σ_{k<j} L[j][k]*D[k]*L[j][k]
+        sum = A[j][j];
+        for (int k = 0; k < j; ++k) {
+            sum -= L[j][k] * D[k] * L[j][k];
         }
-        L[j][j] = std::sqrt(A[j][j] - [&]() {
-            double s = 0.0;
-            for (int k = 0; k < j; ++k)
-                s += L[j][k] * L[j][k];
-            return s;
-        }());
+        D[j] = sum;
+        if (D[j] == 0.0)
+            throw std::runtime_error("Zero pivot in LDLT decomposition");
+
+        // pozostałe wiersze i kolumny L[i][j] = (A[i][j] - Σ L[i][k]*D[k]*L[j][k]) / D[j]
+        L[j][j] = 1.0; // schemat unit lower
+        for (int i = j+1; i < n; ++i) {
+            sum = A[i][j];
+            for (int k = 0; k < j; ++k) {
+                sum -= L[i][k] * D[k] * L[j][k];
+            }
+            L[i][j] = sum / D[j];
+        }
     }
 
-    // U = L^T
-    for (int i = 0; i < n; ++i)
-        for (int j = 0; j <= i; ++j)
-            U[j][i] = L[i][j];
-
-    // Forward substitution: L * y = b
+    // Budujemy U = D * Lᵀ
     for (int i = 0; i < n; ++i) {
-        double sum = b[i];
-        for (int j = 0; j < i; ++j)
-            sum -= L[i][j] * y[j];
-        y[i] = sum / L[i][i];
+        for (int j = i; j < n; ++j) {
+            U[i][j] = D[i] * L[j][i];
+        }
     }
 
-    // Backward substitution: U * x = y
-    for (int i = n - 1; i >= 0; --i) {
-        double sum = y[i];
-        for (int j = i + 1; j < n; ++j)
-            sum -= U[i][j] * x[j];
-        x[i] = sum / U[i][i];
+    // Forward: L * y = b
+    for (int i = 0; i < n; ++i) {
+        double s = b[i];
+        for (int k = 0; k < i; ++k) {
+            s -= L[i][k] * y[k];
+        }
+        // L[i][i] == 1
+        y[i] = s;
+    }
+    // Middle: D * z = y  (z = Lᵀ x)
+    QVector<double> z(n);
+    for (int i = 0; i < n; ++i) {
+        z[i] = y[i] / D[i];
+    }
+    // Backward: Lᵀ * x = z
+    for (int i = n-1; i >= 0; --i) {
+        double s = z[i];
+        for (int k = i+1; k < n; ++k) {
+            s -= L[k][i] * x[k];
+        }
+        // L[i][i] == 1 in Lᵀ too
+        x[i] = s;
     }
 
     return {L, U, y, x};
