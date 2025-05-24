@@ -442,12 +442,15 @@
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtGui/qtransform.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtGui/qvalidator.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtGui/qwindowdefs.h
+ mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QButtonGroup
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QComboBox
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QGridLayout
+ mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QGroupBox
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QHBoxLayout
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QLineEdit
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QMainWindow
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QPushButton
+ mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QRadioButton
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QSpinBox
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QTextEdit
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/QVBoxLayout
@@ -457,14 +460,17 @@
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qabstractslider.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qabstractspinbox.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qboxlayout.h
+ mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qbuttongroup.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qcombobox.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qframe.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qgridlayout.h
+ mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qgroupbox.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlayout.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlayoutitem.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qlineedit.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qmainwindow.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qpushbutton.h
+ mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qradiobutton.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qrubberband.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qsizepolicy.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtWidgets/qslider.h

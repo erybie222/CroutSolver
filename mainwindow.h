@@ -8,79 +8,57 @@
 #include <QComboBox>
 #include <QSpinBox>
 #include <QPushButton>
+#include <QRadioButton>
+#include <QButtonGroup>
+#include <QGridLayout>    // <-- nowy
+#include <QVBoxLayout>    // <-- nowy
 #include <QHBoxLayout>
-#include <QVBoxLayout>
-#include <QGridLayout>
+#include <QGroupBox>
 
 #include "interval.hpp"
+
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    ~MainWindow() override;
+
+private slots:
+    void createMatrixInputs(int size);
+    void solveSystem();
 
 private:
-    void solveSystem();
-    void createMatrixInputs(int size);
-
-    // GETTERY
+    // Gettery
     QVector<QVector<double>> getMatrixDouble() const;
-    QVector<double> getVectorDouble() const;
-
+    QVector<double>          getVectorDouble() const;
     QVector<QVector<mpfr::mpreal>> getMatrixMpreal() const;
-    QVector<mpfr::mpreal> getVectorMpreal() const;
-
+    QVector<mpfr::mpreal>         getVectorMpreal() const;
     QVector<QVector<interval_arithmetic::Interval<mpfr::mpreal>>> getMatrixInterval() const;
-    QVector<interval_arithmetic::Interval<mpfr::mpreal>> getVectorInterval() const;
+    QVector<interval_arithmetic::Interval<mpfr::mpreal>>         getVectorInterval() const;
 
-    // WYPISYWANIE ROZWIĄZAŃ
-    void displaySolutionDetails(const QVector<QVector<double>> &L,
-                                const QVector<QVector<double>> &U,
-                                const QVector<double> &y,
-                                const QVector<double> &x);
+    // Pomocnicze
+    QString normalizeIntervalText(const QString &text) const;
+    bool parseInterval(const QString &text, interval_arithmetic::Interval<mpfr::mpreal> &out) const;
+    void highlightInvalidField(QLineEdit *f, bool ok, const QString &msg = {}) const;
 
-    void displaySolutionDetails(const QVector<QVector<mpfr::mpreal>> &L,
-                                const QVector<QVector<mpfr::mpreal>> &U,
-                                const QVector<mpfr::mpreal> &y,
-                                const QVector<mpfr::mpreal> &x);
+    // GUI
+    QSpinBox    *matrixSizeSpinBox;
+    QComboBox   *dataTypeComboBox;
+    QRadioButton *symRadio, *triRadio;
+    QButtonGroup *matrixTypeGroup;
+    QPushButton *solveButton;
+    QTextEdit   *solutionTextEdit;
 
-    void displaySolutionDetails(const QVector<QVector<interval_arithmetic::Interval<mpfr::mpreal>>> &L,
-                                const QVector<QVector<interval_arithmetic::Interval<mpfr::mpreal>>> &U,
-                                const QVector<interval_arithmetic::Interval<mpfr::mpreal>> &y,
-                                const QVector<interval_arithmetic::Interval<mpfr::mpreal>> &x);
-
-    // WIDGETY
-    QVBoxLayout *mainLayout;
-    QHBoxLayout *controlsLayout;
     QGridLayout *matrixLayout;
     QVBoxLayout *vectorLayout;
 
-    QSpinBox *matrixSizeSpinBox;
-    QComboBox *dataTypeComboBox;
-    QComboBox *matrixTypeComboBox;
-    QPushButton *solveButton;
-    QTextEdit *solutionTextEdit;
-
-    QString selectedType;
-
-  
-
-    bool parseInterval(const QString &text, interval_arithmetic::Interval<mpfr::mpreal> &result) const;
-    void highlightInvalidField(QLineEdit *field, bool isValid) const;
-    void highlightInvalidField(QLineEdit *field, bool isValid, const QString &message) const;
-
-
-    QString normalizeIntervalText(const QString &text) const;
-    
-
-    mutable QVector<QVector<QLineEdit *>> matrixInputs;
-    mutable QVector<QLineEdit *> vectorInputs;
-
-    QVector<QVector<QPair<QLineEdit*, QLineEdit*>>> matrixInputsInterval;
-    QVector<QPair<QLineEdit*, QLineEdit*>> vectorInputsInterval;
-
+    // Wartości wpisane przez użytkownika
+    QVector<QVector<QLineEdit*>> matrixInputs;
+    QVector<QLineEdit*>          vectorInputs;
+    QVector<QVector<QPair<QLineEdit*,QLineEdit*>>> matrixInputsInterval;
+    QVector<QPair<QLineEdit*,QLineEdit*>>          vectorInputsInterval;
 };
 
 #endif // MAINWINDOW_H
