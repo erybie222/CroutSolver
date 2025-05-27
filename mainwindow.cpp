@@ -1,6 +1,7 @@
 // mainwindow.cpp
 
 #include "mainwindow.h"
+#include <cmath>  // dla std::isnan i std::isinf
 
 #include <QFormLayout>
 #include <QVBoxLayout>
@@ -44,7 +45,7 @@ MainWindow::MainWindow(QWidget *parent)
     auto *mainLayout = new QVBoxLayout(central);
     setCentralWidget(central);
 
-    // --- Top controls: size on the left, type on the right ---
+    // --- Top controls: size on the left, type and matrix-type on the right ---
     auto *topLayout = new QHBoxLayout;
     {
         // Left: matrix size
@@ -52,24 +53,35 @@ MainWindow::MainWindow(QWidget *parent)
         matrixSizeSpinBox     = new QSpinBox;
         matrixSizeSpinBox->setRange(2,20);
         matrixSizeSpinBox->setValue(3);
-
         topLayout->addWidget(sizeLabel);
         topLayout->addWidget(matrixSizeSpinBox);
 
-        // stretch pushes the next widgets to the right edge
-        topLayout->addStretch(1);
+        topLayout->addStretch(1);  
 
-        // Right: data type
+       
         auto *typeLabel       = new QLabel("Typ danych:");
         dataTypeComboBox      = new QComboBox;
         dataTypeComboBox->addItems({
-            "Zmiennoprzecinkowe (double)",
-            "Wysokoprecyzyjne (mpreal)",
+            "Zmiennoprzecinkowe",
+            "Wysokoprecyzyjne",
             "Przedziałowe"
         });
-
         topLayout->addWidget(typeLabel);
         topLayout->addWidget(dataTypeComboBox);
+
+        // Right: matrix type
+        topLayout->addSpacing(20);
+        auto *matrixTypeBox = new QGroupBox("Rodzaj macierzy:");
+        auto *mtLayout      = new QHBoxLayout(matrixTypeBox);
+        symRadio            = new QRadioButton("Symetryczna");
+        triRadio            = new QRadioButton("Trójdiagonalna");
+        symRadio->setChecked(true);
+        mtLayout->addWidget(symRadio);
+        mtLayout->addWidget(triRadio);
+        matrixTypeGroup = new QButtonGroup(this);
+        matrixTypeGroup->addButton(symRadio, 0);
+        matrixTypeGroup->addButton(triRadio, 1);
+        topLayout->addWidget(matrixTypeBox);
     }
     mainLayout->addLayout(topLayout);
     mainLayout->addSpacing(15);
@@ -130,9 +142,16 @@ MainWindow::MainWindow(QWidget *parent)
     // Initial population
     createMatrixInputs(matrixSizeSpinBox->value());
 
-    setWindowTitle("CroutSolver");
+    // w MainWindow::MainWindow(...)
+    setWindowTitle(
+        "Rozwiązywanie układu równań liniowych z macierzą symetryczną oraz "
+        "macierzą trójdiagonalną metodą Crouta"
+    );
+
+    
     resize(900,700);
 }
+
 
 
 MainWindow::~MainWindow() = default;
@@ -300,14 +319,16 @@ QVector<Interval<mpreal>> MainWindow::getVectorInterval() const {
 
 // --- solveSystem() ---
 
-void MainWindow::solveSystem() {
+
+// --------------------  MainWindow::solveSystem()  --------------------
+void MainWindow::solveSystem()
+{
     const int n     = matrixSizeSpinBox->value();
-    const int dtype = dataTypeComboBox->currentIndex();
-    const int mtype = matrixTypeGroup->checkedId();
+    const int dtype = dataTypeComboBox->currentIndex();   // 0=double, 1=mpreal, 2=interval
+    const int mtype = matrixTypeGroup->checkedId();       // 0=symetryczna, 1=trójdiagonalna
 
     solutionTextEdit->clear();
-
-    auto pad3exp = [](const QString &s){
+    auto pad3 = [](const QString &s) {
         int e = s.indexOf('E');
         if (e < 0 || e+2 >= s.size()) return s;
         QString d = s.mid(e+2);
@@ -316,105 +337,127 @@ void MainWindow::solveSystem() {
     };
 
     QStringList out;
+    int status = 0;  // 0=OK, 1=zerowa szerokość (interval), 2=NaN/Inf (double), 3=singularność
 
+    /* ------------------------------------------------------------------ */
+    /*                             double                                 */
+    /* ------------------------------------------------------------------ */
     if (dtype == 0) {
-        // double
         auto A = getMatrixDouble();
         auto b = getVectorDouble();
-        QVector<QVector<double>> L, U;
-        QVector<double> y, x;
+
+        QVector<QVector<double>> U;
+        QVector<double>          x, y;
 
         if (mtype == 0) {
-            std::tie(L,U,y,x) = solveCroutSymmetric(A,b);
+            // symetryczny
+            std::tie(std::ignore, U, y, x) = solveCroutSymmetric(A, b);
         } else {
+            // tri-diagonalny
             QVector<double> a(n-1), d(n), c(n-1);
             for (int i = 0; i < n; ++i) {
                 d[i] = A[i][i];
                 if (i < n-1) c[i] = A[i][i+1];
                 if (i > 0)   a[i-1] = A[i][i-1];
             }
-            QList<double> lq, diagq, upq, yLq, xLq;
-            std::tie(lq,diagq,upq,yLq,xLq) = solveCroutTridiagonal(a,d,c,b);
-            QVector<double> l(lq.begin(),lq.end()),
-                            diag(diagq.begin(),diagq.end()),
-                            up(upq.begin(),upq.end()),
-                            yL(yLq.begin(),yLq.end()),
-                            xL(xLq.begin(),xLq.end());
+            QList<double> lq, dq, uq, yq, xq;
+            std::tie(lq, dq, uq, yq, xq) = solveCroutTridiagonal(a, d, c, b);
 
-            L = QVector<QVector<double>>(n, QVector<double>(n,0.0));
             U = QVector<QVector<double>>(n, QVector<double>(n,0.0));
-            y.resize(n); x.resize(n);
+            x.resize(n);
             for (int i = 0; i < n; ++i) {
-                L[i][i] = 1.0;
-                if (i > 0)   L[i][i-1] = l[i-1];
-                U[i][i]   = diag[i];
-                if (i < n-1) U[i][i+1] = up[i];
-                y[i] = yL[i];
-                x[i] = xL[i];
+                U[i][i] = dq[i];
+                if (i < n-1) U[i][i+1] = uq[i];
+                x[i] = xq[i];
             }
         }
 
-        for (int i = 0; i < n; ++i) {
-            QString xi = pad3exp(QString::asprintf("%.14E", x[i]).toUpper());
-            QString w  = pad3exp(QString::asprintf("%.3E", 0.0).toUpper());
-            out << QString("d[%1]=%2, szer.=%3").arg(i+1).arg(xi).arg(w);
+        // 1) NaN/Inf w x
+        for (double v : x) {
+            if (std::isnan(v) || std::isinf(v)) {
+                status = 2;
+                break;
+            }
+        }
+        // 2) pivot == 0 ⇒ singularność
+        if (status == 0) {
+            for (int i = 0; i < n; ++i) {
+                if (U[i][i] == 0.0) {
+                    status = 3;
+                    break;
+                }
+            }
+        }
+        // 3) wypisz tylko gdy OK
+        if (status == 0) {
+            for (int i = 0; i < n; ++i) {
+                QString xs = pad3(QString::asprintf("%.14E", x[i]).toUpper());
+                out << QString("x[%1]=%2").arg(i+1).arg(xs);
+            }
         }
     }
+
+    /* ------------------------------------------------------------------ */
+    /*                            mpreal                                 */
+    /* ------------------------------------------------------------------ */
     else if (dtype == 1) {
-        // mpreal
-        using M = mpfr::mpreal;
+        using mp = mpfr::mpreal;
         auto A = getMatrixMpreal();
         auto b = getVectorMpreal();
-        QVector<QVector<M>> L, U;
-        QVector<M> y, x;
+
+        QVector<QVector<mp>> U;
+        QVector<mp>          x, y;
 
         if (mtype == 0) {
-            std::tie(L,U,y,x) = solveCroutSymmetric(A,b);
+            std::tie(std::ignore, U, y, x) = solveCroutSymmetric(A, b);
         } else {
-            QVector<M> a(n-1), d(n), c(n-1);
+            QVector<mp> a(n-1), d(n), c(n-1);
             for (int i = 0; i < n; ++i) {
                 d[i] = A[i][i];
                 if (i < n-1) c[i] = A[i][i+1];
                 if (i > 0)   a[i-1] = A[i][i-1];
             }
-            QList<M> lq, diagq, upq, yLq, xLq;
-            std::tie(lq,diagq,upq,yLq,xLq) = solveCroutTridiagonal(a,d,c,b);
-            QVector<M> l(lq.begin(),lq.end()),
-                        diag(diagq.begin(),diagq.end()),
-                        up(upq.begin(),upq.end()),
-                        yL(yLq.begin(),yLq.end()),
-                        xL(xLq.begin(),xLq.end());
+            QList<mp> lq, dq, uq, yq, xq;
+            std::tie(lq, dq, uq, yq, xq) = solveCroutTridiagonal(a, d, c, b);
 
-            L = QVector<QVector<M>>(n, QVector<M>(n,0));
-            U = QVector<QVector<M>>(n, QVector<M>(n,0));
-            y.resize(n); x.resize(n);
+            U = QVector<QVector<mp>>(n, QVector<mp>(n,0));
+            x.resize(n);
             for (int i = 0; i < n; ++i) {
-                L[i][i] = 1;
-                if (i > 0)   L[i][i-1] = l[i-1];
-                U[i][i]   = diag[i];
-                if (i < n-1) U[i][i+1] = up[i];
-                y[i] = yL[i];
-                x[i] = xL[i];
+                U[i][i] = dq[i];
+                if (i < n-1) U[i][i+1] = uq[i];
+                x[i] = xq[i];
             }
         }
 
-        for (int i = 0; i < n; ++i) {
-            double dv = x[i].toDouble();
-            QString xi = pad3exp(QString::asprintf("%.14E", dv).toUpper());
-            QString w  = pad3exp(QString::asprintf("%.3E", 0.0).toUpper());
-            out << QString("d[%1]=%2, szer.=%3").arg(i+1).arg(xi).arg(w);
+        // pivot == 0 ⇒ singularność
+        for (int i = 0; i < n && status == 0; ++i) {
+            if (U[i][i] == mp(0)) {
+                status = 3;
+                break;
+            }
+        }
+        // wypisz tylko gdy OK
+        if (status == 0) {
+            for (int i = 0; i < n; ++i) {
+                QString xs = pad3(QString::asprintf("%.14E", x[i].toDouble()).toUpper());
+                out << QString("x[%1]=%2").arg(i+1).arg(xs);
+            }
         }
     }
+
+    /* ------------------------------------------------------------------ */
+    /*                   Interval<mpreal>                                  */
+    /* ------------------------------------------------------------------ */
     else {
-        // interval<mpreal>
         using I = Interval<mpfr::mpreal>;
         auto A = getMatrixInterval();
         auto b = getVectorInterval();
-        QVector<QVector<I>> L, U;
-        QVector<I> y, x;
+
+        QVector<QVector<I>> U;
+        QVector<I>          x, y;
 
         if (mtype == 0) {
-            std::tie(L,U,y,x) = solveCroutSymmetric(A,b);
+            std::tie(std::ignore, U, y, x) = solveCroutSymmetric(A, b);
         } else {
             QVector<I> a(n-1), d(n), c(n-1);
             for (int i = 0; i < n; ++i) {
@@ -422,39 +465,53 @@ void MainWindow::solveSystem() {
                 if (i < n-1) c[i] = A[i][i+1];
                 if (i > 0)   a[i-1] = A[i][i-1];
             }
-            QList<I> lq, diagq, upq, yLq, xLq;
-            std::tie(lq,diagq,upq,yLq,xLq) = solveCroutTridiagonal(a,d,c,b);
-            QVector<I> l(lq.begin(),lq.end()),
-                        diag(diagq.begin(),diagq.end()),
-                        up(upq.begin(),upq.end()),
-                        yL(yLq.begin(),yLq.end()),
-                        xL(xLq.begin(),xLq.end());
+            QList<I> lq, dq, uq, yq, xq;
+            std::tie(lq, dq, uq, yq, xq) = solveCroutTridiagonal(a, d, c, b);
 
-            L = QVector<QVector<I>>(n, QVector<I>(n));
             U = QVector<QVector<I>>(n, QVector<I>(n));
-            y.resize(n); x.resize(n);
+            x.resize(n);
             for (int i = 0; i < n; ++i) {
-                L[i][i] = I(1,1);
-                if (i > 0)   L[i][i-1] = l[i-1];
-                U[i][i]   = diag[i];
-                if (i < n-1) U[i][i+1] = up[i];
-                y[i] = yL[i];
-                x[i] = xL[i];
+                U[i][i] = dq[i];
+                if (i < n-1) U[i][i+1] = uq[i];
+                x[i] = xq[i];
             }
         }
 
+        // 1) szerokość > 0 ⇒ status=1
         for (int i = 0; i < n; ++i) {
-            QString xi = QStringUtils::toQString(x[i])
-                               .toUpper()
-                               .replace(",", ";")
-                               .replace(" ", "");
-            mpfr::mpreal lo = x[i].a, hi = x[i].b;
-            double width = (hi - lo).toDouble();
-            QString w = pad3exp(QString::asprintf("%.3E", width).toUpper());
-            out << QString("d[%1]=%2, szer.=%3").arg(i+1).arg(xi).arg(w);
+            double w = (x[i].b - x[i].a).toDouble();
+            if (w > 0.0) {
+                status = 1;
+                break;
+            }
+        }
+        // 2) pivot zawiera zero ⇒ status=3
+        if (status == 0) {
+            for (int i = 0; i < n; ++i) {
+                I p = U[i][i];
+                if (p.a <= 0.0 && 0.0 <= p.b) {
+                    status = 3;
+                    break;
+                }
+            }
+        }
+        // 3) wypisz tylko gdy OK
+        if (status == 0) {
+            for (int i = 0; i < n; ++i) {
+                double w = (x[i].b - x[i].a).toDouble();
+                QString xs = QStringUtils::toQString(x[i])
+                                 .toUpper()
+                                 .replace(",", ";");
+                QString ws = pad3(QString::asprintf("%.3E", w).toUpper());
+                out << QString("x[%1]=[%2], szer.=%3")
+                           .arg(i+1).arg(xs).arg(ws);
+            }
         }
     }
 
-    solutionTextEdit->append(out.join(", "));
-    solutionTextEdit->append("st = 0");
+    // — wyświetlamy —
+    if (status == 0) {
+        solutionTextEdit->append(out.join(", "));
+    }
+    solutionTextEdit->append(QString("st = %1").arg(status));
 }
