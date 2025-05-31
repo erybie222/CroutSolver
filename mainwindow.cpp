@@ -55,6 +55,7 @@ using namespace interval_arithmetic;
 /*  Separator przedziału: ';'                                    */
 /*--------------------------------------------------------------*/
 
+
 static I readIntervalCell(const QLineEdit* e)
 {
     // 1) Usuń białe znaki:
@@ -62,14 +63,15 @@ static I readIntervalCell(const QLineEdit* e)
     // 2) Rozdziel tylko po średniku ';'
     const auto parts = txt.split(';', Qt::SkipEmptyParts);
 
-    // 3) Zdefiniuj TINY = 2^(-80) (≈1.2e-24), to będzie minimalna pół‐szerokość:
-    static const mpreal TINY = mpfr::pow(mpreal(2), -80);
+    // --- Obliczamy maszynowe epsilon dla mpreal (~2^(-precision)) ---
+    static const mpreal eps = std::numeric_limits<mpfr::mpreal>::epsilon();
+    ;  // jeśli precyzja=40 bitów => eps ≈ 2^(-40)
 
     // --- Jeśli użytkownik nie podał średnika (tylko jedna liczba) ---
     if (parts.size() == 1) {
         mpreal v(parts[0].toStdString());        // np. "2.5" → 2.5
-        // Zawsze zwracamy [v–TINY ; v+TINY]
-        return I(v - TINY, v + TINY);
+        // Zwracamy [v - eps ; v + eps]
+        return I(v - eps, v + eps);
     }
 
     // --- Jeśli są dokładnie dwa fragmenty: 'a;b' ---
@@ -77,15 +79,13 @@ static I readIntervalCell(const QLineEdit* e)
         mpreal a(parts[0].trimmed().toStdString());
         mpreal b(parts[1].trimmed().toStdString());
         if (a > b) std::swap(a, b);
-        // Zwracamy [a–TINY ; b+TINY]
-        // (dzięki temu nawet jeśli użytkownik wpisał "3.0;3.0",
-        //  to uzyskamy [3–TINY ; 3+TINY], a nie idealnie [3;3])
-        return I(a - TINY, b + TINY);
+        // Zwracamy [a - eps ; b + eps]
+        return I(a - eps, b + eps);
     }
 
-    // --- W każdym innym (błędnym) wypadku dajemy [0;0] rozszerzone o TINY: ---
-    static const mpreal ZERO = mpfr::mpreal(0);
-    return I(ZERO - TINY, ZERO + TINY);
+    // --- W każdym innym (błędnym) wypadku dajemy [0;0] powiększone o ±eps: ---
+    mpreal ZERO = mpreal(0);
+    return I(ZERO - eps, ZERO + eps);
 }
 
 
