@@ -1,56 +1,68 @@
-#pragma once
-#include <tuple>
-#include <QVector>
-#include "interval.hpp"   // Interval<mpfr::mpreal>
-#include <stdexcept>
+#include "solver/tridiagonal/crout_tridiagonal_interval.h"
+
+#include "interval.hpp"
+#include "interval_rounding_fix.hpp"
+
+namespace IA = interval_arithmetic;           // <── ta linijka zamiast „using”
+using I  = IA::Interval<mpfr::mpreal>;
 
 namespace solver {
 namespace tridiagonal {
 
-// Returns L (subdiag, length n-1), D (diag, length n), U (supdiag, length n-1), y, x
-std::tuple<
-    QVector<interval_arithmetic::Interval<mpfr::mpreal>>,
-    QVector<interval_arithmetic::Interval<mpfr::mpreal>>,
-    QVector<interval_arithmetic::Interval<mpfr::mpreal>>,
-    QVector<interval_arithmetic::Interval<mpfr::mpreal>>,
-    QVector<interval_arithmetic::Interval<mpfr::mpreal>>
->
-solveCroutTridiagonal(
-    const QVector<interval_arithmetic::Interval<mpfr::mpreal>> &a,
-    const QVector<interval_arithmetic::Interval<mpfr::mpreal>> &b,
-    const QVector<interval_arithmetic::Interval<mpfr::mpreal>> &c,
-    const QVector<interval_arithmetic::Interval<mpfr::mpreal>> &rhs)
+namespace {
+bool initInterval()
 {
-    int n = b.size();
-    if (a.size() != n-1 || c.size() != n-1 || rhs.size() != n)
-        throw std::invalid_argument("Invalid sizes in tridiagonal interval");
+    I::Initialize();
+    I::SetMode(IA::DINT_MODE);
+    return true;
+}
+const bool _intervalReady = initInterval();
+} // anonymous
 
-    using I = interval_arithmetic::Interval<mpfr::mpreal>;
-    QVector<I> L(n-1), D(n), U(n-1), y(n), x(n);
+// a – pod-przekątna (n-1), d – przekątna (n), c – nad-przekątna (n-1)
+std::tuple<
+    QList<I>,  // l  (pod przekątną L)
+    QList<I>,  // d  (diag. D)
+    QList<I>,  // u  (nad przekątną U = D·Lᵀ)
+    QList<I>,  // y
+    QList<I>   // x
+>
+solveCroutTridiagonal(const QVector<I>& a,
+                      const QVector<I>& d,
+                      const QVector<I>& c,
+                      const QVector<I>& b)
+{
+    const int n = d.size();
 
-    // Crout decomposition (identycznie jak w mpreal, tylko na przedziałach)
-    D[0] = b[0];
-    U[0] = c[0];
-    for (int i = 1; i < n; ++i) {
-        L[i-1] = a[i-1] / D[i-1];               // <-- TU była pomyłka
-        D[i]   = b[i] - L[i-1] * c[i-1];
+    QList<I> l(n-1), D(n), u(n-1), y(n), x(n);
+
+    // --- Crout LDLᵀ specjalnie dla macierzy trójdiagonalnej ---
+    D[0] = d[0];
+    u[0] = c[0];                        // U[0,1] = u0
+    for (int i = 1; i < n; ++i)
+    {
+        l[i-1] = IA::IDiv( a[i-1], D[i-1] );                 // L[i,i-1]
+        I tmp  = IA::ISub( d[i], IA::IMul(l[i-1], u[i-1]) ); // D_i
+        D[i]   = tmp;
         if (i < n-1)
-            U[i] = c[i];
+            u[i] = c[i];                                     // U[i,i+1] = c_i
     }
 
-    // forward substitution Ly = rhs
-    y[0] = rhs[0];
-    for (int i = 1; i < n; ++i) {
-        y[i] = rhs[i] - L[i-1] * y[i-1];
-    }
+    // --- Ly = b (z L z jedynkami na diag.) ---
+    y[0] = b[0];
+    for (int i = 1; i < n; ++i)
+        y[i] = IA::ISub( b[i], IA::IMul(l[i-1], y[i-1]) );
 
-    // back substitution Ux = y (obie strony dzielone przez D w trakcie Ux=y/D)
-    x[n-1] = y[n-1] / D[n-1];
-    for (int i = n-2; i >= 0; --i) {
-        x[i] = (y[i] - U[i] * x[i+1]) / D[i];
-    }
+    // --- Dzielenie przez D ---
+    for (int i = 0; i < n; ++i)
+        y[i] = IA::IDiv(y[i], D[i]);
 
-    return {L, D, U, y, x};
+    // --- Lᵀx = y (od końca) ---
+    x[n-1] = y[n-1];
+    for (int i = n-2; i >= 0; --i)
+       x[i] = IA::ISub( y[i], IA::IMul( l[i], x[i+1] ) );
+
+    return {l, D, u, y, x};
 }
 
 } // namespace tridiagonal

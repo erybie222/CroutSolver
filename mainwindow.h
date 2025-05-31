@@ -55,10 +55,11 @@ private:
     QVBoxLayout *vectorLayout;
 
     // Wartości wpisane przez użytkownika
-    QVector<QVector<QLineEdit*>> matrixInputs;
-    QVector<QLineEdit*>          vectorInputs;
-    QVector<QVector<QPair<QLineEdit*,QLineEdit*>>> matrixInputsInterval;
-    QVector<QPair<QLineEdit*,QLineEdit*>>          vectorInputsInterval;
+    QVector<QVector<QLineEdit*>> matrixInputs;          // double / mp
+QVector<QVector<QLineEdit*>> matrixInputsInterval;  // jedna kratka na element
+
+QVector<QLineEdit*>          vectorInputs;          // double / mp
+QVector<QLineEdit*>          vectorInputsInterval;  // jedna kratka na element
 };
 
 #endif // MAINWINDOW_H

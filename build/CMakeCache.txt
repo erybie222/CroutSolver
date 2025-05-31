@@ -14,6 +14,12 @@
 # EXTERNAL cache entries
 ########################
 
+//The directory containing a CMake configuration file for Boost.
+Boost_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/Boost-1.83.0
+
+//Path to a file.
+Boost_INCLUDE_DIR:PATH=/usr/include
+
 //Path to a program.
 CMAKE_ADDR2LINE:FILEPATH=/usr/bin/addr2line
 
@@ -52,32 +58,6 @@ CMAKE_CXX_FLAGS_RELEASE:STRING=-O3 -DNDEBUG
 
 //Flags used by the CXX compiler during RELWITHDEBINFO builds.
 CMAKE_CXX_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG
-
-//C compiler
-CMAKE_C_COMPILER:FILEPATH=/usr/bin/cc
-
-//A wrapper around 'ar' adding the appropriate '--plugin' option
-// for the GCC compiler
-CMAKE_C_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar-13
-
-//A wrapper around 'ranlib' adding the appropriate '--plugin' option
-// for the GCC compiler
-CMAKE_C_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib-13
-
-//Flags used by the C compiler during all build types.
-CMAKE_C_FLAGS:STRING=
-
-//Flags used by the C compiler during DEBUG builds.
-CMAKE_C_FLAGS_DEBUG:STRING=-g
-
-//Flags used by the C compiler during MINSIZEREL builds.
-CMAKE_C_FLAGS_MINSIZEREL:STRING=-Os -DNDEBUG
-
-//Flags used by the C compiler during RELEASE builds.
-CMAKE_C_FLAGS_RELEASE:STRING=-O3 -DNDEBUG
-
-//Flags used by the C compiler during RELWITHDEBINFO builds.
-CMAKE_C_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG
 
 //Path to a program.
 CMAKE_DLLTOOL:FILEPATH=CMAKE_DLLTOOL-NOTFOUND
@@ -312,7 +292,7 @@ OPENGL_xmesa_INCLUDE_DIR:PATH=OPENGL_xmesa_INCLUDE_DIR-NOTFOUND
 PKG_CONFIG_ARGN:STRING=
 
 //pkg-config executable
-PKG_CONFIG_EXECUTABLE:FILEPATH=PKG_CONFIG_EXECUTABLE-NOTFOUND
+PKG_CONFIG_EXECUTABLE:FILEPATH=/usr/bin/pkg-config
 
 //Additional directories where find(Qt6 ...) host Qt components
 // are searched
@@ -366,11 +346,25 @@ XKB_INCLUDE_DIR:PATH=XKB_INCLUDE_DIR-NOTFOUND
 //Path to a library.
 XKB_LIBRARY:FILEPATH=XKB_LIBRARY-NOTFOUND
 
+//The directory containing a CMake configuration file for boost_headers.
+boost_headers_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/boost_headers-1.83.0
+
+//Path to a library.
+pkgcfg_lib_GMP_gmp:FILEPATH=/usr/lib/x86_64-linux-gnu/libgmp.so
+
+//Path to a library.
+pkgcfg_lib_MPFR_gmp:FILEPATH=/usr/lib/x86_64-linux-gnu/libgmp.so
+
+//Path to a library.
+pkgcfg_lib_MPFR_mpfr:FILEPATH=/usr/lib/x86_64-linux-gnu/libmpfr.so
+
 
 ########################
 # INTERNAL cache entries
 ########################
 
+//ADVANCED property for variable: Boost_DIR
+Boost_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_ADDR2LINE
 CMAKE_ADDR2LINE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_AR
@@ -407,22 +401,6 @@ CMAKE_CXX_FLAGS_MINSIZEREL-ADVANCED:INTERNAL=1
 CMAKE_CXX_FLAGS_RELEASE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_CXX_FLAGS_RELWITHDEBINFO
 CMAKE_CXX_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: CMAKE_C_COMPILER
-CMAKE_C_COMPILER-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: CMAKE_C_COMPILER_AR
-CMAKE_C_COMPILER_AR-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: CMAKE_C_COMPILER_RANLIB
-CMAKE_C_COMPILER_RANLIB-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: CMAKE_C_FLAGS
-CMAKE_C_FLAGS-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: CMAKE_C_FLAGS_DEBUG
-CMAKE_C_FLAGS_DEBUG-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: CMAKE_C_FLAGS_MINSIZEREL
-CMAKE_C_FLAGS_MINSIZEREL-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: CMAKE_C_FLAGS_RELEASE
-CMAKE_C_FLAGS_RELEASE-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: CMAKE_C_FLAGS_RELWITHDEBINFO
-CMAKE_C_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_DLLTOOL
 CMAKE_DLLTOOL-ADVANCED:INTERNAL=1
 //Executable file format
@@ -550,8 +528,12 @@ CMAKE_TAPI-ADVANCED:INTERNAL=1
 CMAKE_UNAME:INTERNAL=/usr/bin/uname
 //ADVANCED property for variable: CMAKE_VERBOSE_MAKEFILE
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
+//Details about finding Boost
+FIND_PACKAGE_MESSAGE_DETAILS_Boost:INTERNAL=[/usr/lib/x86_64-linux-gnu/cmake/Boost-1.83.0/BoostConfig.cmake][c ][v1.83.0()]
 //Details about finding OpenGL
 FIND_PACKAGE_MESSAGE_DETAILS_OpenGL:INTERNAL=[/usr/lib/x86_64-linux-gnu/libOpenGL.so][/usr/lib/x86_64-linux-gnu/libGLX.so][/usr/include][c ][v()]
+//Details about finding PkgConfig
+FIND_PACKAGE_MESSAGE_DETAILS_PkgConfig:INTERNAL=[/usr/bin/pkg-config][v1.8.1()]
 //Details about finding Threads
 FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
 //Details about finding WrapAtomic
@@ -560,8 +542,78 @@ FIND_PACKAGE_MESSAGE_DETAILS_WrapAtomic:INTERNAL=[1][v()]
 FIND_PACKAGE_MESSAGE_DETAILS_WrapOpenGL:INTERNAL=[ON][v()]
 //Details about finding WrapVulkanHeaders
 FIND_PACKAGE_MESSAGE_DETAILS_WrapVulkanHeaders:INTERNAL=[/usr/include][v()]
+GMP_CFLAGS:INTERNAL=-I/usr/include
+GMP_CFLAGS_I:INTERNAL=
+GMP_CFLAGS_OTHER:INTERNAL=
+GMP_FOUND:INTERNAL=1
+GMP_INCLUDEDIR:INTERNAL=/usr/include
+GMP_INCLUDE_DIRS:INTERNAL=/usr/include
+GMP_LDFLAGS:INTERNAL=-L/usr/lib/x86_64-linux-gnu;-lgmp
+GMP_LDFLAGS_OTHER:INTERNAL=
+GMP_LIBDIR:INTERNAL=/usr/lib/x86_64-linux-gnu
+GMP_LIBRARIES:INTERNAL=gmp
+GMP_LIBRARY_DIRS:INTERNAL=/usr/lib/x86_64-linux-gnu
+GMP_LIBS:INTERNAL=
+GMP_LIBS_L:INTERNAL=
+GMP_LIBS_OTHER:INTERNAL=
+GMP_LIBS_PATHS:INTERNAL=
+GMP_MODULE_NAME:INTERNAL=gmp
+GMP_PREFIX:INTERNAL=/usr
+GMP_STATIC_CFLAGS:INTERNAL=-I/usr/include
+GMP_STATIC_CFLAGS_I:INTERNAL=
+GMP_STATIC_CFLAGS_OTHER:INTERNAL=
+GMP_STATIC_INCLUDE_DIRS:INTERNAL=/usr/include
+GMP_STATIC_LDFLAGS:INTERNAL=-L/usr/lib/x86_64-linux-gnu;-lgmp
+GMP_STATIC_LDFLAGS_OTHER:INTERNAL=
+GMP_STATIC_LIBDIR:INTERNAL=
+GMP_STATIC_LIBRARIES:INTERNAL=gmp
+GMP_STATIC_LIBRARY_DIRS:INTERNAL=/usr/lib/x86_64-linux-gnu
+GMP_STATIC_LIBS:INTERNAL=
+GMP_STATIC_LIBS_L:INTERNAL=
+GMP_STATIC_LIBS_OTHER:INTERNAL=
+GMP_STATIC_LIBS_PATHS:INTERNAL=
+GMP_VERSION:INTERNAL=6.3.0
+GMP_gmp_INCLUDEDIR:INTERNAL=
+GMP_gmp_LIBDIR:INTERNAL=
+GMP_gmp_PREFIX:INTERNAL=
+GMP_gmp_VERSION:INTERNAL=
 //Test HAVE_STDATOMIC
 HAVE_STDATOMIC:INTERNAL=1
+MPFR_CFLAGS:INTERNAL=-I/usr/include
+MPFR_CFLAGS_I:INTERNAL=
+MPFR_CFLAGS_OTHER:INTERNAL=
+MPFR_FOUND:INTERNAL=1
+MPFR_INCLUDEDIR:INTERNAL=/usr/include
+MPFR_INCLUDE_DIRS:INTERNAL=/usr/include
+MPFR_LDFLAGS:INTERNAL=-L/usr/lib/x86_64-linux-gnu;-lmpfr;-lgmp
+MPFR_LDFLAGS_OTHER:INTERNAL=
+MPFR_LIBDIR:INTERNAL=/usr/lib/x86_64-linux-gnu
+MPFR_LIBRARIES:INTERNAL=mpfr;gmp
+MPFR_LIBRARY_DIRS:INTERNAL=/usr/lib/x86_64-linux-gnu
+MPFR_LIBS:INTERNAL=
+MPFR_LIBS_L:INTERNAL=
+MPFR_LIBS_OTHER:INTERNAL=
+MPFR_LIBS_PATHS:INTERNAL=
+MPFR_MODULE_NAME:INTERNAL=mpfr
+MPFR_PREFIX:INTERNAL=/usr
+MPFR_STATIC_CFLAGS:INTERNAL=-I/usr/include
+MPFR_STATIC_CFLAGS_I:INTERNAL=
+MPFR_STATIC_CFLAGS_OTHER:INTERNAL=
+MPFR_STATIC_INCLUDE_DIRS:INTERNAL=/usr/include
+MPFR_STATIC_LDFLAGS:INTERNAL=-L/usr/lib/x86_64-linux-gnu;-lmpfr;-lgmp
+MPFR_STATIC_LDFLAGS_OTHER:INTERNAL=
+MPFR_STATIC_LIBDIR:INTERNAL=
+MPFR_STATIC_LIBRARIES:INTERNAL=mpfr;gmp
+MPFR_STATIC_LIBRARY_DIRS:INTERNAL=/usr/lib/x86_64-linux-gnu
+MPFR_STATIC_LIBS:INTERNAL=
+MPFR_STATIC_LIBS_L:INTERNAL=
+MPFR_STATIC_LIBS_OTHER:INTERNAL=
+MPFR_STATIC_LIBS_PATHS:INTERNAL=
+MPFR_VERSION:INTERNAL=4.2.1
+MPFR_mpfr_INCLUDEDIR:INTERNAL=
+MPFR_mpfr_LIBDIR:INTERNAL=
+MPFR_mpfr_PREFIX:INTERNAL=
+MPFR_mpfr_VERSION:INTERNAL=
 //ADVANCED property for variable: OPENGL_EGL_INCLUDE_DIR
 OPENGL_EGL_INCLUDE_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: OPENGL_GLES2_INCLUDE_DIR
@@ -611,6 +663,10 @@ PKG_XKB_STATIC_LIBS_L:INTERNAL=
 PKG_XKB_STATIC_LIBS_OTHER:INTERNAL=
 PKG_XKB_STATIC_LIBS_PATHS:INTERNAL=
 PKG_XKB_VERSION:INTERNAL=
+PKG_XKB_xkbcommon_INCLUDEDIR:INTERNAL=
+PKG_XKB_xkbcommon_LIBDIR:INTERNAL=
+PKG_XKB_xkbcommon_PREFIX:INTERNAL=
+PKG_XKB_xkbcommon_VERSION:INTERNAL=
 //Qt feature: abstractbutton (from target Qt6::Widgets)
 QT_FEATURE_abstractbutton:INTERNAL=ON
 //Qt feature: abstractslider (from target Qt6::Widgets)
@@ -1333,5 +1389,18 @@ Vulkan_LIBRARY-ADVANCED:INTERNAL=1
 _CMAKE_LINKER_PUSHPOP_STATE_SUPPORTED:INTERNAL=TRUE
 //CMAKE_INSTALL_PREFIX during last run
 _GNUInstallDirs_LAST_CMAKE_INSTALL_PREFIX:INTERNAL=/usr/local
+__pkg_config_arguments_GMP:INTERNAL=REQUIRED;IMPORTED_TARGET;gmp
+__pkg_config_arguments_MPFR:INTERNAL=REQUIRED;IMPORTED_TARGET;mpfr
+__pkg_config_checked_GMP:INTERNAL=1
+__pkg_config_checked_MPFR:INTERNAL=1
 __pkg_config_checked_PKG_XKB:INTERNAL=1
+//ADVANCED property for variable: boost_headers_DIR
+boost_headers_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: pkgcfg_lib_GMP_gmp
+pkgcfg_lib_GMP_gmp-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: pkgcfg_lib_MPFR_gmp
+pkgcfg_lib_MPFR_gmp-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: pkgcfg_lib_MPFR_mpfr
+pkgcfg_lib_MPFR_mpfr-ADVANCED:INTERNAL=1
+prefix_result:INTERNAL=/usr/lib/x86_64-linux-gnu
 

@@ -280,6 +280,8 @@ CroutSolver: /usr/lib/x86_64-linux-gnu/libQt6Gui.so.6.4.2
 CroutSolver: /usr/lib/x86_64-linux-gnu/libQt6Core.so.6.4.2
 CroutSolver: /usr/lib/x86_64-linux-gnu/libGLX.so
 CroutSolver: /usr/lib/x86_64-linux-gnu/libOpenGL.so
+CroutSolver: /usr/lib/x86_64-linux-gnu/libmpfr.so
+CroutSolver: /usr/lib/x86_64-linux-gnu/libgmp.so
 CroutSolver: CMakeFiles/CroutSolver.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/eryk/CroutSolver/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Linking CXX executable CroutSolver"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/CroutSolver.dir/link.txt --verbose=$(VERBOSE)
