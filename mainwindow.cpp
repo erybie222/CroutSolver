@@ -60,32 +60,38 @@ static I readIntervalCell(const QLineEdit* e)
 {
     // 1) Usuń białe znaki:
     QString txt = e->text().trimmed().replace(QRegularExpression("\\s+"), "");
-    // 2) Rozdziel tylko po średniku ';'
+    // 2) Rozdziel po średniku ';'
     const auto parts = txt.split(';', Qt::SkipEmptyParts);
 
-    // --- Obliczamy maszynowe epsilon dla mpreal (~2^(-precision)) ---
+    // --- Maszynowe epsilon dla mpreal (~2^(-precision)) ---
     static const mpreal eps = std::numeric_limits<mpfr::mpreal>::epsilon();
-    ;  // jeśli precyzja=40 bitów => eps ≈ 2^(-40)
 
-    // --- Jeśli użytkownik nie podał średnika (tylko jedna liczba) ---
+    // --- Jeżeli użytkownik wpisze tylko jedną liczbę (np. "2.5") ---
     if (parts.size() == 1) {
-        mpreal v(parts[0].toStdString());        // np. "2.5" → 2.5
-        // Zwracamy [v - eps ; v + eps]
-        return I(v - eps, v + eps);
+        // Tworzymy punktowy przedział [v; v], bez żadnego rozszerzenia
+        mpreal v(parts[0].toStdString());
+        return I(v, v);
     }
 
-    // --- Jeśli są dokładnie dwa fragmenty: 'a;b' ---
+    // --- Jeżeli są dokładnie dwa fragmenty: "a;b" ---
     if (parts.size() == 2) {
         mpreal a(parts[0].trimmed().toStdString());
         mpreal b(parts[1].trimmed().toStdString());
+        // Jeśli użytkownik podał w odwrotnej kolejności, zamieniamy:
         if (a > b) std::swap(a, b);
-        // Zwracamy [a - eps ; b + eps]
+
+        // Gdy przedział jest tak naprawdę punktowy (a == b), zwracamy [a; a]
+        if (a == b) {
+            return I(a, a);
+        }
+        // W przeciwnym razie (a < b) – zwracamy [a - eps ; b + eps]:
         return I(a - eps, b + eps);
     }
 
-    // --- W każdym innym (błędnym) wypadku dajemy [0;0] powiększone o ±eps: ---
+    // --- W każdym innym (błędnym) wypadku: zwracamy [0;0] bez rozszerzenia ---
+    //     ewentualnie można dodać ±eps, ale skoro błędny format, lepiej nie rozszerzać
     mpreal ZERO = mpreal(0);
-    return I(ZERO - eps, ZERO + eps);
+    return I(ZERO, ZERO);
 }
 
 
@@ -373,7 +379,8 @@ void MainWindow::solveSystem()
 
     solutionTextEdit->clear();
 
-    // Pomocnicza do wyrównania wykładnika „E”
+    // ─── Pomocnicza do wyrównania wykładnika „E” ─────────────────────
+    // Lekka funkcja‐lambda: dostosowuje postać łańcucha "1.23E+05" do "1.23E+05" (z dwucyfrowym wykładnikiem)
     auto pad3 = [](const QString &s) {
         int e = s.indexOf('E');
         if (e < 0 || e+2 >= s.size()) return s;
@@ -381,6 +388,7 @@ void MainWindow::solveSystem()
         if (d.size() == 2) d.prepend('0');
         return s.left(e+2) + d;
     };
+    // ──────────────────────────────────────────────────────────────────
 
     QStringList out;
     int status = 0;  // 0=OK, 1=szerokość>0 (interval), 2=NaN/Inf (double), 3=singularność
@@ -439,7 +447,11 @@ void MainWindow::solveSystem()
                 QString xs = pad3(QString::asprintf("%.14E", x[i]).toUpper());
                 out << QString("x[%1]=%2").arg(i+1).arg(xs);
             }
+            solutionTextEdit->setPlainText(out.join('\n'));
+        } else {
+            solutionTextEdit->setPlainText(QString("st = %1").arg(status));
         }
+        return;
     }
 
     /* ======================= mpreal ======================== */
@@ -480,21 +492,23 @@ void MainWindow::solveSystem()
                 break;
             }
         }
-        // wypisz tylko, gdy OK
         if (status == 0) {
             for (int i = 0; i < n; ++i) {
                 QString xs = pad3(QString::asprintf("%.14E", x[i].toDouble()).toUpper());
                 out << QString("x[%1]=%2").arg(i+1).arg(xs);
             }
+            solutionTextEdit->setPlainText(out.join('\n'));
+        } else {
+            solutionTextEdit->setPlainText(QString("st = %1").arg(status));
         }
+        return;
     }
 
-      /* ===================== Interval ======================= */
-    // --- fragment solveSystem(), gałąź dtype==2 ---
-    else if (dtype == 2) {                       // dtype == 2
+    /* ===================== Interval ======================= */
+    else if (dtype == 2) {
         using I = IA::Interval<mpfr::mpreal>;
 
-        // 0. Pobranie przedziałów z GUI --------------------------------
+        // 0. Pobranie przedziałów z GUI
         const auto A = getMatrixInterval();
         const auto b = getVectorInterval();
 
@@ -520,7 +534,7 @@ void MainWindow::solveSystem()
             }
         }
 
-        // 1. Sprawdzenie, czy któryś wynik zawiera zero → singularność ----
+        // 1. Sprawdzenie, czy któryś wynik zawiera zero → singularność
         if (status == 0) {
             for (int i = 0; i < n; ++i) {
                 if (x[i].containsZero()) {
@@ -530,48 +544,37 @@ void MainWindow::solveSystem()
             }
         }
 
-        // 2. Przygotowanie wyników do wyświetlenia lub st = kod błędu -------
+        // 2. Przygotowanie wyników do wyświetlenia lub st = kod błędu
         if (status == 0) {
-            // Ustawiamy EPS = 2^-100, poniżej którego traktujemy szerokość jako dokładnie 0
             const mpfr::mpreal EPS = mpfr::pow(mpreal(2), -100);  // ~7.9e-31
 
             QStringList lines;
             for (int i = 0; i < n; ++i) {
-                // Rozpakowujemy końce przedziału do łańcuchów:
                 std::string ls, rs;
                 x[i].IEndsToStrings(ls, rs);
 
-                // Obliczamy szerokość przedziału:
                 mpfr::mpreal w = x[i].GetWidth();
-                // Jeśli szerokość jest ujemna (rzadko, bo GetWidth zwraca >=0), bierzemy wartość bezwzględną:
                 if (w < 0) w = -w;
 
-                // Formatujemy szerokość:
                 QString wtxt;
                 if (w < EPS) {
-                    // Jeżeli „praktycznie 0” (poniżej EPS), wypisujemy dokładnie "0"
                     wtxt = "0";
                 } else {
-                    // W przeciwnym razie wypisujemy w notacji naukowej z 6 cyframi znaczącymi
                     wtxt = QString::fromStdString(
                         w.toString(6, std::ios_base::scientific)
                     ).toUpper();
                 }
 
-                // Składamy linię typu: x[i] = [lewo ; prawo]    szerokość = wtxt
                 lines << QString("x[%1] = [%2 ; %3]    szerokość = %4")
-                             .arg(i + 1)                             // numer zmiennej
-                             .arg(QString::fromStdString(ls).toUpper())  // lewy koniec przedziału
-                             .arg(QString::fromStdString(rs).toUpper())  // prawy koniec przedziału
-                             .arg(wtxt);                                // szerokość
+                             .arg(i + 1)
+                             .arg(QString::fromStdString(ls).toUpper())
+                             .arg(QString::fromStdString(rs).toUpper())
+                             .arg(wtxt);
             }
-
-            // Wstawiamy wszystkie linie do QTextEdit (każda linia w nowym wierszu)
             solutionTextEdit->setPlainText(lines.join('\n'));
         } else {
-            // Jeśli status != 0, wypisujemy tylko kod błędu
             solutionTextEdit->setPlainText(QString("st = %1").arg(status));
         }
-    } // ← koniec gałęzi dtype==2
-    // … (następne nawiasy zamykające funkcji i klasy)
+        return;
+    }
 }
