@@ -60,36 +60,51 @@ static I readIntervalCell(const QLineEdit* e)
 {
     // 1) Usuń białe znaki:
     QString txt = e->text().trimmed().replace(QRegularExpression("\\s+"), "");
-    // 2) Rozdziel po średniku ';'
+    // 2) Rozdziel tylko po średniku ';'
     const auto parts = txt.split(';', Qt::SkipEmptyParts);
 
-    // --- Maszynowe epsilon dla mpreal (~2^(-precision)) ---
+    // Maszynowe epsilon dla mpreal (~2^(-precision))
     static const mpreal eps = std::numeric_limits<mpfr::mpreal>::epsilon();
 
-    // --- Jeżeli użytkownik wpisze tylko jedną liczbę (np. "2.5") ---
+    // Jeżeli użytkownik wpisał tylko jedną liczbę:
     if (parts.size() == 1) {
-        // Tworzymy punktowy przedział [v; v], bez żadnego rozszerzenia
-        mpreal v(parts[0].toStdString());
-        return I(v, v);
+        QString s = parts[0].trimmed();
+        // Spróbuj sparsować jako mpreal:
+        mpreal v(s.toStdString());
+        // Jeśli w zapisie jest kropka '.' lub 'e'/'E', traktujemy to jako "zmiennoprzecinkowe"
+        if (s.contains('.') || s.contains('e', Qt::CaseInsensitive)) {
+            // → nawet jeśli a == b, dodajemy ±eps → szerokość > 0
+            return I(v - eps, v + eps);
+        } else {
+            // → to jest czysto całkowity wpis, punktowy: [v; v], szerokość = 0
+            return I(v, v);
+        }
     }
 
-    // --- Jeżeli są dokładnie dwa fragmenty: "a;b" ---
+    // Jeśli są dokładnie dwa fragmenty: "a;b"
     if (parts.size() == 2) {
-        mpreal a(parts[0].trimmed().toStdString());
-        mpreal b(parts[1].trimmed().toStdString());
-        // Jeśli użytkownik podał w odwrotnej kolejności, zamieniamy:
+        QString sa = parts[0].trimmed();
+        QString sb = parts[1].trimmed();
+        mpreal a(sa.toStdString());
+        mpreal b(sb.toStdString());
         if (a > b) std::swap(a, b);
 
-        // Gdy przedział jest tak naprawdę punktowy (a == b), zwracamy [a; a]
-        if (a == b) {
+        // Gdy przedział punktowy (a == b) i wpis _bez_ kropki/'e' → zero‐width:
+        if (a == b && 
+            !sa.contains('.') && !sa.contains('e', Qt::CaseInsensitive) &&
+            !sb.contains('.') && !sb.contains('e', Qt::CaseInsensitive))
+        {
+            // Użytkownik wprowadził dwie identyczne liczby całkowite, np. "2;2"
             return I(a, a);
         }
-        // W przeciwnym razie (a < b) – zwracamy [a - eps ; b + eps]:
+
+        // W każdej innej sytuacji (a < b albo a == b, ale jest kropka bądź 'e'):
+        // traktujemy to jako "przedział niepunktowy" lub "zmiennoprzecinkowy punkt":
         return I(a - eps, b + eps);
     }
 
-    // --- W każdym innym (błędnym) wypadku: zwracamy [0;0] bez rozszerzenia ---
-    //     ewentualnie można dodać ±eps, ale skoro błędny format, lepiej nie rozszerzać
+    // W pozostałych (błędnych) przypadkach:
+    // Zwracamy [0;0] bez rozszerzenia.
     mpreal ZERO = mpreal(0);
     return I(ZERO, ZERO);
 }
@@ -271,7 +286,7 @@ void MainWindow::createMatrixInputs(int size) {
         for (int j = 0; j < size; ++j) {
             if (isInterval) {
                 // Dla przedziałów zakładamy domyślnie "[0;0]", wpisane jako "0,0"
-                QLineEdit *cell = new QLineEdit("0.0;0.0");
+                QLineEdit *cell = new QLineEdit("0;0");
                 cell->setFixedWidth(80);
                 cell->setAlignment(Qt::AlignCenter);
                 matrixLayout->addWidget(cell, i, j);
